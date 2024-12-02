@@ -15,9 +15,9 @@
 - [1-3 개발환경](#1-3-개발환경)
 - [1-4 구동방법](#1-4-구동방법)
 
-[2-Architecture](#2-architecture)
-- [2-1 구조도](#2-1-구조도)
-- [2-2 파일 디렉토리](#2-2-파일-디렉토리)
+[2-앱-디자인](#2-앱-디자인)
+- [2-1 Screen Flow](#2-1-Screen-Flow)
+- [2-2 Architecture](#2-2-Architecture)
 
 [3-프로젝트 특징](#3-프로젝트-특징)
 
@@ -31,3 +31,21 @@
 ## 1-프로젝트 소개
 
 ### 1-1 개요
+
+<br>
+
+## 2-앱 디자인
+
+### 2-1 Screen Flow
+`Main - Search - Setting(더보기) 주요 Tab 구성`
+- Main 페이지 내, 주요 프로그램 및 카테고리 별 상세보기를 통해 빠르게 정보를 인지할 수 있도록 함
+- 다수의 프로그램이 진행되므로, 검색 탭을 별도로 구성하여 사용자의 편의성을 고려함
+- '찜' 기능과 센터에서 제공하는 기타 정보(대관, 위치 등)를 마지막 더보기 탭 내 구성
+
+<img width="3632" alt="app_screen_flow" src="https://github.com/user-attachments/assets/30aabacc-7c11-44d2-96d8-6d6f4b04e725">
+
+
+### 2-2 Architecture
+
+<br>
+
