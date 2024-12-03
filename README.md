@@ -42,7 +42,8 @@
 - 다수의 프로그램이 진행되므로, 검색 탭을 별도로 구성하여 사용자의 편의성을 고려함
 - '찜' 기능과 센터에서 제공하는 기타 정보(대관, 위치 등)를 마지막 더보기 탭 내 구성
 
-<img width="3632" alt="app_screen_flow" src="https://github.com/user-attachments/assets/30aabacc-7c11-44d2-96d8-6d6f4b04e725">
+<img width="4166" alt="screen_flow" src="https://github.com/user-attachments/assets/4b7ef9cb-7e2a-492c-a877-7314d2488716">
+
 
 
 ### 2-2 Architecture
