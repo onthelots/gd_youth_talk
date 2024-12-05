@@ -1,0 +1,39 @@
+name: gd_youth_talk
+description: "A youth information app providing real-time updates on programs and services from the Gangdong-gu Youth Center"
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # 상태괸리
+  flutter_bloc: ^8.1.6
+  equatable: ^2.0.7
+
+  # Firebase
+
+  # Local Storage
+  shared_preferences: ^2.3.3
+
+  # Networking
+  dio: ^5.7.0
+
+  # Route (Navigation)
+  go_router: ^14.6.2
+
+  # UI
+  table_calendar: ^3.1.2
+  carousel_slider: ^5.0.0
+  webview_flutter: ^4.10.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
