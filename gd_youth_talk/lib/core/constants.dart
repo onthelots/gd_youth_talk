@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:gd_youth_talk/app/routes.dart';
 
 /// App Colors
 class AppColors {

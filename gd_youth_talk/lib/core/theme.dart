@@ -13,8 +13,9 @@ class AppTheme {
     // - text
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: AppColors.lightText, fontSize: 32),
-      bodyLarge: TextStyle(color: AppColors.lightText, fontSize: 16),
-      bodyMedium: TextStyle(color: AppColors.lightIcon, fontSize: 14),
+      bodyLarge: TextStyle(color: AppColors.lightText, fontSize: 16, fontWeight: FontWeight.bold),
+      bodyMedium: TextStyle(color: AppColors.lightText, fontSize: 14),
+      bodySmall: TextStyle(color: AppColors.lightText, fontSize: 10),
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -44,8 +45,9 @@ class AppTheme {
     // - text
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: AppColors.darkText, fontSize: 32),
-      bodyLarge: TextStyle(color: AppColors.darkText, fontSize: 16),
-      bodyMedium: TextStyle(color: AppColors.darkIcon, fontSize: 14),
+      bodyLarge: TextStyle(color: AppColors.darkText, fontSize: 16, fontWeight: FontWeight.bold),
+      bodyMedium: TextStyle(color: AppColors.darkText, fontSize: 14),
+      bodySmall: TextStyle(color: AppColors.darkText, fontSize: 10),
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
