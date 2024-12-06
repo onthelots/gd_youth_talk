@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gd_youth_talk/app/routes.dart';
+import 'package:gd_youth_talk/presentation/widgets/program_section.dart';
+import 'package:gd_youth_talk/presentation/widgets/pageIndicator.dart';
+import 'package:gd_youth_talk/app/dummy_data.dart';
 
-class HomeScreen extends StatefulWidget {
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+class HomeScreen extends StatelessWidget {
+  final PageController _pageController = PageController();
+  final categories = parseCategoryData(categoryData);
 
-class _HomeScreenState extends State<HomeScreen> {
-  final PageController _pageController = PageController(); // pageControl 설정
-  int _currentPage = 0; // 현재 page
-
+  // button Data 
+  final List<Map<String, dynamic>> buttonData = [
+    {'icon': Icons.volunteer_activism, 'label': "건강&웰빙"},
+    {'icon': Icons.psychology, 'label': "자기계발"},
+    {'icon': Icons.palette, 'label': "문화&취미"},
+    {'icon': Icons.local_library, 'label': "강연&포럼"},
+  ];
+  
+  // pageControl 설정
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,71 +33,145 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 페이지 인디케이터
+            /// (상단)페이지 Sized Box
             SizedBox(
               height: 200, // 페이지 뷰 높이
-              child: PageView(
+              child: PageView.builder(
+                scrollDirection: Axis.horizontal,
                 controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
+                physics: const BouncingScrollPhysics(),
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  // 랜덤으로 카테고리 5개 뽑기
+                  final random = Random();
+                  final randomIndex = random.nextInt(categories.length);  // 랜덤 인덱스
+                  final category = categories[randomIndex]; // 랜덤 카테고리 가져오기
+
+                  // 해당 카테고리의 첫 번째 아이템을 사용
+                  final item = category.items[0];
+                  return _buildPageContent(item, context);
                 },
-                children: [
-                  _buildPageContent("Page 1", Colors.blue),
-                  _buildPageContent("Page 2", Colors.green),
-                  _buildPageContent("Page 3", Colors.orange),
-                ],
               ),
             ),
+
+            /// (상단) Page Indicator
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PageIndicator(currentPage: _currentPage, pageCount: 3),
+              padding: const EdgeInsets.symmetric(vertical: 15.0),
+              // custom PageIndicator
+              child: PageIndicator(
+                pageCount: 5, // 실제 프로그램 count 할당할 것
+                pageController: _pageController,
+              ),
             ),
-            // 버튼 4개
+
+            SizedBox(
+              height: 20,
+            ),
+
+            /// (중앙) 카테고리 버튼
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
+              padding: const EdgeInsets.symmetric(horizontal: 13.0),
+              child: Container(
+                height: 100.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildButton(Icons.home, "Home"),
-                  _buildButton(Icons.search, "Search"),
-                  _buildButton(Icons.notifications, "Alerts"),
-                  _buildButton(Icons.person, "Profile"),
-                ],
+
+                  // List.generate를 통한 루프 실시
+                  children: List.generate(categories.length, (index) {
+                    final button = buttonData[index]; // 버튼 데이터 매칭
+                    return _buildButton(
+                      button['icon'], // 아이콘
+                      button['label'], // 레이블
+                      context,
+                      index,
+                    );
+                  }),
+                ),
               ),
             ),
             // Section별 리스트
-            Section(
-              sectionText: "Photo Gallery",
-              programTitle: 'Program Title',
-              color: Colors.grey,
-              itemCount: 5,
-              imageUrls: [
-                'https://via.placeholder.com/300',
-                'https://via.placeholder.com/150',
-                'https://via.placeholder.com/150',
-                'https://via.placeholder.com/150',
-                'https://via.placeholder.com/150',
-              ],
+
+            SizedBox(
+              height: 20,
             ),
+
+            /// Section
+            for (var category in categories)
+              Section(category: category)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildPageContent(String text, Color color) {
+  /// Widgets 1. buildPageContent
+  Widget _buildPageContent(CategoryItem item, BuildContext context) {
     return Container(
-      color: color,
+      color: Colors.grey,
+      width: double.infinity, // 페이지 뷰 너비
+      height: double.infinity, // 페이지 뷰 높이
       child: Stack(
-        alignment: Alignment.centerLeft,
+        alignment: Alignment.center, // Stack 전체 중앙정렬
         children: [
+          // 첫 번째 Container (150x150 크기, 오른쪽 중앙에 위치)
           Positioned(
+            right: 0,
             child: Container(
-              width: 150,
+              width: 200,
+              height: 200,
+              child: Center(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.network(
+                    item.thumbnailUrl,
+                    width: 180, // 이미지 크기 조정
+                    height: 180,
+                    fit: BoxFit.cover, // 이미지 크기에 맞게 자르기
+                  ),
+                ),
+                // 이미지 할당하기 (150 x 150 사이즈로)
+              ),
+            ),
+          ),
+
+          Positioned(
+            left: 10,
+            child: Container(
+              width: MediaQuery.of(context).size.width - 200, // 현재 페이지 너비에서 이미지 Container Width 200(고정값) 뺀 값
               height: 150,
-              color: Colors.red,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FilledButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                      padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
+                      minimumSize: WidgetStateProperty.all<Size>(Size.zero),
+                    ),
+                    child: Text(item.title),
+                  ),
+
+                  Text(
+                    item.description,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2, // max line
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+
+                  // 위치 정보 텍스트, 하단에 고정
+                  Text(
+                    item.date.timeZoneName,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1, // max line
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -96,168 +179,40 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // children: [
-  //   // 첫 번째 Container는 Expanded로 감싸서 여유 공간을 차지하도록 함
-  //   Expanded(
-  //     child: Container(
-  //       height: 150,
-  //       child: Column(
-  //         children: [
-  //           // FilledButton은 이미지의 수직 중앙에 위치
-  //           Align(
-  //             alignment: Alignment.topLeft,
-  //             child: FilledButton(
-  //               onPressed: () {},
-  //               style: ButtonStyle(
-  //                 padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-  //                     EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
-  //                 minimumSize: WidgetStateProperty.all<Size>(Size.zero),
-  //               ),
-  //               child: Text('문화&취미'),
-  //             ),
-  //           ),
-  //
-  //           Align(
-  //             alignment: Alignment.centerLeft,
-  //             child: Text(
-  //               '<Upcycling Week_플라스틱> 참여자 추가모집',
-  //               overflow: TextOverflow.ellipsis,
-  //               maxLines: 2, // max line
-  //               style: Theme.of(context).textTheme.bodyLarge,
-  //             ),
-  //           ),
-  //
-  //           // 위치 정보 텍스트, 하단에 고정
-  //
-  //           Align(
-  //             alignment: Alignment.bottomLeft,
-  //             child: Text(
-  //               '11/24(일) ~ 12/2(월) 14:00',
-  //               overflow: TextOverflow.ellipsis,
-  //               maxLines: 1, // max line
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   ),
-  //
-  //   Container(
-  //     color: Colors.red,
-  //     height: 150,
-  //     width: 150,
-  //   ),
-  // ],
-
-
-  Widget _buildButton(IconData icon, String label) {
+  /// Widgets 2. buttons
+  Widget _buildButton(
+      IconData icon,
+      String label,
+      BuildContext context,
+      int index,
+      ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 32),
-        SizedBox(height: 4),
-        Text(label),
-      ],
-    );
-  }
-}
-
-class PageIndicator extends StatelessWidget {
-  final int currentPage;
-  final int pageCount;
-
-  PageIndicator({required this.currentPage, required this.pageCount});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(pageCount, (index) {
-        return Container(
-          margin: EdgeInsets.symmetric(horizontal: 4),
-          width: 12,
-          height: 12,
+        Container(
+          width: 50,
+          height: 50,
           decoration: BoxDecoration(
-            color: currentPage == index ? Colors.blue : Colors.grey,
             shape: BoxShape.circle,
+            color: Theme.of(context).scaffoldBackgroundColor,
           ),
-        );
-      }),
-    );
-  }
-}
-
-class Section extends StatelessWidget {
-  final String sectionText;
-  final String programTitle;
-  final Color color;
-  final int itemCount;
-  final List<String> imageUrls; // 이미지 URL 리스트
-
-  Section({
-    required this.sectionText,
-    required this.programTitle,
-    required this.color,
-    required this.itemCount,
-    required this.imageUrls,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Section text
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              sectionText,
-              style: Theme.of(context).textTheme.bodyLarge,
+          child: IconButton(
+            icon: Icon(
+              icon,
+              size: 25,
+              color: Theme.of(context).primaryColor,
             ),
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.category, arguments: index);
+            },
           ),
-
-          // ListView
-          SizedBox(
-            height: 165,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: itemCount, // item 갯수
-              itemBuilder: (context, index) {
-                return Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  width: 150,
-                  margin: EdgeInsets.all(8),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
-                          child: Image.network(
-                            imageUrls[index], // URL로 이미지 로드
-                            width: 120, // 이미지 크기 조정
-                            height: 120,
-                            fit: BoxFit.cover, // 이미지 크기에 맞게 자르기
-                          ),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          programTitle,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+        SizedBox(height: 4),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+      ],
     );
   }
 }

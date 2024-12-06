@@ -3,6 +3,7 @@ import 'package:gd_youth_talk/app/routes.dart';
 import 'package:gd_youth_talk/app/splash_screen.dart';
 import 'package:gd_youth_talk/core/theme.dart';
 import 'package:gd_youth_talk/presentation/screens/calendar/calendar_screen.dart';
+import 'package:gd_youth_talk/presentation/screens/home/category_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/home/home_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/landing/landing_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/main/main_screen.dart';
@@ -43,8 +44,7 @@ class MyApp extends StatelessWidget {
       case Routes.more:
         return MaterialPageRoute(builder: (_) => MoreScreen());
       case Routes.category:
-        // return MaterialPageRoute(builder: (_) => CategoryScreen());
-        return null;
+        return MaterialPageRoute(builder: (_) => CategoryScreen(selectedIndex: settings.arguments as int));
 
         //TODO: 상세 프로그램 페이지에서는, 데이터를 넘겨받을 것 (settings.arguments)
       case Routes.programDetail:

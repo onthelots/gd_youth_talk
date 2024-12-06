@@ -7,13 +7,13 @@ class AppTheme {
   // Light_Theme
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
-    primaryColor: AppColors.lightPrimary,
-    scaffoldBackgroundColor: AppColors.lightBackground,
+    primaryColor: AppColors.lightPrimary, // 주요색상
+    scaffoldBackgroundColor: AppColors.lightBackground, // 백그라운드 색상
 
     // - text
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: AppColors.lightText, fontSize: 32),
-      bodyLarge: TextStyle(color: AppColors.lightText, fontSize: 16, fontWeight: FontWeight.bold),
+      bodyLarge: TextStyle(color: AppColors.lightText, fontSize: 18, fontWeight: FontWeight.bold),
       bodyMedium: TextStyle(color: AppColors.lightText, fontSize: 14),
       bodySmall: TextStyle(color: AppColors.lightText, fontSize: 10),
     ),
@@ -32,7 +32,6 @@ class AppTheme {
         color: AppColors.lightInactiveButtonText, // 비선택된 텍스트 색상
       ),
     ),
-
   );
 
 
@@ -45,7 +44,7 @@ class AppTheme {
     // - text
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: AppColors.darkText, fontSize: 32),
-      bodyLarge: TextStyle(color: AppColors.darkText, fontSize: 16, fontWeight: FontWeight.bold),
+      bodyLarge: TextStyle(color: AppColors.darkText, fontSize: 18, fontWeight: FontWeight.bold),
       bodyMedium: TextStyle(color: AppColors.darkText, fontSize: 14),
       bodySmall: TextStyle(color: AppColors.darkText, fontSize: 10),
     ),
