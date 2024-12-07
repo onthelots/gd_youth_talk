@@ -47,7 +47,8 @@
 ### 2-2 Architecture
 `장기적인 업데이트 및 유지보수를 위한 Clean Architecture 적용`
 - Application Layout, Domain Layout, Data Layout 분리
-- 프로그램 데이터 파싱 이외, 추후 계정관리 기능 도입에 앞서 유지보수가 용이한 Clean Architecture 사전 설계
+- 프로그램 데이터 파싱 이외, 추후 계정관리 기능 도입에 앞서 유지보수가 용이한 Clean Architecture 설계
+- Bloc 상태관리 설정
 
 <img width="4203" alt="app_architecture" src="https://github.com/user-attachments/assets/5248ff40-7f01-45fc-8cfb-3d4b94d89890">
 
