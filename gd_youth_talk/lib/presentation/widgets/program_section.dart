@@ -4,10 +4,10 @@ import 'package:gd_youth_talk/app/dummy_data.dart';
 /// Widgets 3. Section
 //TODO : Bloc을 통해, 할당된 Program 데이터를 할당할 것
 class Section extends StatelessWidget {
-  final Category category;
+  final Programs programs;
 
   Section({
-    required this.category,
+    required this.programs,
   });
 
   @override
@@ -20,7 +20,7 @@ class Section extends StatelessWidget {
 
           // Section text
           Text(
-            category.name,
+            programs.categoryName,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
 
@@ -30,11 +30,14 @@ class Section extends StatelessWidget {
             child: ListView.builder(
               shrinkWrap: true, // 콘텐츠 크기에 따라 높이 결정
               scrollDirection: Axis.horizontal,
-              itemCount: category.items.length, // item 갯수
+              itemCount: programs.items.length, // item 갯수
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.0),
-                  child: ProgramSectionListTile(category: category, index: index,),
+                  child: ProgramSectionListTile(
+                    programs: programs,
+                    index: index,
+                  ),
                 );
               },
             ),
@@ -46,11 +49,11 @@ class Section extends StatelessWidget {
 }
 
 class ProgramSectionListTile extends StatelessWidget {
-  final Category category;
+  final Programs programs;
   final int index;
 
   ProgramSectionListTile({
-    required this.category,
+    required this.programs,
     required this.index,
   });
 
@@ -66,7 +69,7 @@ class ProgramSectionListTile extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(5),
               child: Image.network(
-                category.items[index].thumbnailUrl,
+                programs.items[index].thumbnailUrl,
                 width: 120, // 이미지 크기 조정
                 height: 120,
                 fit: BoxFit.cover, // 이미지 크기에 맞게 자르기
@@ -78,7 +81,7 @@ class ProgramSectionListTile extends StatelessWidget {
             ),
 
             Text(
-              category.items[index].title,
+              programs.items[index].title,
               style: Theme.of(context).textTheme.bodyMedium,
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,

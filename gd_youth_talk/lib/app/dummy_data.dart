@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-// 더미 아이템
+/// Programs Data
+class Programs {
+  final String categoryName; // 카테고리
+  final List<Program> items; // 카테고리 내 프로그램들
+
+  Programs({required this.categoryName, required this.items});
+
+  // factory constructor로 변환 -> programs인데, items와
+  factory Programs.fromMap(String categoryName, Map<String, dynamic> map) {
+    return Programs(
+      categoryName: categoryName,
+      items: (map['items'] as List)
+          .map((item) => Program.fromMap(item as Map<String, dynamic>, categoryName))
+          .toList(),
+    );
+  }
+}
 
 // CategoryItem에 새로운 속성 추가
-class CategoryItem {
+class Program {
+  final CategoryType category; // 카테고리 타입 추가
   final String title;
   final String description;
   final String thumbnailUrl;
@@ -12,7 +29,8 @@ class CategoryItem {
   final String time;
   final String location;
 
-  CategoryItem({
+  Program({
+    required this.category,
     required this.title,
     required this.description,
     required this.thumbnailUrl,
@@ -21,37 +39,66 @@ class CategoryItem {
     required this.location,
   });
 
-  factory CategoryItem.fromMap(Map<String, dynamic> map) {
-    return CategoryItem(
+  // factory : 해당 생성자(Constructor)는 기존 객체나 캐싱된 객체를 반환할 수 있습니다.
+  factory Program.fromMap(Map<String, dynamic> map, String categoryName) {
+    return Program(
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       thumbnailUrl: map['thumbnailUrl'] ?? '',
       date: DateTime.parse(map['date']),
       time: map['time'] ?? '',
       location: map['location'] ?? '',
+      category: _categoryTypeFromString(categoryName), // 변환된 카테고리 타입
+    );
+  }
+
+  static CategoryType _categoryTypeFromString(String displayName) {
+    return CategoryType.values.firstWhere(
+          (type) => type.name == displayName, // displayName과 매칭
+      orElse: () => throw ArgumentError('Unknown category display name: $displayName'),
     );
   }
 }
 
-class Category {
-  final String name;
-  final List<CategoryItem> items;
+enum CategoryType {
+  healthAndWellbeing,
+  selfDevelopment,
+  cultureAndHobbies,
+  lecturesAndForums,
+}
 
-  Category({required this.name, required this.items});
+extension CategoryTypeExtension on CategoryType {
+  String get displayName {
+    switch (this) {
+      case CategoryType.healthAndWellbeing:
+        return '건강&웰빙';
+      case CategoryType.selfDevelopment:
+        return '자기계발';
+      case CategoryType.cultureAndHobbies:
+        return '문화&취미';
+      case CategoryType.lecturesAndForums:
+        return '강연&포럼';
+    }
+  }
 
-  factory Category.fromMap(String name, Map<String, dynamic> map) {
-    return Category(
-      name: name,
-      items: (map['items'] as List)
-          .map((item) => CategoryItem.fromMap(item as Map<String, dynamic>))
-          .toList(),
-    );
+  IconData get icon {
+    switch (this) {
+      case CategoryType.healthAndWellbeing:
+        return Icons.volunteer_activism;
+      case CategoryType.selfDevelopment:
+        return Icons.psychology;
+      case CategoryType.cultureAndHobbies:
+        return Icons.palette;
+      case CategoryType.lecturesAndForums:
+        return Icons.local_library;
+      default:
+        return Icons.help_outline;
+    }
   }
 }
 
-
-// 더미 아이템 데이터에 추가된 속성 반영
-final Map<String, dynamic> categoryData = {
+/// Dummy Data
+final Map<String, dynamic> programData = {
   "healthAndWellbeing": {
     "items": [
       {
@@ -141,10 +188,3 @@ final Map<String, dynamic> categoryData = {
     ],
   },
 };
-
-List<Category> parseCategoryData(Map<String, dynamic> data) {
-  return data.entries
-      .map((entry) => Category.fromMap(entry.key, entry.value))
-      .toList();
-}
-

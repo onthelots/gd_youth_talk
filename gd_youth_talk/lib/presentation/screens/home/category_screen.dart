@@ -3,7 +3,11 @@ import 'package:gd_youth_talk/app/dummy_data.dart';
 
 class CategoryScreen extends StatefulWidget {
   final int selectedIndex;
-  final categories = parseCategoryData(categoryData); // 더미데이터
+
+  // 더미데이터 기반, Parse 예시
+  final List<Programs> programsList = programData.entries.map((entry) {
+    return Programs.fromMap(entry.key, entry.value as Map<String, dynamic>);
+  }).toList();
 
   CategoryScreen({Key? key, required this.selectedIndex})
       : super(key: key);
@@ -20,7 +24,7 @@ class _CategoryScreenState extends State<CategoryScreen>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: categoryData.length,
+      length: widget.programsList.length,
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
@@ -66,32 +70,37 @@ class _CategoryScreenState extends State<CategoryScreen>
         padding: EdgeInsets.symmetric(vertical: 20.0),
         child: TabBarView(
           controller: _tabController,
-          children: List.generate(widget.categories.length, (index) {
+          children: List.generate(widget.programsList.length, (index) {
+            final programs = widget.programsList[index].items;
             return ListView.builder(
-              itemCount: widget.categories[index].items.length,
+              itemCount: programs.length,
               itemBuilder: (context, itemIndex) {
-                final item = widget.categories[index].items[itemIndex];
+
+                final program = programs[itemIndex];
+
                 return ListTile(
                   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                  title: Text(item.title, style: Theme.of(context).textTheme.labelLarge),
+                  title: Text(program.title, style: Theme.of(context).textTheme.labelLarge),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(item.description, style: Theme.of(context).textTheme.bodyMedium),
+                      Text(program.description, style: Theme.of(context).textTheme.bodyMedium),
                       SizedBox(height: 4.0),
                       // Text('일시: ${item.date.year}-${item.date.month}-${item.date.day} ${item.time.format(context)}', style: Theme.of(context).textTheme.bodySmall),
-                      Text('위치: ${item.location}', style: Theme.of(context).textTheme.bodySmall),
+                      Text('위치: ${program.location}', style: Theme.of(context).textTheme.bodySmall),
                     ],
                   ),
-                  trailing: Image.network(
-                    item.thumbnailUrl,
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
+                  trailing: Container(
+                    child: Image.network(
+                      program.thumbnailUrl,
+                      width: 65,
+                      height: 65,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                   onTap: () {
                     // 항목을 클릭했을 때 처리할 로직
-                    print('탭된 항목: ${item.title}');
+                    print('탭된 항목: ${program.title}');
                   },
                 );
               },

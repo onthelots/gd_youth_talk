@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gd_youth_talk/app/dummy_data.dart';
 
 /// App Colors
 class AppColors {
@@ -25,6 +26,7 @@ class AppColors {
   static const Color darkInactiveButtonText = Color(0xffB0B0B0);
 }
 
+/// BottomNavigationBar
 class CustomBottomNavigationBar {
   static List<BottomNavigationBarItem> bottomNavigationBarItem = const [
   BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
