@@ -19,102 +19,97 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Icon(Icons.home), // 로고
-        title: Text('My App'),
-        actions: [
-          Icon(Icons.settings), // Trailing 아이콘
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// (상단)페이지 Sized Box
-            SizedBox(
-              height: 200, // 페이지 뷰 높이
-              child: PageView.builder(
-                scrollDirection: Axis.horizontal,
-                controller: _pageController,
-                physics: const BouncingScrollPhysics(),
-                itemCount: 4, // 4개만 랜덤으로 표시
-                itemBuilder: (context, index) {
-                  // 모든 프로그램 데이터를 가져옵니다.
-                  final allPrograms = <Program>[];
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// (상단)페이지 Sized Box
+              SizedBox(
+                height: 200, // 페이지 뷰 높이
+                child: PageView.builder(
+                  scrollDirection: Axis.horizontal,
+                  controller: _pageController,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: 4, // 4개만 랜덤으로 표시
+                  itemBuilder: (context, index) {
+                    // 모든 프로그램 데이터를 가져옵니다.
+                    final allPrograms = <Program>[];
+        
+                    programData.forEach((categoryName, categoryData) {
+                      final programs = Programs.fromMap(categoryName, categoryData);
+                      allPrograms.addAll(programs.items); // 각 카테고리의 아이템들을 추가
+                    });
+        
+                    // 4개의 랜덤 프로그램 아이템 선택
+                    final randomPrograms = List.generate(4, (i) {
+                      return allPrograms[Random().nextInt(allPrograms.length)];
+                    });
+        
+                    final program = randomPrograms[index]; // 랜덤으로 선택된 프로그램
 
-                  programData.forEach((categoryName, categoryData) {
-                    final programs = Programs.fromMap(categoryName, categoryData);
-                    allPrograms.addAll(programs.items); // 각 카테고리의 아이템들을 추가
-                  });
-
-                  // 4개의 랜덤 프로그램 아이템 선택
-                  final randomPrograms = List.generate(4, (i) {
-                    return allPrograms[Random().nextInt(allPrograms.length)];
-                  });
-
-                  final program = randomPrograms[index]; // 랜덤으로 선택된 프로그램
-
-                  return PageContent(program: program); // PageContent에 전달
-                },
-              ),
-            ),
-
-            /// (상단) Page Indicator
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15.0),
-              // custom PageIndicator
-              child: PageIndicator(
-                pageCount: 4, // 실제 프로그램 count 할당할 것
-                pageController: _pageController,
-              ),
-            ),
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            /// (중앙) 카테고리 버튼
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 13.0),
-              child: Container(
-                height: 100.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-                  // List.generate를 통한 루프 실시
-                  // Category(enum)에 따른 length 처리
-                  children: List.generate(CategoryType.values.length, (index) {
-                    final categoryType = CategoryType.values[index]; // index에 따른 CategoryType 할당
-                    // label, icon 설정
-                    final label = categoryType.displayName; // 확장된 displayName 사용
-                    final icon = categoryType.icon; // 확장된 icon 사용
-                    return CategoryButtons(
-                      icon: icon,
-                      label: label,
-                      index: index,
-                      onTap: () {
-                        print('Tap Button : $label');
-                        Navigator.pushNamed(context, Routes.category, arguments: index);
+                    return PageContent(
+                      program: program,
+                      onTap: (program) {
+                        Navigator.pushNamed(context, Routes.programDetail, arguments: program);
                       },
-                    );
-                  }),
+                    ); // PageContent에 전달
+                  },
                 ),
               ),
-            ),
-            // Section별 리스트
-
-            const SizedBox(
-              height: 20,
-            ),
-
-            /// Section
-            for (var programs in programsList)
-              Section(programs: programs)
-          ],
+        
+              /// (상단) Page Indicator
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15.0),
+                // custom PageIndicator
+                child: PageIndicator(
+                  pageCount: 4, // 실제 프로그램 count 할당할 것
+                  pageController: _pageController,
+                ),
+              ),
+        
+              const SizedBox(
+                height: 20,
+              ),
+        
+              /// (중앙) 카테고리 버튼
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                child: Container(
+                  height: 100.0,
+                  child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+        
+                    // List.generate를 통한 루프 실시
+                    // Category(enum)에 따른 length 처리
+                    children: List.generate(CategoryType.values.length, (index) {
+                      final categoryType = CategoryType.values[index]; // index에 따른 CategoryType 할당
+                      // label, icon 설정
+                      final label = categoryType.displayName; // 확장된 displayName 사용
+                      final icon = categoryType.icon; // 확장된 icon 사용
+                      return CategoryButtons(
+                        icon: icon,
+                        label: label,
+                        index: index,
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.category, arguments: index);
+                        },
+                      );
+                    }),
+                  ),
+                ),
+              ),
+              // Section별 리스트
+        
+              const SizedBox(
+                height: 20,
+              ),
+        
+              /// Section
+              for (var programs in programsList)
+                Section(programs: programs)
+            ],
+          ),
         ),
       ),
     );

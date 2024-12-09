@@ -29,7 +29,7 @@ class _CategoryButtonsState extends State<CategoryButtons> {
           height: 50,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: Colors.white,
           ),
           child: IconButton(
             icon: Icon(
@@ -43,11 +43,11 @@ class _CategoryButtonsState extends State<CategoryButtons> {
           ),
         ),
 
-        const SizedBox(height: 4),
+        const SizedBox(height: 10),
 
         Text(
           widget.label,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.labelLarge,
         ),
       ],
     );

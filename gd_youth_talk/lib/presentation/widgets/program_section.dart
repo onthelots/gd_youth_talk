@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/app/dummy_data.dart';
+import 'package:gd_youth_talk/app/routes.dart';
 
 /// Widgets 3. Section
 //TODO : Bloc을 통해, 할당된 Program 데이터를 할당할 것
@@ -13,7 +14,7 @@ class Section extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 13.0),
+      padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 15.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -35,8 +36,11 @@ class Section extends StatelessWidget {
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 5.0),
                   child: ProgramSectionListTile(
-                    programs: programs,
+                    program: programs.items[index],
                     index: index,
+                    onTap: (program) {
+                      Navigator.pushNamed(context, Routes.programDetail, arguments: program);
+                    },
                   ),
                 );
               },
@@ -49,45 +53,52 @@ class Section extends StatelessWidget {
 }
 
 class ProgramSectionListTile extends StatelessWidget {
-  final Programs programs;
+  final Program program;
   final int index;
+  final Function(Program)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
 
   ProgramSectionListTile({
-    required this.programs,
+    required this.program,
     required this.index,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      width: 150,
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(5),
-              child: Image.network(
-                programs.items[index].thumbnailUrl,
-                width: 120, // 이미지 크기 조정
-                height: 120,
-                fit: BoxFit.cover, // 이미지 크기에 맞게 자르기
-              ),
-            ),
+    return Material(
+      child: InkWell(
+        onTap: () => onTap?.call(program), // program을 전달하며 탭 이벤트 핸들러 호출
+        child: Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          width: 150,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.network(
+                    program.thumbnailUrl,
+                    width: 120, // 이미지 크기 조정
+                    height: 120,
+                    fit: BoxFit.cover, // 이미지 크기에 맞게 자르기
+                  ),
+                ),
 
-            SizedBox(
-              height: 5,
-            ),
+                SizedBox(
+                  height: 10,
+                ),
 
-            Text(
-              programs.items[index].title,
-              style: Theme.of(context).textTheme.bodyMedium,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2, // max line
-            )
-          ],
+                Text(
+                  program.title,
+                  style: Theme.of(context).textTheme.labelMedium,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2, // max line
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );

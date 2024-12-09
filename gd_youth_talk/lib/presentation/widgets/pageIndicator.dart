@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gd_youth_talk/core/constants.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PageIndicator extends StatelessWidget {
@@ -15,8 +16,10 @@ class PageIndicator extends StatelessWidget {
       child: SmoothPageIndicator(
           controller: pageController,
           count: pageCount,
-          effect: const ScrollingDotsEffect(
-            activeDotColor: Colors.indigoAccent,
+          effect: ScrollingDotsEffect(
+            activeDotColor: Theme.of(context).brightness == Brightness.light
+                ? AppColors.lightPrimary
+                : AppColors.darkPrimary,
             activeStrokeWidth: 10,
             activeDotScale: 1.7,
             maxVisibleDots: 5,

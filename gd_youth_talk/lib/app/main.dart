@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/app/routes.dart';
 import 'package:gd_youth_talk/app/splash_screen.dart';
 import 'package:gd_youth_talk/core/theme.dart';
+import 'dummy_data.dart';
 import 'package:gd_youth_talk/presentation/screens/calendar/calendar_screen.dart';
+import 'package:gd_youth_talk/presentation/screens/detail/detail_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/home/category_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/home/home_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/landing/landing_screen.dart';
@@ -43,6 +45,8 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder: (_) => CalendarScreen());
       case Routes.more:
         return MaterialPageRoute(builder: (_) => MoreScreen());
+      case Routes.programDetail:
+        return MaterialPageRoute(builder: (_) => DetailScreen(program: settings.arguments as Program));
       case Routes.category:
         return MaterialPageRoute(builder: (_) => CategoryScreen(selectedIndex: settings.arguments as int));
 

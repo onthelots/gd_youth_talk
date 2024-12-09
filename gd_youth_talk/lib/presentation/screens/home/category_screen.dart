@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gd_youth_talk/core/theme.dart';
 import 'package:gd_youth_talk/app/dummy_data.dart';
+import 'package:gd_youth_talk/app/routes.dart';
+import 'package:gd_youth_talk/presentation/widgets/custom_listTile.dart';
 
 class CategoryScreen extends StatefulWidget {
   final int selectedIndex;
@@ -50,17 +53,17 @@ class _CategoryScreenState extends State<CategoryScreen>
             width: double.infinity,
             child: TabBar(
               isScrollable: false,
-              labelStyle: Theme.of(context).textTheme.bodyMedium,
-              unselectedLabelStyle: Theme.of(context).textTheme.bodyMedium,
+              labelStyle: Theme.of(context).textTheme.labelMedium,
+              unselectedLabelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppTheme.unselectedLabelColor(context),
+              ),
               indicatorSize: TabBarIndicatorSize.tab,
               indicatorColor: Theme.of(context).primaryColor,
               indicatorWeight: 1.0,
               controller: _tabController,
-              tabs: const [
-                Tab(text: '건강&웰빙'),
-                Tab(text: '자기계발'),
-                Tab(text: '문화&취미'),
-                Tab(text: '강연&포럼'),
+              tabs: [
+                for (final category in CategoryType.values)
+                  Tab(text: category.displayName)
               ],
             ),
           ),
@@ -78,30 +81,17 @@ class _CategoryScreenState extends State<CategoryScreen>
 
                 final program = programs[itemIndex];
 
-                return ListTile(
-                  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
-                  title: Text(program.title, style: Theme.of(context).textTheme.labelLarge),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(program.description, style: Theme.of(context).textTheme.bodyMedium),
-                      SizedBox(height: 4.0),
-                      // Text('일시: ${item.date.year}-${item.date.month}-${item.date.day} ${item.time.format(context)}', style: Theme.of(context).textTheme.bodySmall),
-                      Text('위치: ${program.location}', style: Theme.of(context).textTheme.bodySmall),
-                    ],
-                  ),
-                  trailing: Container(
-                    child: Image.network(
-                      program.thumbnailUrl,
-                      width: 65,
-                      height: 65,
-                      fit: BoxFit.cover,
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0), // 항목 간격 추가
+                  child: SizedBox(
+                    height: 150, // 150
+                    child: CustomListTile(
+                      program: program,
+                      onTap: (program) {
+                        Navigator.pushNamed(context, Routes.programDetail, arguments: program);
+                      },
                     ),
                   ),
-                  onTap: () {
-                    // 항목을 클릭했을 때 처리할 로직
-                    print('탭된 항목: ${program.title}');
-                  },
                 );
               },
             );

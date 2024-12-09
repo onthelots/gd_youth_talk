@@ -9,6 +9,7 @@ class AppTheme {
     brightness: Brightness.light,
     primaryColor: AppColors.lightPrimary, // 주요색상
     scaffoldBackgroundColor: AppColors.lightBackground, // 백그라운드 색상
+    highlightColor: AppColors.lightAccent,
 
     // - text
     textTheme: const TextTheme(
@@ -16,6 +17,9 @@ class AppTheme {
       bodyLarge: TextStyle(color: AppColors.lightText, fontSize: 18, fontWeight: FontWeight.bold),
       bodyMedium: TextStyle(color: AppColors.lightText, fontSize: 14),
       bodySmall: TextStyle(color: AppColors.lightText, fontSize: 10),
+      labelLarge: TextStyle(color: AppColors.lightText, fontSize: 13, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
+      labelMedium: TextStyle(color: AppColors.lightText, fontSize: 13, fontWeight: FontWeight.w800), // Section 타이틀
+      labelSmall: TextStyle(color: AppColors.lightText, fontSize: 11, fontWeight: FontWeight.w600), // 위치, 장소
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -40,6 +44,7 @@ class AppTheme {
     brightness: Brightness.dark,
     primaryColor: AppColors.darkPrimary,
     scaffoldBackgroundColor: AppColors.darkBackground,
+    highlightColor: AppColors.darkAccent,
 
     // - text
     textTheme: const TextTheme(
@@ -47,6 +52,9 @@ class AppTheme {
       bodyLarge: TextStyle(color: AppColors.darkText, fontSize: 18, fontWeight: FontWeight.bold),
       bodyMedium: TextStyle(color: AppColors.darkText, fontSize: 14),
       bodySmall: TextStyle(color: AppColors.darkText, fontSize: 10),
+      labelLarge: TextStyle(color: AppColors.darkText, fontSize: 13, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
+      labelMedium: TextStyle(color: AppColors.darkText, fontSize: 13, fontWeight: FontWeight.w800), // Section 타이틀
+      labelSmall: TextStyle(color: AppColors.darkText, fontSize: 11, fontWeight: FontWeight.w600), // 위치, 장소
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -62,4 +70,16 @@ class AppTheme {
       ),
     ),
   );
+
+  // Get selected label color based on the current theme
+  static Color selectedLabelColor(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    return isDarkMode ? AppColors.darkActiveButtonText : AppColors.lightActiveButtonText;
+  }
+
+  // Get unselected label color based on the current theme
+  static Color unselectedLabelColor(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    return isDarkMode ? AppColors.darkInactiveButtonText : AppColors.lightInactiveButtonText;
+  }
 }
