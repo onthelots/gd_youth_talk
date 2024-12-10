@@ -1,18 +1,28 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/app/routes.dart';
 import 'package:gd_youth_talk/app/splash_screen.dart';
 import 'package:gd_youth_talk/core/theme.dart';
-import 'dummy_data.dart';
+import 'package:gd_youth_talk/presentation/screens/more/theme_screen.dart';
+import 'app/dummy_data.dart';
 import 'package:gd_youth_talk/presentation/screens/calendar/calendar_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/detail/detail_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/home/category_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/home/home_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/landing/landing_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/main/main_screen.dart';
-import 'package:gd_youth_talk/presentation/screens/more/more_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/search/search_screen.dart';
+import 'package:gd_youth_talk/presentation/screens/more/more_screen.dart';
+import 'package:gd_youth_talk/presentation/screens/web/webview_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb &&
+      kDebugMode &&
+      defaultTargetPlatform == TargetPlatform.android) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
+  }
   runApp(MyApp());
 }
 
@@ -45,15 +55,16 @@ class MyApp extends StatelessWidget {
         return MaterialPageRoute(builder: (_) => CalendarScreen());
       case Routes.more:
         return MaterialPageRoute(builder: (_) => MoreScreen());
+      case Routes.setting:
+        return MaterialPageRoute(builder: (_) => ThemeScreen());
       case Routes.programDetail:
         return MaterialPageRoute(builder: (_) => DetailScreen(program: settings.arguments as Program));
       case Routes.category:
-        return MaterialPageRoute(builder: (_) => CategoryScreen(selectedIndex: settings.arguments as int));
-
-        //TODO: 상세 프로그램 페이지에서는, 데이터를 넘겨받을 것 (settings.arguments)
-      case Routes.programDetail:
-      // return MaterialPageRoute(builder: (_) => CategoryScreen());
-        return null;
+        final pageIndex = settings.arguments as int;
+        return MaterialPageRoute(builder: (_) => CategoryScreen(selectedIndex: pageIndex));
+      case Routes.webView:
+        final url = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) => WebViewScreen(url: url));
       default:
         return null; // 경로가 정의되지 않은 경우 null 반환
     }

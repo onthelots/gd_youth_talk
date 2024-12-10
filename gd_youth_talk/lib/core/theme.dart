@@ -14,12 +14,13 @@ class AppTheme {
     // - text
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: AppColors.lightText, fontSize: 32),
-      bodyLarge: TextStyle(color: AppColors.lightText, fontSize: 18, fontWeight: FontWeight.bold),
-      bodyMedium: TextStyle(color: AppColors.lightText, fontSize: 14),
-      bodySmall: TextStyle(color: AppColors.lightText, fontSize: 10),
-      labelLarge: TextStyle(color: AppColors.lightText, fontSize: 13, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
-      labelMedium: TextStyle(color: AppColors.lightText, fontSize: 13, fontWeight: FontWeight.w800), // Section 타이틀
-      labelSmall: TextStyle(color: AppColors.lightText, fontSize: 11, fontWeight: FontWeight.w600), // 위치, 장소
+      displayMedium: TextStyle(color: AppColors.lightText, fontSize: 25, fontWeight: FontWeight.bold),
+      bodyLarge: TextStyle(color: AppColors.lightText, fontSize: 20, fontWeight: FontWeight.bold),
+      bodyMedium: TextStyle(color: AppColors.lightText, fontSize: 16),
+      bodySmall: TextStyle(color: AppColors.lightText, fontSize: 12),
+      labelLarge: TextStyle(color: AppColors.lightText, fontSize: 20, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
+      labelMedium: TextStyle(color: AppColors.lightText, fontSize: 16, fontWeight: FontWeight.w800), // Section 타이틀
+      labelSmall: TextStyle(color: AppColors.lightText, fontSize: 12, fontWeight: FontWeight.w600), // 위치, 장소
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
@@ -49,12 +50,13 @@ class AppTheme {
     // - text
     textTheme: const TextTheme(
       displayLarge: TextStyle(color: AppColors.darkText, fontSize: 32),
-      bodyLarge: TextStyle(color: AppColors.darkText, fontSize: 18, fontWeight: FontWeight.bold),
-      bodyMedium: TextStyle(color: AppColors.darkText, fontSize: 14),
-      bodySmall: TextStyle(color: AppColors.darkText, fontSize: 10),
-      labelLarge: TextStyle(color: AppColors.darkText, fontSize: 13, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
-      labelMedium: TextStyle(color: AppColors.darkText, fontSize: 13, fontWeight: FontWeight.w800), // Section 타이틀
-      labelSmall: TextStyle(color: AppColors.darkText, fontSize: 11, fontWeight: FontWeight.w600), // 위치, 장소
+      displayMedium: TextStyle(color: AppColors.darkText, fontSize: 25, fontWeight: FontWeight.bold),
+      bodyLarge: TextStyle(color: AppColors.darkText, fontSize: 20, fontWeight: FontWeight.bold),
+      bodyMedium: TextStyle(color: AppColors.darkText, fontSize: 16),
+      bodySmall: TextStyle(color: AppColors.darkText, fontSize: 12),
+      labelLarge: TextStyle(color: AppColors.darkText, fontSize: 20, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
+      labelMedium: TextStyle(color: AppColors.darkText, fontSize: 16, fontWeight: FontWeight.w800), // Section 타이틀
+      labelSmall: TextStyle(color: AppColors.darkText, fontSize: 12, fontWeight: FontWeight.w600), // 위치, 장소
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gd_youth_talk/app/dummy_data.dart';
 
 /// App Colors
 class AppColors {
@@ -34,4 +33,24 @@ class CustomBottomNavigationBar {
   BottomNavigationBarItem(icon: Icon(Icons.calendar_today), label: 'Calendar'),
   BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: 'More'),
   ];
+}
+
+/// WebView Routes
+class WebRoutes {
+  static const String introduce = 'https://youth.seoul.go.kr/orang/cntr/intro.do?key=2309210001&cntrId=CT00001';
+  static const String instagram = 'https://www.instagram.com/syc_gangdong/#';
+  static const String customerService  = 'https://pf.kakao.com/_GQxjUxb';
+  static const String blog  = 'https://blog.naver.com/syc_gangdong';
+  static const String coronation = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S231102155211165423';
+  static const String location = 'https://map.naver.com/p/entry/place/1133065835?placePath=%2Fhome&c=15.00,0,0,0,dh';
+  static const String termsOfUse = 'https://iosdevlime.tistory.com/';
+  static const String openSource = 'https://iosdevlime.tistory.com/';
+}
+
+class MenuItem {
+  final String menuTitle;
+  final String route;
+  final Widget? trailing;
+
+  MenuItem({required this.menuTitle, required this.route, this.trailing});
 }

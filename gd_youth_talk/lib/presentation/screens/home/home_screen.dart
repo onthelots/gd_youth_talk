@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/app/routes.dart';
 import 'package:gd_youth_talk/core/constants.dart';
-import 'package:gd_youth_talk/presentation/widgets/program_section.dart';
+import 'package:gd_youth_talk/presentation/screens/home/widgets/program_section.dart';
 import 'package:gd_youth_talk/presentation/widgets/pageIndicator.dart';
-import 'package:gd_youth_talk/presentation/widgets/category_buttons.dart';
-import 'package:gd_youth_talk/presentation/widgets/program_page_contents.dart';
+import 'package:gd_youth_talk/presentation/screens/home/widgets/category_buttons.dart';
+import 'package:gd_youth_talk/presentation/screens/home/widgets/program_page_contents.dart';
 import 'package:gd_youth_talk/app/dummy_data.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,7 +19,20 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        scrolledUnderElevation: 0,
+        leadingWidth: 200.0,
+        leading: Align(
+          alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
+          child: Padding(
+            padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
+            child: Icon(Icons.add)
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(top: 5),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

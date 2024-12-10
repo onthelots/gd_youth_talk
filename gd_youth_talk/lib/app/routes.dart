@@ -7,6 +7,8 @@ class Routes {
   static const String search = '/search';
   static const String calendar = '/calendar';
   static const String more = '/more';
+  static const String setting = '/setting';
   static const String category = '/category';
   static const String programDetail = '/detail';
+  static const String webView = '/webView';
 }

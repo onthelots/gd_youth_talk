@@ -12,7 +12,7 @@ class CategoryButtons extends StatefulWidget {
   final IconData icon;
   final String label;
   final int index;
-  final void Function() onTap;
+  final VoidCallback onTap;
 
   @override
   State<CategoryButtons> createState() => _CategoryButtonsState();

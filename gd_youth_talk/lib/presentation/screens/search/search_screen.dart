@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/app/dummy_data.dart';
 import 'package:gd_youth_talk/app/routes.dart';
-import 'package:gd_youth_talk/presentation/widgets/search_result_tile.dart';
-import 'package:gd_youth_talk/presentation/widgets/search_result_placeholder.dart';
+import 'package:gd_youth_talk/presentation/screens/search/widgets/search_result_tile.dart';
+import 'package:gd_youth_talk/presentation/screens/search/widgets/search_result_placeholder.dart';
 import 'package:gd_youth_talk/core/constants.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -56,7 +56,23 @@ class _SearchScreenState extends State<SearchScreen> {
     final isDarkMode = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      body: SafeArea(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        scrolledUnderElevation: 0,
+        leadingWidth: 200.0,
+        leading: Align(
+          alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
+          child: Padding(
+            padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
+            child: Text(
+                '검색',
+                style: Theme.of(context).textTheme.displayMedium
+            ),
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(top: 5),
         child: Column(
           children: [
             Padding(
@@ -88,9 +104,11 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: searchQueryResult.isEmpty && searchQuery.isEmpty
-                    ? Center(child: SearchResultPlaceholder())
+                    ? Center(
+                        child: SearchResultPlaceholder(),
+                      )
                     : ListView.builder(
                   itemCount: searchQueryResult.length,
                   itemBuilder: (context, index) {
