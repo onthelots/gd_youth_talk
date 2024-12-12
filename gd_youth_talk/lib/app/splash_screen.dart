@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'routes.dart';
+import 'package:gd_youth_talk/data/models/program_model.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -8,6 +9,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late Stream<List<ProgramModel>> _programStream;
+
   @override
   void initState() {
     super.initState();

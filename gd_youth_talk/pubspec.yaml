@@ -15,6 +15,7 @@ dependencies:
   equatable: ^2.0.7
 
   # Firebase
+  firebase_core: ^3.8.1
 
   # Local Storage
   shared_preferences: ^2.3.3
@@ -34,6 +35,8 @@ dependencies:
 
   # Shared
   share_plus: ^10.1.2
+  cloud_firestore: ^5.5.1
+  firebase_storage: ^12.3.7
 
 dev_dependencies:
   flutter_test:

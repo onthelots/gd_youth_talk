@@ -54,3 +54,7 @@ class MenuItem {
 
   MenuItem({required this.menuTitle, required this.route, this.trailing});
 }
+
+class FirebaseOption {
+  static const String programCollection = 'programs';
+}

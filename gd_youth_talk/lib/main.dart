@@ -15,6 +15,8 @@ import 'package:gd_youth_talk/presentation/screens/main/main_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/search/search_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/more/more_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/web/webview_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +25,10 @@ void main() async {
       defaultTargetPlatform == TargetPlatform.android) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(kDebugMode);
   }
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -66,7 +72,7 @@ class MyApp extends StatelessWidget {
         final url = settings.arguments as String;
         return MaterialPageRoute(builder: (_) => WebViewScreen(url: url));
       default:
-        return null; // 경로가 정의되지 않은 경우 null 반환
+        return null;
     }
   }
 }
