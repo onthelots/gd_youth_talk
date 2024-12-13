@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gd_youth_talk/app/dummy_data.dart';
+import 'package:gd_youth_talk/data/models/program_model.dart';
 
 class DetailScreen extends StatelessWidget {
-  final Program program;
+  final ProgramModel program;
 
   DetailScreen({super.key, required this.program});
 

@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/core/theme.dart';
-import 'package:gd_youth_talk/app/dummy_data.dart';
 import 'package:gd_youth_talk/app/routes.dart';
+import 'package:gd_youth_talk/data/models/program_model.dart';
 import 'package:gd_youth_talk/presentation/widgets/custom_listTile.dart';
 
 class CategoryScreen extends StatefulWidget {
   final int selectedIndex;
-
-  // 더미데이터 기반, Parse 예시
-  final List<Programs> programsList = programData.entries.map((entry) {
-    return Programs.fromMap(entry.key, entry.value as Map<String, dynamic>);
-  }).toList();
 
   CategoryScreen({Key? key, required this.selectedIndex})
       : super(key: key);
@@ -27,7 +22,7 @@ class _CategoryScreenState extends State<CategoryScreen>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: widget.programsList.length,
+      length: 4,
       vsync: this,
       initialIndex: widget.selectedIndex,
     );
@@ -62,8 +57,8 @@ class _CategoryScreenState extends State<CategoryScreen>
               indicatorWeight: 1.0,
               controller: _tabController,
               tabs: [
-                for (final category in CategoryType.values)
-                  Tab(text: category.displayName)
+                // for (final category in CategoryType.values)
+                //   Tab(text: category.displayName)
               ],
             ),
           ),
@@ -73,20 +68,20 @@ class _CategoryScreenState extends State<CategoryScreen>
         padding: EdgeInsets.symmetric(vertical: 20.0),
         child: TabBarView(
           controller: _tabController,
-          children: List.generate(widget.programsList.length, (index) {
-            final programs = widget.programsList[index].items;
+          children: List.generate(4, (index) {
+            // final programs = widget.programsList[index].items;
             return ListView.builder(
-              itemCount: programs.length,
+              itemCount: 4,
               itemBuilder: (context, itemIndex) {
 
-                final program = programs[itemIndex];
+                // final program = programs[itemIndex];
 
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 15.0), // 항목 간격 추가
                   child: SizedBox(
                     height: 150, // 150
                     child: CustomListTile(
-                      program: program,
+                      program: ProgramModel(),
                       onTap: (program) {
                         Navigator.pushNamed(context, Routes.programDetail, arguments: program);
                       },

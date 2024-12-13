@@ -9,7 +9,7 @@ class ProgramDataSource {
 
   /// 1. Programs data 받아오기
   Stream<List<ProgramModel>> getProgramsStream() {
-    return _firestore.collection(FirebaseOption.programCollection).snapshots().map((snapshot) {
+    return _firestore.collection('programs').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         return ProgramModel.fromFirebase(doc.data());
       }).toList();

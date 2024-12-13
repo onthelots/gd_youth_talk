@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'routes.dart';
-import 'package:gd_youth_talk/data/models/program_model.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -9,7 +8,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late Stream<List<ProgramModel>> _programStream;
 
   @override
   void initState() {
@@ -17,8 +15,8 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateToNextScreen();
   }
 
+  /// Splash 애니메이션 이후, isFirstLaunch에 따른 첫 화면 분기처리 실시
   Future<void> _navigateToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 2)); // 딜레이
 
     final prefs = await SharedPreferences.getInstance();
     final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
@@ -35,7 +33,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: Center(
+          child: SizedBox(
+              width: 100, height: 100, child: Icon(Icons.add)),
+        ),
       ),
     );
   }

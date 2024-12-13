@@ -29,6 +29,9 @@ class GetProgramsByDateEvent extends ProgramEvent {
   GetProgramsByDateEvent(this.date);
 }
 
+// Event 5. 카테고리 별 프로그램 (Map 형식)
+class LoadProgramsByCategories extends ProgramEvent {}
+
 /// State 정의
 abstract class ProgramState {}
 
@@ -37,9 +40,10 @@ class ProgramLoadingState extends ProgramState {}
 
 // State 2. Loaded
 class ProgramLoadedState extends ProgramState {
-  final List<ProgramModel> programs;
+  late List<ProgramModel> latestPrograms;
+  late Map<String, List<ProgramModel>> categorizedPrograms;
 
-  ProgramLoadedState(this.programs);
+  ProgramLoadedState(this.latestPrograms, this.categorizedPrograms);
 }
 
 // State 3. Error
@@ -61,44 +65,62 @@ class ProgramBloc extends Bloc<ProgramEvent, ProgramState> {
     on<GetLatestProgramsEvent>((event, emit) async {
       emit(ProgramLoadingState()); // 로딩중
       try {
-        final programs = await useCase.getLatestPrograms().first;
-        emit(ProgramLoadedState(programs)); // 로드 완료
+        final latestPrograms = await useCase.getLatestPrograms().first;
+        if (latestPrograms.isEmpty) {
+          emit(ProgramErrorState('데이터가 없습니다.'));
+        } else {
+          emit(ProgramLoadedState(latestPrograms, {}));
+        }
       } catch (e) {
         emit(ProgramErrorState(e.toString())); // 에러
+        print(e);
       }
     });
 
     // GetProgramsByCategoryEvent 처리
-    on<GetProgramsByCategoryEvent>((event, emit) async {
-      emit(ProgramLoadingState()); // 로딩중
-      try {
-        final programs = await useCase.getProgramsByCategory(event.category).first;
-        emit(ProgramLoadedState(programs)); // 로드 완료
-      } catch (e) {
-        emit(ProgramErrorState(e.toString())); // 에러
-      }
-    });
-
+    // on<LoadProgramsByCategories>((event, emit) async {
+    //   emit(ProgramLoadingState()); // 로딩중
+    //   try {
+    //     final categorizedPrograms = await useCase.getProgramsByCategories().first;
+    //     emit(ProgramLoadedState(latestPrograms: [], categorizedPrograms: categorizedPrograms)); // 로드 완료
+    //   } catch (e) {
+    //     emit(ProgramErrorState(e.toString())); // 에러
+    //     print(e);
+    //   }
+    // });
+    // //
+    // GetProgramsByCategoryEvent 처리
+    // on<GetProgramsByCategoryEvent>((event, emit) async {
+    //   emit(ProgramLoadingState()); // 로딩중
+    //   try {
+    //     final categoryPrograms = await useCase.getProgramsByCategory(event.category).first;
+    //     final currentState = state as ProgramLoadedState;
+    //     emit(ProgramLoadedState(categoryPrograms: categoryPrograms)); // 로드 완료
+    //   } catch (e) {
+    //     emit(ProgramErrorState(e.toString())); // 에러
+    //   }
+    // });
+    //
     // SearchProgramsEvent 처리
-    on<SearchProgramsEvent>((event, emit) async {
-      emit(ProgramLoadingState()); // 로딩중
-      try {
-        final programs = await useCase.searchPrograms(event.query).first;
-        emit(ProgramLoadedState(programs)); // 로드 완료
-      } catch (e) {
-        emit(ProgramErrorState(e.toString())); // 에러
-      }
-    });
-
+    // on<SearchProgramsEvent>((event, emit) async {
+    //   emit(ProgramLoadingState()); // 로딩중
+    //   try {
+    //     final programs = await useCase.searchPrograms(event.query).first;
+    //     emit(ProgramLoadedState(programs)); // 로드 완료
+    //   } catch (e) {
+    //     emit(ProgramErrorState(e.toString())); // 에러
+    //   }
+    // });
+    //
     // GetProgramsByDateEvent 처리
-    on<GetProgramsByDateEvent>((event, emit) async {
-      emit(ProgramLoadingState());
-      try {
-        final programs = await useCase.getProgramsByDate(event.date).first;
-        emit(ProgramLoadedState(programs));
-      } catch (e) {
-        emit(ProgramErrorState(e.toString()));
-      }
-    });
+    // on<GetProgramsByDateEvent>((event, emit) async {
+    //   emit(ProgramLoadingState());
+    //   try {
+    //     final programs = await useCase.getProgramsByDate(event.date).first;
+    //     emit(ProgramLoadedState(programs));
+    //   } catch (e) {
+    //     emit(ProgramErrorState(e.toString()));
+    //   }
+    // });
   }
 }

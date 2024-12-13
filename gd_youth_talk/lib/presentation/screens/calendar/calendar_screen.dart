@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gd_youth_talk/data/models/program_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:gd_youth_talk/app/routes.dart';
-import 'package:gd_youth_talk/app/dummy_data.dart';
 import 'package:gd_youth_talk/presentation/screens/calendar/widgets/calendar_tile.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -11,20 +11,15 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
 
-  // 더미데이터
-  final List<Programs> programsList = programData.entries.map((entry) {
-    return Programs.fromMap(entry.key, entry.value as Map<String, dynamic>);
-  }).toList();
-
   // 날짜와 프로그램 데이터
-  late Map<DateTime, List<Program>> _events;
+  late Map<DateTime, List<ProgramModel>> _events;
 
   // 현재 선택된 날짜 (오늘)
   late DateTime _focusedDay;
 
   // 선택한  날짜
   late DateTime _selectedDay;
-  List<Program> _selectedPrograms = []; // 선택된 날짜의 프로그램 목록
+  List<ProgramModel> _selectedPrograms = []; // 선택된 날짜의 프로그램 목록
 
   @override
   void initState() {
@@ -32,29 +27,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
     _focusedDay = DateTime.now();
     _selectedDay = _focusedDay;
-    _events = _initializeEvents(); // 초기화 시 _events를 설정합니다.
+    // _events = _initializeEvents(); // 초기화 시 _events를 설정합니다.
     Future.delayed(Duration.zero, () {
       _updateSelectedPrograms(_selectedDay);
     });
   }
 
-  Map<DateTime, List<Program>> _initializeEvents() {
-    Map<DateTime, List<Program>> events = {};
-
-    // programsList에서 각 프로그램을 날짜별로 매핑
-    for (var programs in programsList) {
-      for (var program in programs.items) {
-        DateTime programDate = program.date;
-
-        // 프로그램 날짜를 기준으로 프로그램을 추가
-        if (events[programDate] == null) {
-          events[programDate] = [];
-        }
-        events[programDate]!.add(program);
-      }
-    }
-    return events;
-  }
+  // Map<DateTime, List<ProgramModel>> _initializeEvents() {
+  //   Map<DateTime, List<ProgramModel>> events = {};
+  //
+  //   // programsList에서 각 프로그램을 날짜별로 매핑
+  //   for (var programs in programsList) {
+  //     for (var program in programs.items) {
+  //       DateTime programDate = program.date;
+  //
+  //       // 프로그램 날짜를 기준으로 프로그램을 추가
+  //       if (events[programDate] == null) {
+  //         events[programDate] = [];
+  //       }
+  //       events[programDate]!.add(program);
+  //     }
+  //   }
+  //   return events;
+  // }
 
   void _updateSelectedPrograms(DateTime day) {
     print("Selected Day: $day");

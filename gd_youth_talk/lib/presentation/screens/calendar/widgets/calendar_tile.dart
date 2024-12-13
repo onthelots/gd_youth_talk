@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gd_youth_talk/app/dummy_data.dart';
+import 'package:gd_youth_talk/data/models/program_model.dart';
 
 class CalendarTile extends StatelessWidget {
   const CalendarTile({
@@ -8,8 +8,8 @@ class CalendarTile extends StatelessWidget {
     required this.onTap,
   });
 
-  final Program program;
-  final Function(Program)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
+  final ProgramModel program;
+  final Function(ProgramModel)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
 
   @override
   Widget build(BuildContext context) {
@@ -19,18 +19,18 @@ class CalendarTile extends StatelessWidget {
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(5),
         child: Image.network(
-          program.thumbnailUrl,
+          program.thumbnail ?? "",
           width: 65,
           height: 65,
           fit: BoxFit.cover,
         ),
       ),
       title: Text(
-        program.title,
+        program.title ?? "",
         style: Theme.of(context).textTheme.labelLarge,
       ),
       subtitle: Text(
-        program.time,
+          program.startDate.toString(),
         style: Theme.of(context).textTheme.labelSmall,
       ),
       trailing: Text(

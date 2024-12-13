@@ -43,4 +43,24 @@ class ProgramUseCase {
       }).toList();
     });
   }
+
+  /// UseCase5. 모든 카테고리와 그에 해당하는 프로그램 리스트 반환
+  Stream<Map<String, List<ProgramModel>>> getProgramsByCategories() {
+    return repository.getPrograms().map((programs) {
+      // 고정된 카테고리 목록
+      final categories = ['문화예술', '자기계발', '교육강연', '이벤트'];
+
+      // 카테고리별 프로그램 리스트로 그룹화
+      final categorizedPrograms = <String, List<ProgramModel>>{};
+
+      for (var category in categories) {
+        // 해당 카테고리의 프로그램들을 필터링하여 저장
+        categorizedPrograms[category] = programs
+            .where((program) => program.category == category)
+            .toList();
+      }
+
+      return categorizedPrograms;
+    });
+  }
 }

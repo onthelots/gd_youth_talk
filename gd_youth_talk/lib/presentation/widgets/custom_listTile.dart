@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gd_youth_talk/app/dummy_data.dart';
+import 'package:gd_youth_talk/data/models/program_model.dart';
 
 class CustomListTile extends StatelessWidget {
-  final Function(Program)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
-  final Program program;
+  final Function(ProgramModel)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
+  final ProgramModel program;
 
   // 사용자 지정 목록 타일의 생성자
   const CustomListTile({
@@ -34,7 +34,7 @@ class CustomListTile extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Image.network(
-                      program.thumbnailUrl,
+                      program.thumbnail ?? "",
                       width: 150, // 이미지 크기 조정
                       height: 150,
                       fit: BoxFit.cover, // 이미지 크기에 맞게 자르기
@@ -56,14 +56,14 @@ class CustomListTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      program.subtitle,
+                      program.subtitle ?? "",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1, // max line
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
 
                     Text(
-                      program.title,
+                      program.title ?? "",
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2, // max line
                       style: Theme.of(context).textTheme.bodyLarge,
@@ -83,7 +83,7 @@ class CustomListTile extends StatelessWidget {
                         ),
                         Text(
                           style: Theme.of(context).textTheme.labelSmall,
-                          program.formatDateTime(),
+                          program.startDate.toString(),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1, // max line
                         ),
@@ -102,7 +102,7 @@ class CustomListTile extends StatelessWidget {
                         ),
                         Text(
                           style: Theme.of(context).textTheme.labelSmall,
-                          program.location,
+                          program.location ?? "",
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1, // max line
                         ),

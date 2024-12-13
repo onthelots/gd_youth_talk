@@ -4,8 +4,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/app/routes.dart';
 import 'package:gd_youth_talk/app/splash_screen.dart';
 import 'package:gd_youth_talk/core/theme.dart';
+import 'package:gd_youth_talk/data/models/program_model.dart';
 import 'package:gd_youth_talk/presentation/screens/more/theme_screen.dart';
-import 'app/dummy_data.dart';
 import 'package:gd_youth_talk/presentation/screens/calendar/calendar_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/detail/detail_screen.dart';
 import 'package:gd_youth_talk/presentation/screens/home/category_screen.dart';
@@ -64,7 +64,7 @@ class MyApp extends StatelessWidget {
       case Routes.setting:
         return MaterialPageRoute(builder: (_) => ThemeScreen());
       case Routes.programDetail:
-        return MaterialPageRoute(builder: (_) => DetailScreen(program: settings.arguments as Program));
+        return MaterialPageRoute(builder: (_) => DetailScreen(program: settings.arguments as ProgramModel));
       case Routes.category:
         final pageIndex = settings.arguments as int;
         return MaterialPageRoute(builder: (_) => CategoryScreen(selectedIndex: pageIndex));

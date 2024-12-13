@@ -27,6 +27,7 @@ class ProgramModel {
 
   // Firebase의 json 형식을 Model 객체로 변환
   factory ProgramModel.fromFirebase(Map<String, dynamic> data) {
+    print('Firebase Data: $data'); // 데이터 로그로 출력
     return ProgramModel(
       category: data['category'] as String?,
       title: data['title'] as String?,

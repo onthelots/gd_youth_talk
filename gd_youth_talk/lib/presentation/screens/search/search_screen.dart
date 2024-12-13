@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gd_youth_talk/app/dummy_data.dart';
 import 'package:gd_youth_talk/app/routes.dart';
+import 'package:gd_youth_talk/data/models/program_model.dart';
 import 'package:gd_youth_talk/presentation/screens/search/widgets/search_result_tile.dart';
 import 'package:gd_youth_talk/presentation/screens/search/widgets/search_result_placeholder.dart';
 import 'package:gd_youth_talk/core/constants.dart';
@@ -11,11 +11,8 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final List<Programs> programsList = programData.entries.map((entry) {
-    return Programs.fromMap(entry.key, entry.value as Map<String, dynamic>);
-  }).toList();
 
-  List<Program> searchQueryResult = [];
+  List<ProgramModel> searchQueryResult = [];
   String searchQuery = "";
 
   @override
@@ -39,13 +36,14 @@ class _SearchScreenState extends State<SearchScreen> {
       searchQuery = query;
       if (query.isEmpty) {
         searchQueryResult = [];
-      } else {
-        searchQueryResult = programsList
-            .expand((programs) => programs.items)
-            .where((program) =>
-        program.title.toLowerCase().contains(queryLower) ||
-            program.subtitle.toLowerCase().contains(queryLower))
-            .toList();
+        // } else {
+        //   searchQueryResult = programsList
+        //       .expand((programs) => programs.items)
+        //       .where((program) =>
+        //   program.title.toLowerCase().contains(queryLower) ||
+        //       program.subtitle.toLowerCase().contains(queryLower))
+        //       .toList();
+        // }
       }
     });
   }
