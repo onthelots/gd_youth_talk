@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
-import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
-import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
-import 'package:gd_youth_talk/src/presentation/bloc/program_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/views/home/category_screen.dart';
-import 'package:gd_youth_talk/src/presentation/views/home/widgets/category_buttons.dart';
-import 'package:gd_youth_talk/src/presentation/views/home/widgets/program_page_contents.dart';
-import 'package:gd_youth_talk/src/presentation/views/home/widgets/pageIndicator.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/home_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/home_event.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/home_state.dart';
+import 'package:gd_youth_talk/src/presentation/home/widgets/latest_program_tile.dart';
+import 'package:gd_youth_talk/src/presentation/home/widgets/category_buttons.dart';
+import 'package:gd_youth_talk/src/presentation/home/widgets/pageIndicator.dart';
 
 class HomeScreen extends StatelessWidget {
   final PageController _pageController = PageController();
@@ -17,14 +16,14 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProgramBloc>().add(GetLatestProgramsEvent());
+      context.read<HomeBloc>().add(GetLatestProgramsEvent());
     });
 
-    return BlocBuilder<ProgramBloc, ProgramState>(
+    return BlocBuilder<HomeBloc, HomeState>(
       builder: (context, state) {
-        if (state is ProgramLoadingState) {
+        if (state is HomeLoadingState) {
           return CircularProgressIndicator();
-        } else if (state is ProgramLoadedState) {
+        } else if (state is HomeLoadedState) {
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -36,15 +35,6 @@ class HomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
                     child: Icon(Icons.app_registration)),
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: () {
-                    // 갱신 이벤트 호출
-                    context.read<ProgramBloc>().add(GetLatestProgramsEvent());
-                  },
-                ),
-              ],
             ),
             body: Padding(
               padding: EdgeInsets.only(top: 5),
@@ -59,11 +49,10 @@ class HomeScreen extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         controller: _pageController,
                         physics: const BouncingScrollPhysics(),
-                        itemCount: state.latestPrograms.length,
-                        // 4개만 랜덤으로 표시
+                        itemCount: state.programs.length,
                         itemBuilder: (context, index) {
-                          return PageContent(
-                            program: state.latestPrograms.first,
+                          return LatestProgramTile(
+                            program: state.programs[index],
                             onTap: (program) {
                               Navigator.pushNamed(
                                   context,
@@ -80,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 15.0),
                       // custom PageIndicator
                       child: PageIndicator(
-                        pageCount: state.latestPrograms.length,
+                        pageCount: state.programs.length,
                         // 실제 프로그램 count 할당할 것
                         pageController: _pageController,
                       ),
@@ -133,11 +122,10 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           );
-        } else if (state is ProgramErrorState) {
+        } else if (state is HomeErrorState) {
           return Text('Error: ${state.message}');
         } else {
-          return Center(child: Text('무슨 상태인데..? ${state is ProgramsByCategoryLoadedState ? '카테고리 프로그램' : '몰루'}'));
-          return Container();
+          return Center(child: Text('무슨 상태인데..?'));
         }
       },
     );

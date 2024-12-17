@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
-import 'package:intl/intl.dart';
 
-class PageContent extends StatelessWidget {
+class LatestProgramTile extends StatelessWidget {
   final Function(ProgramModel)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
   final ProgramModel program;
 
-  const PageContent({
+  const LatestProgramTile({
     super.key,
     required this.program,
     required this.onTap,
@@ -73,9 +72,7 @@ class PageContent extends StatelessWidget {
                         ),
                         child: Text(
                           program.category ?? "",
-                          style: const TextStyle(
-                            color: Colors.white
-                          ),
+                          style: Theme.of(context).textTheme.labelMedium
                         ),
                       ),
 
@@ -98,7 +95,7 @@ class PageContent extends StatelessWidget {
                         ),
                         Text(
                           style: Theme.of(context).textTheme.labelSmall,
-                          program.startDate.toString(),
+                          program.programStartDate.toString(),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1, // max line
                         ),

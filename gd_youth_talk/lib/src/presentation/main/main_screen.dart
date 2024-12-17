@@ -3,24 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
-import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
-import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
-import 'package:gd_youth_talk/src/presentation/bloc/bottom_nav_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/bloc/program_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/views/screens.dart';
+import 'package:gd_youth_talk/src/core/screens.dart';
+import 'bloc/bottom_nav_state.dart';
+import 'bloc/bottom_nav_bloc.dart';
+import 'bloc/bottom_nav_event.dart';
 
 class MainScreen extends StatelessWidget {
 
   final List<Widget> _tabs = [
-    locator<HomeScreen>(),
-    locator<SearchScreen>(),
-    locator<CalendarScreen>(),
-    locator<MoreScreen>(),
+    HomeScreen(),
+    SearchScreen(),
+    CalendarScreen(),
+    MoreScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BottomNavBloc, BottomNavState>(
+    return BlocBuilder<BottomNavBloc, TabState>(
       builder: (context, state) {
         final currentIndex = (state as TabState).index; // 기본값 0
         return Scaffold(

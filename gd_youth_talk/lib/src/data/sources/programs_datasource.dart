@@ -1,6 +1,5 @@
-import 'package:gd_youth_talk/core/constants.dart';
-import 'package:gd_youth_talk/data/models/program_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gd_youth_talk/src/data/models/program_model.dart';
 
 class ProgramDataSource {
   final FirebaseFirestore _firestore;

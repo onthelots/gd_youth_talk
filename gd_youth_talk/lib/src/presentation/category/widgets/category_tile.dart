@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 
-class CustomListTile extends StatelessWidget {
+class CategoryTile extends StatelessWidget {
   final Function(ProgramModel)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
   final ProgramModel program;
 
   // 사용자 지정 목록 타일의 생성자
-  const CustomListTile({
+  const CategoryTile({
     super.key,
     this.onTap,
     required this.program,
@@ -83,7 +83,7 @@ class CustomListTile extends StatelessWidget {
                         ),
                         Text(
                           style: Theme.of(context).textTheme.labelSmall,
-                          program.startDate.toString(),
+                          program.programStartDate.toString(),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1, // max line
                         ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../core/routes.dart';
+import 'package:gd_youth_talk/src/core/routes.dart';
 
 class SplashScreen extends StatefulWidget {
   @override

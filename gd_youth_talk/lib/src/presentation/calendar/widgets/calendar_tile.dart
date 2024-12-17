@@ -30,7 +30,7 @@ class CalendarTile extends StatelessWidget {
         style: Theme.of(context).textTheme.labelLarge,
       ),
       subtitle: Text(
-          program.startDate.toString(),
+          program.programStartDate.toString(),
         style: Theme.of(context).textTheme.labelSmall,
       ),
       trailing: Text(

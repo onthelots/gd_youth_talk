@@ -7,8 +7,10 @@ class ProgramModel {
   final String? location;
   final String? blogUrl;
   final String? detail;
-  final DateTime? startDate;
-  final DateTime? endDate;
+  final DateTime? programStartDate;
+  final DateTime? programEndDate;
+  final DateTime? RegistrationStartDate;
+  final DateTime? RegistrationEndDate;
   final DateTime? lastModified;
   final String? thumbnail;
 
@@ -19,15 +21,16 @@ class ProgramModel {
     this.location,
     this.blogUrl,
     this.detail,
-    this.startDate,
-    this.endDate,
+    this.programStartDate,
+    this.programEndDate,
+    this.RegistrationStartDate,
+    this.RegistrationEndDate,
     this.lastModified,
     this.thumbnail,
   });
 
   // Firebase의 json 형식을 Model 객체로 변환
   factory ProgramModel.fromFirebase(Map<String, dynamic> data) {
-    print('Firebase Data: $data'); // 데이터 로그로 출력
     return ProgramModel(
       category: data['category'] as String?,
       title: data['title'] as String?,
@@ -35,8 +38,10 @@ class ProgramModel {
       location: data['location'] as String?,
       blogUrl: data['blogUrl'] as String?,
       detail: data['detail'] as String?,
-      startDate: (data['startDate'] as Timestamp?)?.toDate(),
-      endDate: (data['endDate'] as Timestamp?)?.toDate(),
+      programStartDate: (data['programStartDate'] as Timestamp?)?.toDate(),
+      programEndDate: (data['programEndDate'] as Timestamp?)?.toDate(),
+      RegistrationStartDate: (data['RegistrationStartDate'] as Timestamp?)?.toDate(),
+      RegistrationEndDate: (data['RegistrationEndDate'] as Timestamp?)?.toDate(),
       lastModified: (data['lastModified'] as Timestamp?)?.toDate(),
       thumbnail: data['thumbnail'] as String?,
     );

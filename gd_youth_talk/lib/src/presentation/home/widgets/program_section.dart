@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 
-/// Widgets 3. Section
-//TODO : Bloc을 통해, 할당된 Program 데이터를 할당할 것
 class Section extends StatelessWidget {
   final List<ProgramModel> programs;
 
@@ -22,7 +20,7 @@ class Section extends StatelessWidget {
           // Section text
           Text(
             programs.first.category ?? "",
-            style: Theme.of(context).textTheme.bodyLarge,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
 
           // ListView

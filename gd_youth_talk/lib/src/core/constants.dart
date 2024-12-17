@@ -55,6 +55,43 @@ class MenuItem {
   MenuItem({required this.menuTitle, required this.route, this.trailing});
 }
 
+enum CategoryType {
+  cultureArt, // 문화예술
+  selfDevelopment, // 자기개발
+  educationLecture, // 교육강연
+  event, // 이벤트
+}
+
+extension CategoryTypeExtension on CategoryType {
+  // 카테고리의 이름을 표시할 때 사용할 displayName
+  String get displayName {
+    switch (this) {
+      case CategoryType.cultureArt:
+        return '문화예술';
+      case CategoryType.selfDevelopment:
+        return '자기계발';
+      case CategoryType.educationLecture:
+        return '교육강연';
+      case CategoryType.event:
+        return '이벤트';
+    }
+  }
+
+  // 각 카테고리에 맞는 아이콘을 설정
+  IconData get icon {
+    switch (this) {
+      case CategoryType.cultureArt:
+        return Icons.theaters; // 예시로 연극 아이콘
+      case CategoryType.selfDevelopment:
+        return Icons.self_improvement; // 자기개발 아이콘
+      case CategoryType.educationLecture:
+        return Icons.school; // 교육 아이콘
+      case CategoryType.event:
+        return Icons.event; // 이벤트 아이콘
+    }
+  }
+}
+
 class FirebaseOption {
   static const String programCollection = 'programs';
 }
