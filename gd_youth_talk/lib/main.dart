@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 // firebase
 import 'firebase_options.dart';
@@ -41,6 +42,9 @@ void main() async {
 
   // Initialize Dependency Injection
   setupLocator();
+
+  // Initialize Locale
+  await initializeDateFormatting('ko_KR', null);
 
   // env
   await dotenv.load();
@@ -94,8 +98,16 @@ class AppRouter {
           builder: (_) => HomeScreen(),
         );
       case Routes.search:
+        final isHomeScreenPushed = settings.arguments as bool;
         return MaterialPageRoute(
-          builder: (_) => SearchScreen(),
+          builder: (_) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(create: (_) => SearchBloc(locator<ProgramUseCase>())),  // CategoryBloc 주입
+              ],
+              child: SearchScreen(isHomeScreenPushed: isHomeScreenPushed),  // selectedIndex 전달
+            );
+          },
         );
       case Routes.calendar:
         return MaterialPageRoute(

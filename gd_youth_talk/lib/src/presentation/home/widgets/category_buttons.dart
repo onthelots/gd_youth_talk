@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gd_youth_talk/src/core/constants.dart';
 
 class CategoryButtons extends StatefulWidget {
   const CategoryButtons({
@@ -6,12 +7,14 @@ class CategoryButtons extends StatefulWidget {
     required this.icon,
     required this.label,
     required this.index,
+    required this.color,
     required this.onTap,
   });
 
   final IconData icon;
   final String label;
   final int index;
+  final Color color;
   final VoidCallback onTap;
 
   @override
@@ -29,13 +32,15 @@ class _CategoryButtonsState extends State<CategoryButtons> {
           height: 50,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white,
+            color: Theme.of(context).brightness == Brightness.light
+                ? AppColors.lightCategoryButton
+                : AppColors.darkCategoryButton,
           ),
           child: IconButton(
             icon: Icon(
               widget.icon,
               size: 25,
-              color: Theme.of(context).primaryColor,
+              color: widget.color,
             ),
             onPressed: () {
               widget.onTap();
@@ -47,7 +52,7 @@ class _CategoryButtonsState extends State<CategoryButtons> {
 
         Text(
           widget.label,
-          style: Theme.of(context).textTheme.labelLarge,
+          style: Theme.of(context).textTheme.labelMedium,
         ),
       ],
     );

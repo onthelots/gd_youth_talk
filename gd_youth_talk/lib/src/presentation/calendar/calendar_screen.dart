@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gd_youth_talk/src/core/constants.dart';
+import 'package:gd_youth_talk/src/presentation/calendar/widgets/focusDate_avatar.dart';
+import 'package:intl/intl.dart';
 
 // bloc
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
@@ -15,6 +18,8 @@ import 'package:gd_youth_talk/src/core/routes.dart';
 import 'widgets/calendar_tile.dart';
 
 class CalendarScreen extends StatefulWidget {
+  const CalendarScreen({super.key});
+
   @override
   _CalendarScreenState createState() => _CalendarScreenState();
 }
@@ -33,8 +38,10 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CalendarBloc>().add(GetProgramsGroupedByDate()); // 전체 프로그램 (날짜 : 프로그램 매핑)
-      context.read<SelectedCalendarBloc>().add(GetProgramsByDate(_focusedDay)); // 특정 날짜 선택에 따른 프로그램
+      context.read<CalendarBloc>().add(
+          GetProgramsGroupedByDate()); // 전체 프로그램 (날짜 : 프로그램 매핑)
+      context.read<SelectedCalendarBloc>().add(
+          GetProgramsByDate(_focusedDay)); // 특정 날짜 선택에 따른 프로그램
     });
 
     final theme = Theme.of(context);
@@ -47,11 +54,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
         leading: Align(
           alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
           child: Padding(
-              padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
-              child: Text(
-                  '프로그램 일정',
-                  style: theme.textTheme.displayMedium
-              ),
+            padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
+            child: Text(
+                '프로그램 일정',
+                style: theme.textTheme.displayMedium
+            ),
           ),
         ),
       ),
@@ -69,12 +76,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   startingDayOfWeek: StartingDayOfWeek.sunday,
                   selectedDayPredicate: (day) => isSameDay(_focusedDay, day),
 
+                  daysOfWeekStyle: const DaysOfWeekStyle(
+                    weekdayStyle: TextStyle(
+                      fontWeight: FontWeight.bold, // 평일 요일 텍스트 굵게
+                      fontSize: 14,
+                    ),
+                    weekendStyle: TextStyle(
+                      fontWeight: FontWeight.bold, // 주말 요일 텍스트 굵게
+                      fontSize: 14,
+                    ),
+                  ),
+
                   // eventLoader : 날짜 하단 이벤트 나타내는 작은 버튼 (day 파라미터를 기반으로 할당)
                   eventLoader: (day) {
                     if (state is CalendarLoadedState) {
                       // 인자인 'day'의 시간 정보를 00:00:00으로 설정하여 비교
                       final normalizedDay =
-                          DateTime(day.year, day.month, day.day);
+                      DateTime(day.year, day.month, day.day);
 
                       // normalizedDay를 사용하여 비교
                       final programsForDay = state.programs[normalizedDay];
@@ -98,33 +116,78 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     _focusedDay = focusedDay;
                   },
 
+                  calendarBuilders: CalendarBuilders(
+                    markerBuilder: (context, day, events) {
+                      bool isSelectedDay = day == _focusedDay;
+
+                      return events.isNotEmpty
+                          ? Container(
+                        width: 18,
+                        height: 18,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: isSelectedDay ? Colors.black87 : Colors
+                              .black12,
+                        ),
+                        child: Text(
+                          '${events.length}',
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
+                        ),
+                      )
+                          : null;
+                    },
+                  ),
+
                   calendarStyle: CalendarStyle(
+                    markerSize: 10.0,
+                    markersAlignment: Alignment.bottomRight,
+
+                    // 오늘 날짜 (Text)
+                    todayTextStyle: TextStyle(
+                        color: theme.primaryColor,
+                        fontWeight: FontWeight.bold
+                    ),
+
+                    // 오늘 (Decoration)
                     todayDecoration: BoxDecoration(
-                      color: Colors.black,
-                      border: Border.all(
-                        color: theme.primaryColor.withOpacity(0.5),
-                        width: 2.0,
-                      ),
-                      shape: BoxShape.circle,
+                      color: theme.scaffoldBackgroundColor,
                     ),
 
                     // 선택
                     selectedDecoration: BoxDecoration(
-                      color: theme.primaryColor,
-                      shape: BoxShape.circle,
+                      color: Colors.blueAccent,
                     ),
 
-                    // 마커
-                    markerDecoration: BoxDecoration(
-                      color: theme.highlightColor,
-                      shape: BoxShape.circle,
+                    selectedTextStyle: TextStyle(
+                      color: Theme
+                          .of(context)
+                          .scaffoldBackgroundColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+
+                    // 주말(기본 텍스트)
+                    weekendTextStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
+                    ),
+
+                    // 주중(기본 텍스트)
+                    defaultTextStyle: TextStyle(
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
                     ),
                   ),
 
                   // 요일 높이
-                  daysOfWeekHeight: 22.0,
+                  daysOfWeekHeight: 40.0,
 
                   headerStyle: const HeaderStyle(
+                    titleTextStyle: TextStyle(
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                     formatButtonVisible: false,
                     titleCentered: true,
                   ),
@@ -132,62 +195,69 @@ class _CalendarScreenState extends State<CalendarScreen> {
               },
             ),
           ),
+
           const Divider(
             height: 30.0,
             thickness: 10.0,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 13.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "${_focusedDay.year}년 ${_focusedDay.month}월 ${_focusedDay.day}일의 프로그램",
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-            ),
-          ),
+
           Expanded(
             child: BlocBuilder<SelectedCalendarBloc, SelectedProgramState>(
-              builder: (context, state) {
-                if (state is SelectedProgramLoadingState) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (state is SelectedProgramLoadedState) {
-                  final programs = state.selectedPrograms;
-                  if (programs.isEmpty) {
-                    return Center(
-                      child: Text(
-                        '선택된 날짜에 진행되는 프로그램이 없습니다.',
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    );
-                  } else {
-                    return ListView.builder(
-                      itemCount: programs.length,
-                      itemBuilder: (context, index) {
-                        return CalendarTile(
-                          program: programs[index],
-                          onTap: (program) {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.programDetail,
-                              arguments: program,
-                            );
-                          },
-                        );
-                      },
-                    );
-                  }
-                } else if (state is SelectedProgramErrorState) {
+                builder: (context, state) {
+              if (state is SelectedProgramLoadingState) {
+                return Center(child: CircularProgressIndicator());
+              } else if (state is SelectedProgramLoadedState) {
+                final programs = state.selectedPrograms;
+                if (programs.isEmpty) {
                   return Center(
                     child: Text(
-                      '오류가 발생했습니다: ${state.message}',
+                      '선택한 날짜에 진행되는 프로그램이 없습니다.',
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   );
+                } else {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FocusDateAvatar(focusedDay: _focusedDay),
+                        SizedBox(
+                          width: 30,
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: programs.length,
+                            itemBuilder: (context, index) {
+                              // 프로그램 만료여부 확인
+                              final bool isExpired = programs[index].programEndDate?.isBefore(DateTime.now()) ?? false;
+                              return Container(
+                                height: 80,
+                                child: CalendarTile(
+                                  program: programs[index],
+                                  isExpired: isExpired,
+                                  onTap: (program) {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.programDetail,
+                                      arguments: program,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
                 }
+              } else if (state is SelectedProgramErrorState) {
+                return Center();
+              } else {
                 return SizedBox.shrink();
-              },
-            ),
+              }
+            }),
           ),
         ],
       ),

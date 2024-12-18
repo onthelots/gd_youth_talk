@@ -20,13 +20,10 @@ class PageIndicator extends StatelessWidget {
             activeDotColor: Theme.of(context).brightness == Brightness.light
                 ? AppColors.lightPrimary
                 : AppColors.darkPrimary,
-            activeStrokeWidth: 10,
-            activeDotScale: 1.7,
-            maxVisibleDots: 5,
             radius: 8,
             spacing: 10,
-            dotHeight: 5,
-            dotWidth: 5,
+            dotHeight: 8,
+            dotWidth: 8,
           )),
     );
   }

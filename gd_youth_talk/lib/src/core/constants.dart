@@ -12,6 +12,7 @@ class AppColors {
   static const Color lightInactiveButton = Color(0xffB0B0B0);
   static const Color lightActiveButtonText = Color(0xffffffff);
   static const Color lightInactiveButtonText = Color(0xffB0B0B0);
+  static const Color lightCategoryButton = Color(0xffefefef);
 
   // Dark Mode Colors
   static const Color darkPrimary = Color(0xff007B63);
@@ -23,6 +24,13 @@ class AppColors {
   static const Color darkInactiveButton = Color(0xff3A3A3A);
   static const Color darkActiveButtonText = Color(0xffffffff);
   static const Color darkInactiveButtonText = Color(0xffB0B0B0);
+  static const Color darkCategoryButton = Color(0xff3A3A3A);
+
+// Category Colors
+  static const Color cultureArt = Color(0xff4CA399); //
+  static const Color selfDevelopment = Color(0xff007D63); //
+  static const Color educationLecture = Color(0xffF4C542); //
+  static const Color event = Color(0xffD96724); //
 }
 
 /// BottomNavigationBar
@@ -63,6 +71,23 @@ enum CategoryType {
 }
 
 extension CategoryTypeExtension on CategoryType {
+
+  // displayName을 기반으로, 역으로 타입이름 반환
+  static CategoryType fromName(String name) {
+    switch (name) {
+      case '문화예술':
+        return CategoryType.cultureArt;
+      case '자기계발':
+        return CategoryType.selfDevelopment;
+      case '교육강연':
+        return CategoryType.educationLecture;
+      case '이벤트':
+        return CategoryType.event;
+      default:
+        throw ArgumentError('Invalid category name: $name');
+    }
+  }
+
   // 카테고리의 이름을 표시할 때 사용할 displayName
   String get displayName {
     switch (this) {
@@ -77,17 +102,31 @@ extension CategoryTypeExtension on CategoryType {
     }
   }
 
-  // 각 카테고리에 맞는 아이콘을 설정
+  // 각 카테고리에 맞는 아이콘 설정
   IconData get icon {
     switch (this) {
       case CategoryType.cultureArt:
-        return Icons.theaters; // 예시로 연극 아이콘
+        return Icons.theaters;
       case CategoryType.selfDevelopment:
-        return Icons.self_improvement; // 자기개발 아이콘
+        return Icons.self_improvement;
       case CategoryType.educationLecture:
-        return Icons.school; // 교육 아이콘
+        return Icons.school;
       case CategoryType.event:
-        return Icons.event; // 이벤트 아이콘
+        return Icons.event;
+    }
+  }
+
+  // 카테고리별 메인 색상
+  Color get color {
+    switch (this) {
+      case CategoryType.cultureArt:
+        return AppColors.cultureArt;
+      case CategoryType.selfDevelopment:
+        return  AppColors.selfDevelopment;
+      case CategoryType.educationLecture:
+        return  AppColors.educationLecture;
+      case CategoryType.event:
+        return  AppColors.event;
     }
   }
 }

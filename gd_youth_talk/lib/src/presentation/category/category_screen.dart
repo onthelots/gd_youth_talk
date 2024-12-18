@@ -50,7 +50,6 @@ class _CategoryScreenState extends State<CategoryScreen> with SingleTickerProvid
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(50),
                 child: Container(
-                  height: 50,
                   width: double.infinity,
                   child: TabBar(
                     isScrollable: false,
@@ -88,14 +87,14 @@ class _CategoryScreenState extends State<CategoryScreen> with SingleTickerProvid
               ),
             )
             :
-            ListView.builder(
+            ListView.separated(
               itemCount: state.programs.length,
               itemBuilder: (context, index) {
                 final program = state.programs[index];
                 return Padding(
-                  padding: const EdgeInsets.only(top: 15.0, bottom: 30.0),
+                  padding: const EdgeInsets.only(top: 30.0, bottom: 20.0),
                   child: SizedBox(
-                    height: 150,
+                    height: 100,
                     child: CategoryTile(
                       program: program,
                       onTap: (program) {
@@ -104,6 +103,18 @@ class _CategoryScreenState extends State<CategoryScreen> with SingleTickerProvid
                       },
                     ),
                   ),
+                );
+              },
+              separatorBuilder: (context, index) {
+                if (index == state.programs.length - 1) {
+                  return const SizedBox.shrink();
+                }
+                return Divider(
+                  thickness: 0.5,
+                  color: Colors.grey[300],
+                  indent: 13.0,
+                  endIndent: 13.0,
+                  height: 5.0,
                 );
               },
             ),

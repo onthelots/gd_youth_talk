@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gd_youth_talk/src/core/utils.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 
 class CategoryTile extends StatelessWidget {
@@ -28,8 +29,8 @@ class CategoryTile extends StatelessWidget {
             Positioned(
               right: 13,
               child: Container(
-                width: 130,
-                height: 130,
+                width: 100,
+                height: 100,
                 child: Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
@@ -50,64 +51,53 @@ class CategoryTile extends StatelessWidget {
               child: Container(
                 width: MediaQuery.of(context).size.width - 170,
                 // 현재 페이지 너비에서 이미지 Container Width 200(고정값) 뺀 값
-                height: 130, // 이미지 크기에 맞춤
+                height: 100, // 이미지 크기에 맞춤
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      program.subtitle ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1, // max line
-                      style: Theme.of(context).textTheme.bodySmall,
+                    Expanded(
+                      child: Text(
+                        program.title ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2, // max line
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
                     ),
 
-                    Text(
-                      program.title ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 2, // max line
-                      style: Theme.of(context).textTheme.bodyLarge,
+                    /// 위치정보
+                    Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                      Expanded(
+                        child: Text(
+                          program.location ?? '',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: Theme.of(context).textTheme.labelSmall // max line
+                        ),
+                      ),
+                    ]),
+
+                    SizedBox(
+                      height: 5,
                     ),
 
-                    // 위치 정보 텍스트, 하단에 고정
+                    /// 날짜정보
                     Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.calendar_month_outlined,
-                          color: Theme.of(context).primaryColor,
-                          size: 15.0,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          style: Theme.of(context).textTheme.labelSmall,
-                          program.programStartDate.toString(),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1, // max line
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: Theme.of(context).highlightColor,
-                          size: 15.0,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          style: Theme.of(context).textTheme.labelSmall,
-                          program.location ?? "",
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1, // max line
-                        ),
-                      ],
-                    ),
+                        children: [
+                          Expanded(
+                            child: Text(
+                              program.programStartDate?.day !=
+                                  program.programEndDate?.day
+                                  ? '${formatDate(program.programStartDate ?? DateTime.now())} - ${formatDate(program.programEndDate ?? DateTime.now())}'
+                                  : formatDate(program.programStartDate ??
+                                  DateTime.now()),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: Theme.of(context).textTheme.labelSmall // max lin// max line
+                            ),
+                          ),
+                        ]),
                   ],
                 ),
               ),

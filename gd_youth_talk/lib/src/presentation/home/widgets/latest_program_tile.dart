@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
+import 'package:gd_youth_talk/src/core/utils.dart';
 
 class LatestProgramTile extends StatelessWidget {
   final Function(ProgramModel)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
@@ -14,15 +15,17 @@ class LatestProgramTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: InkWell(
-        onTap: () => onTap?.call(program), // program을 전달하며 탭 이벤트 핸들러 호출
-        onDoubleTap: () => onTap?.call(program), // program을 전달하며 두 번 탭 이벤트 핸들러 호출
-        onLongPress: () => onTap?.call(program), // program을 전달하며 길게 누름 이벤트 핸들러 호출
+        onTap: () => onTap?.call(program),
+        onDoubleTap: () => onTap?.call(program),
+        onLongPress: () => onTap?.call(program),
 
         child: Container(
-          // TODO: - Card 배경색 설정 -> thumbnail 이미지를 기반으로 메인 색상을 가져오는걸로..?
-          color: Theme.of(context).cardColor,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5), // 코너 레디우스 설정
+            color: getColorFromHex(program.primaryColor ?? '#FFFFFF'),
+          ),
           width: double.infinity, // 페이지 뷰 너비
           height: double.infinity, // 페이지 뷰 높이
           child: Stack(
@@ -56,50 +59,71 @@ class LatestProgramTile extends StatelessWidget {
               Positioned(
                 left: 13,
                 child: Container(
-                  width: MediaQuery.of(context).size.width - 200, // 현재 페이지 너비에서 이미지 Container Width 200(고정값) 뺀 값
+                  width: MediaQuery.of(context).size.width - 220, // 현재 페이지 너비에서 이미지 Container Width 200(고정값) 뺀 값
                   height: 150,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FilledButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).highlightColor),
-                          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
-                              const EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
-                          minimumSize: WidgetStateProperty.all<Size>(Size.zero),
-                        ),
+                      SizedBox(
+                        height: 30,
+                      ),
+
+                      /// 타이틀
+                      Expanded(
                         child: Text(
-                          program.category ?? "",
-                          style: Theme.of(context).textTheme.labelMedium
-                        ),
-                      ),
-
-                      Text(
-                        program.title ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2, // max line
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-
-                      // 위치 정보 텍스트, 하단에 고정
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                        Icon(
-                          Icons.calendar_month_outlined,
-                          color: Theme.of(context).primaryColor,
-                          size: 15.0,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          style: Theme.of(context).textTheme.labelSmall,
-                          program.programStartDate.toString(),
+                          program.title ?? "",
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 1, // max line
+                          maxLines: 2, // max line
+                          style: TextStyle(
+                              color: getTextColorBasedOnBackground(program.primaryColor ?? '#FFFFFF'),
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+
+                      /// 위치정보
+                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                        Expanded(
+                          child: Text(
+                            program.location ?? '',
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(
+                                color: getTextColorBasedOnBackground(program.primaryColor ?? '#FFFFFF'),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500
+                            ), // max line
+                          ),
                         ),
                       ]),
+
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                      /// 날짜정보
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                program.programStartDate?.day !=
+                                        program.programEndDate?.day
+                                    ? '${formatDate(program.programStartDate ?? DateTime.now())} - ${formatDate(program.programEndDate ?? DateTime.now())}'
+                                    : formatDate(program.programStartDate ??
+                                        DateTime.now()),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(
+                                    color: getTextColorBasedOnBackground(
+                                        program.primaryColor ?? '#FFFFFF'),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500), // max line
+                              ),
+                            ),
+                          ]),
                     ],
                   ),
                 ),

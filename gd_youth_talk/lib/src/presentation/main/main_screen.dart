@@ -12,7 +12,7 @@ class MainScreen extends StatelessWidget {
 
   final List<Widget> _tabs = [
     HomeScreen(),
-    SearchScreen(),
+    SearchScreen(isHomeScreenPushed: false),
     CalendarScreen(),
     MoreScreen(),
   ];

@@ -42,6 +42,7 @@ dependencies:
   # env
   flutter_dotenv: ^5.2.1
   xml: ^6.5.0
+  palette_generator: ^0.3.3+5
 
 dev_dependencies:
   flutter_test:

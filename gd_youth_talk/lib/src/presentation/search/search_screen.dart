@@ -9,6 +9,9 @@ import 'package:gd_youth_talk/src/presentation/search/widgets/search_result_plac
 import 'package:gd_youth_talk/src/presentation/search/widgets/search_result_tile.dart';
 
 class SearchScreen extends StatefulWidget {
+  final bool isHomeScreenPushed;
+
+  SearchScreen({required this.isHomeScreenPushed});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -40,17 +43,19 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         scrolledUnderElevation: 0,
-        leadingWidth: 200.0,
-        leading: Align(
-          alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
-          child: Padding(
-            padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
-            child: Text(
-                '검색',
-                style: Theme.of(context).textTheme.displayMedium
-            ),
-          ),
-        ),
+        centerTitle: true,
+        title: widget.isHomeScreenPushed ? Text('검색') : null,
+        leadingWidth: widget.isHomeScreenPushed ? null : 200,
+        leading: widget.isHomeScreenPushed
+            ? null
+            : Align(
+                alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
+                  child: Text('검색',
+                      style: Theme.of(context).textTheme.displayMedium),
+                ),
+              ),
       ),
       body: Column(
         children: [
@@ -110,6 +115,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           padding: const EdgeInsets.only(bottom: 15.0),
                           child: SearchResultTile(
                             program: program,
+                            query: _searchController.text, // 검색어 전달
                             onTap: (program) {
                               Navigator.pushNamed(
                                 context,

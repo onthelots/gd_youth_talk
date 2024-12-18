@@ -150,31 +150,34 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   },
                   onLoadStart: (controller, url) {
                     if (url != null) {
-                      setState(() {
-                        this.url = url.toString();
-                        isSecure = urlIsSecure(url);
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        setState(() {
+                          this.url = url.toString();
+                          isSecure = urlIsSecure(url);
+                        });
                       });
                     }
                   },
                   onLoadStop: (controller, url) async {
-                    if (url != null) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
                       setState(() {
                         this.url = url.toString();
                       });
-                    }
+                    });
 
                     final sslCertificate = await controller.getCertificate();
-                    setState(() {
-                      isSecure = sslCertificate != null ||
-                          (url != null && urlIsSecure(url));
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      setState(() {
+                        isSecure = sslCertificate != null || (url != null && urlIsSecure(url));
+                      });
                     });
                   },
                   onUpdateVisitedHistory: (controller, url, isReload) {
-                    if (url != null) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
                       setState(() {
-                        this.url = url.toString();
+                        this.progress = progress / 100;
                       });
-                    }
+                    });
                   },
                   onTitleChanged: (controller, title) {
                     if (title != null) {
@@ -263,7 +266,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   child: Row(
                     children: [
                       Icon(Icons.open_in_browser, color: Colors.white),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10),
                       Text(
                         '다른 앱에서 열기',
                         style: TextStyle(
@@ -279,7 +282,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   child: Row(
                     children: [
                       Icon(Icons.auto_delete_outlined, color: Colors.white),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10),
                       Text(
                         '검색 데이터 삭제하기',
                         style: TextStyle(

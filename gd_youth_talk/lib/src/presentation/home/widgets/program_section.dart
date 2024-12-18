@@ -3,9 +3,11 @@ import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 
 class Section extends StatelessWidget {
+  final String sectionTitle;
   final List<ProgramModel> programs;
 
   Section({
+    required this.sectionTitle,
     required this.programs,
   });
 
@@ -16,11 +18,10 @@ class Section extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           // Section text
           Text(
-            programs.first.category ?? "",
-            style: Theme.of(context).textTheme.bodyMedium,
+            sectionTitle,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
 
           // ListView
@@ -37,7 +38,8 @@ class Section extends StatelessWidget {
                     program: programs[index],
                     index: index,
                     onTap: (program) {
-                      Navigator.pushNamed(context, Routes.programDetail, arguments: program);
+                      Navigator.pushNamed(context, Routes.programDetail,
+                          arguments: program);
                     },
                   ),
                 );
@@ -92,7 +94,7 @@ class ProgramSectionListTile extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelMedium,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
-                  maxLines: 2, // max line
+                  maxLines: 1, // max line
                 )
               ],
             ),
