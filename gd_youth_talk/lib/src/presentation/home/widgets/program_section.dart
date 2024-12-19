@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
+import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
 
 class Section extends StatelessWidget {
   final String sectionTitle;
   final List<ProgramModel> programs;
+  final VoidCallback? onMorePressed; // 더보기 버튼 클릭 시 호출되는 콜백 이벤트
 
   Section({
     required this.sectionTitle,
     required this.programs,
+    this.onMorePressed, // 콜백 함수 전달
   });
 
   @override
@@ -19,9 +23,35 @@ class Section extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Section text
-          Text(
-            sectionTitle,
-            style: Theme.of(context).textTheme.labelLarge,
+          Row(
+            children: [
+              Text(
+                sectionTitle,
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              Spacer(), // 버튼을 오른쪽 끝으로 밀어줍니다
+              TextButton(
+                onPressed: onMorePressed, // 버튼 클릭 시 콜백 호출
+                child: Row(
+                  mainAxisSize: MainAxisSize.min, // Row의 크기를 최소화하여 텍스트와 아이콘만 포함되도록 설정
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '더보기',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        color: Theme.of(context).disabledColor,
+                        fontSize: 13,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right, // 오른쪽 화살표 아이콘
+                      color: Theme.of(context).disabledColor,
+                      size: 16, // 아이콘 크기
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
 
           // ListView
@@ -37,7 +67,7 @@ class Section extends StatelessWidget {
                   child: ProgramSectionListTile(
                     program: programs[index],
                     index: index,
-                    onTap: (program) {
+                    onTap: (program) async {
                       Navigator.pushNamed(context, Routes.programDetail,
                           arguments: program);
                     },

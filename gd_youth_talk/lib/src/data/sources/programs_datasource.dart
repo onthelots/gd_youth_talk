@@ -6,12 +6,25 @@ class ProgramDataSource {
 
   ProgramDataSource(this._firestore);
 
-  /// 1. Programs data (Read)
+  /// Programs data (Read)
   Stream<List<ProgramModel>> getProgramsStream() {
-    return _firestore.collection('programs').snapshots().map((snapshot) {
+    final now = DateTime.now();
+    return _firestore
+        .collection('programs')
+        .where('programEndDate', isGreaterThanOrEqualTo: now) // 프로그램 종료 시점이 경과했을 경우, 필터링을 실시함
+        .snapshots()
+        .map((snapshot) {
       return snapshot.docs.map((doc) {
-        return ProgramModel.fromFirebase(doc.data());
+        return ProgramModel.fromFirebase(doc.id, doc.data());
       }).toList();
     });
+  }
+
+  /// hits update
+  Future<void> updateHits(String documentId, int currentHits) async {
+    await _firestore
+        .collection('programs')
+        .doc(documentId)
+        .update({'hits': currentHits + 1});
   }
 }

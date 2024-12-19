@@ -117,6 +117,35 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   },
 
                   calendarBuilders: CalendarBuilders(
+                    todayBuilder: (context, day, focusedDay) {
+                      return Container(
+                        alignment: Alignment.center,
+                        child: Text(
+                          '${day.day}',
+                          style: TextStyle(
+                            color: theme.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
+
+                    selectedBuilder: (context, day, focusedDay) {
+                      return Container(
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          color: Colors.blueAccent, // 원하는 색상으로 변경
+                          shape: BoxShape.circle, // 원형으로 설정
+                        ),
+                        child: Text(
+                          '${day.day}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
                     markerBuilder: (context, day, events) {
                       bool isSelectedDay = day == _focusedDay;
 
@@ -126,6 +155,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         height: 18,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
+                          shape: BoxShape.circle,
                           color: isSelectedDay ? Colors.black87 : Colors
                               .black12,
                         ),
@@ -143,20 +173,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     markerSize: 10.0,
                     markersAlignment: Alignment.bottomRight,
 
+                    markerDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+
                     // 오늘 날짜 (Text)
                     todayTextStyle: TextStyle(
-                        color: theme.primaryColor,
+                        color: theme.scaffoldBackgroundColor,
                         fontWeight: FontWeight.bold
-                    ),
-
-                    // 오늘 (Decoration)
-                    todayDecoration: BoxDecoration(
-                      color: theme.scaffoldBackgroundColor,
-                    ),
-
-                    // 선택
-                    selectedDecoration: BoxDecoration(
-                      color: Colors.blueAccent,
                     ),
 
                     selectedTextStyle: TextStyle(
@@ -165,18 +189,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           .scaffoldBackgroundColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                    ),
-
-                    // 주말(기본 텍스트)
-                    weekendTextStyle: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14,
-                    ),
-
-                    // 주중(기본 텍스트)
-                    defaultTextStyle: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      fontSize: 14,
                     ),
                   ),
 
@@ -222,7 +234,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         FocusDateAvatar(focusedDay: _focusedDay),
-                        SizedBox(
+                        const SizedBox(
                           width: 30,
                         ),
                         Expanded(

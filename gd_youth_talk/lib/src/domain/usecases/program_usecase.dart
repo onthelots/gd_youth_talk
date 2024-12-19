@@ -94,4 +94,43 @@ class ProgramUseCase {
       return groupedPrograms;
     });
   }
+
+  /// UseCase6. 등록 종료일이 임박한 프로그램 필터링 (오늘 날짜와 가까운 순으로 정렬)
+  Stream<List<ProgramModel>> getCTAPrograms() {
+    return repository.getPrograms().map((programs) {
+      // 오늘 날짜와 일주일 후 날짜를 계산
+      final today = DateTime.now();
+      final oneWeekLater = today.add(Duration(days: 7));
+
+      // 등록 마감일이 오늘로부터 일주일 이내인 프로그램들만 필터링
+      final filteredPrograms = programs.where((program) {
+        final registrationEndDate = program.registrationEndDate;
+        // registrationEndDate가 null인 경우를 처리하기 위해 null 체크
+        if (registrationEndDate == null) {
+          return false; // null이면 제외
+        }
+        // 등록 마감일이 오늘부터 일주일 이내인지를 체크
+        return registrationEndDate.isAfter(today) && registrationEndDate.isBefore(oneWeekLater);
+      }).toList();
+
+      // 일주일 이내 마감일을 가진 프로그램들 정렬
+      filteredPrograms.sort((a, b) => a.registrationEndDate!.compareTo(b.registrationEndDate!));
+
+      return filteredPrograms;
+    });
+  }
+
+  /// UseCase7. 프로그램의 hits 수에 따른 정렬
+  Stream<List<ProgramModel>> getProgramsSortedByHits() {
+    return repository.getPrograms().map((programs) {
+      // hits 값을 기준으로 내림차순 정렬
+      programs.sort((a, b) => b.hits.compareTo(a.hits));
+      return programs;
+    });
+  }
+
+  /// update1. program hits increment
+  Future<void> incrementProgramHits(ProgramModel program) {
+    return repository.updateHits(program.documentId!, program.hits);
+  }
 }

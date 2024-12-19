@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProgramModel {
+  final String? documentId; // Firestore 문서 ID
   final String? category;
   final String? title;
   final String? subtitle;
@@ -14,8 +15,10 @@ class ProgramModel {
   final DateTime? lastModified;
   final String? thumbnail;
   final String? primaryColor;
+  final int hits;
 
   ProgramModel({
+    this.documentId,
     this.category,
     this.title,
     this.subtitle,
@@ -29,11 +32,13 @@ class ProgramModel {
     this.lastModified,
     this.thumbnail,
     this.primaryColor,
+    this.hits = 0,
   });
 
   // Firebase의 json 형식을 Model 객체로 변환
-  factory ProgramModel.fromFirebase(Map<String, dynamic> data) {
+  factory ProgramModel.fromFirebase(String id, Map<String, dynamic> data) {
     return ProgramModel(
+      documentId: id,
       category: data['category'] as String?,
       title: data['title'] as String?,
       subtitle: data['subtitle'] as String?,
@@ -47,6 +52,7 @@ class ProgramModel {
       lastModified: (data['lastModified'] as Timestamp?)?.toDate(),
       thumbnail: data['thumbnail'] as String?,
       primaryColor: data['primaryColor'] as String?,
+      hits: (data['hits'] ?? 0) as int,
     );
   }
 }

@@ -1,7 +1,6 @@
 /// Routes Constants
 class Routes {
   static const String splash = '/';
-  static const String landing = '/landing';
   static const String main = '/main';
   static const String home = '/home';
   static const String search = '/search';

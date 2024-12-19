@@ -131,6 +131,11 @@ extension CategoryTypeExtension on CategoryType {
   }
 }
 
+/// Firebase Collection 명칭
 class FirebaseOption {
   static const String programCollection = 'programs';
 }
+
+/// HomeScreen 섹션 타이틀
+String sectionTitle1 = "지금, 청년들이 눈여겨 본 활동은?";
+String sectionTitle2 = "참여 신청 마감 임박!";

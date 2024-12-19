@@ -3,6 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/ctaProgramBloc/cta_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/hitsProgramBloc/hits_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme_event.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme_state.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // firebase
@@ -11,7 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 // bloc
-import 'package:gd_youth_talk/src/presentation/home/bloc/home_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/latestProgramBloc/latest_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/category/bloc/category_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/calendarBloc/calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
@@ -56,13 +61,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      initialRoute: Routes.splash,
-      onGenerateRoute: _router.onGenerateRoute,
+    // theme
+    return BlocProvider(
+      create: (context) => ThemeBloc()..add(
+        ThemeChanged(themeMode: ThemeMode.system), // 기본값으로 시스템 테마 설정
+      ),
+      child: Builder(
+        builder: (context) {
+          return BlocBuilder<ThemeBloc, ThemeState>(
+            builder: (context, state) {
+              final themeMode = (state is ThemeInitial) ? state.themeMode : ThemeMode.system;
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: AppTheme.lightTheme,
+                darkTheme: AppTheme.darkTheme,
+                themeMode: themeMode,
+                initialRoute: Routes.main,
+                onGenerateRoute: _router.onGenerateRoute,
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -74,17 +94,15 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => SplashScreen(),
         );
-      case Routes.landing:
-        return MaterialPageRoute(
-          builder: (_) => LandingPage(),
-        );
       case Routes.main:
         return MaterialPageRoute(
           builder: (_) {
             return MultiBlocProvider(
               providers: [
                 BlocProvider(create: (_) => BottomNavBloc()),  // BottomNavBloc 주입
-                BlocProvider(create: (_) => HomeBloc(locator<ProgramUseCase>())),  // HomeBloc 주입
+                BlocProvider(create: (_) => LatestProgramBloc(locator<ProgramUseCase>())),  // LatestProgramBloc 주입
+                BlocProvider(create: (_) => CTAProgramBloc(locator<ProgramUseCase>())),  // CTAProgramBloc 주입
+                BlocProvider(create: (_) => HitsProgramBloc(locator<ProgramUseCase>())),  // CTAProgramBloc 주입
                 BlocProvider(create: (_) => SearchBloc(locator<ProgramUseCase>())),  // HomeBloc 주입
                 BlocProvider(create: (_) => CalendarBloc(locator<ProgramUseCase>())),  // HomeBloc 주입
                 BlocProvider(create: (_) => SelectedCalendarBloc(locator<ProgramUseCase>())),  // HomeBloc 주입
@@ -119,7 +137,7 @@ class AppRouter {
         );
       case Routes.setting:
         return MaterialPageRoute(
-          builder: (_) => ThemeScreen(),
+          builder: (_) => ThemeSettingsScreen(),
         );
       case Routes.programDetail:
         final program = settings.arguments as ProgramModel;

@@ -10,4 +10,8 @@ class ProgramRepository {
   Stream<List<ProgramModel>> getPrograms() {
     return _dataSource.getProgramsStream();
   }
+
+  Future<void> updateHits(String documentId, int currentHits) {
+    return _dataSource.updateHits(documentId, currentHits);
+  }
 }

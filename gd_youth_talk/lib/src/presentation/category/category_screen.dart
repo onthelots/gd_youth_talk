@@ -31,6 +31,12 @@ class _CategoryScreenState extends State<CategoryScreen> with SingleTickerProvid
   }
 
   @override
+  void dispose() {
+    print("화면 dispose");
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<CategoryBloc>().add(GetProgramsByCategoryEvent(CategoryType.values[widget.selectedIndex].displayName));
@@ -45,7 +51,10 @@ class _CategoryScreenState extends State<CategoryScreen> with SingleTickerProvid
             appBar: AppBar(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               centerTitle: true,
-              title: const Text('카테고리'),
+              title: Text(
+                '카테고리',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
               scrolledUnderElevation: 0,
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(50),

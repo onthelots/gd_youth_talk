@@ -17,25 +17,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /// Splash 애니메이션 이후, isFirstLaunch에 따른 첫 화면 분기처리 실시
   Future<void> _navigateToNextScreen() async {
-
-    final prefs = await SharedPreferences.getInstance();
-    final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
-
-    if (isFirstLaunch) {
-      prefs.setBool('isFirstLaunch', false);
-      Navigator.of(context).pushReplacementNamed(Routes.landing);
-    } else {
-      Navigator.of(context).pushReplacementNamed(Routes.main);
-    }
+    // 3초 동안 로고를 보여준 후, 다음 화면으로 이동
+    await Future.delayed(Duration(seconds: 3));
+    Navigator.of(context).pushReplacementNamed(Routes.main);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Center(
-          child: SizedBox(
-              width: 100, height: 100, child: Icon(Icons.add)),
+        child: SizedBox(
+          width: 200, height: 200,
+          child: Image.asset('assets/logo.png'),
         ),
       ),
     );
