@@ -4,6 +4,7 @@ import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/core/theme.dart';
 import 'package:gd_youth_talk/src/presentation/category/widgets/category_tile.dart';
+import 'package:gd_youth_talk/src/presentation/category/widgets/placeholder/category_shimmer.dart';
 import 'bloc/category_bloc.dart';
 import 'bloc/category_event.dart';
 import 'bloc/category_state.dart';
@@ -45,7 +46,7 @@ class _CategoryScreenState extends State<CategoryScreen> with SingleTickerProvid
     return BlocBuilder<CategoryBloc, CategoryState>(
       builder: (context, state) {
         if (state is CategoryLoadingState) {
-          return const Center(child: CircularProgressIndicator());
+          return ShimmerCategoryTile();
         } else if (state is CategoryLoadedState) {
           return Scaffold(
             appBar: AppBar(

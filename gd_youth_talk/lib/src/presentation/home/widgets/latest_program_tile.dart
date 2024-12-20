@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 import 'package:gd_youth_talk/src/core/utils.dart';
+import 'package:shimmer/shimmer.dart';
 
 class LatestProgramTile extends StatelessWidget {
   final Function(ProgramModel)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
@@ -41,14 +43,21 @@ class LatestProgramTile extends StatelessWidget {
                   child: Center(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
-                        program.thumbnail ?? "",
+                      child: CachedNetworkImage(
+                        imageUrl: program.thumbnail ?? "",
                         width: 150,
                         height: 150,
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Icon(Icons.error);  // 오류가 발생하면 에러 아이콘을 표시
-                        },
+                        placeholder: (context, url) => Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: Container(
+                            width: 120,
+                            height: 120,
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Icon(Icons.error),    // 에러 발생 시 표시
                       )
                     ),
                   ),

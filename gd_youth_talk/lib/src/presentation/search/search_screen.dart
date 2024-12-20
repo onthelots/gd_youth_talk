@@ -5,6 +5,7 @@ import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/presentation/search/bloc/search_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/search/bloc/search_event.dart';
 import 'package:gd_youth_talk/src/presentation/search/bloc/search_state.dart';
+import 'package:gd_youth_talk/src/presentation/search/widgets/placeholder/result_shimmer.dart';
 import 'package:gd_youth_talk/src/presentation/search/widgets/search_result_placeholder.dart';
 import 'package:gd_youth_talk/src/presentation/search/widgets/search_result_tile.dart';
 
@@ -39,108 +40,113 @@ class _SearchScreenState extends State<SearchScreen> {
     final theme = Theme.of(context);
     final isDarkMode = theme.brightness == Brightness.dark;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-        title: widget.isHomeScreenPushed ? Text('검색') : null,
-        leadingWidth: widget.isHomeScreenPushed ? null : 200,
-        leading: widget.isHomeScreenPushed
-            ? null
-            : Align(
-                alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
-                  child: Text('검색',
-                      style: Theme.of(context).textTheme.displayMedium),
-                ),
-              ),
-      ),
-      body: Column(
-        children: [
-          // 검색창 부분은 BlocBuilder 외부에 둡니다.
-          Padding(
-            padding: const EdgeInsets.all(13.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: isDarkMode
-                    ? Colors.black.withOpacity(0.3)
-                    : Colors.grey.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: TextField(
-                controller: _searchController, // 컨트롤러 연결
-                focusNode: _focusNode, // 포커스 노드 추가
-                onChanged: (value) {
-                  context.read<SearchBloc>().add(
-                    SearchQueryProgramsEvent(query: value),
-                  );
-                },
-                style: theme.textTheme.bodyMedium,
-                decoration: InputDecoration(
-                  hintText: '관심 키워드, 프로그램 명, 카테고리 찾기',
-                  hintStyle: theme.textTheme.bodyMedium,
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: isDarkMode
-                        ? AppColors.darkIcon
-                        : AppColors.lightIcon,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        // 화면을 터치하면 키보드를 숨깁니다.
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          scrolledUnderElevation: 0,
+          centerTitle: true,
+          title: widget.isHomeScreenPushed ? Text('검색') : null,
+          leadingWidth: widget.isHomeScreenPushed ? null : 200,
+          leading: widget.isHomeScreenPushed
+              ? null
+              : Align(
+                  alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
+                    child: Text('검색',
+                        style: Theme.of(context).textTheme.displayMedium),
                   ),
-                  border: InputBorder.none,
-                  contentPadding:
-                  const EdgeInsets.symmetric(vertical: 15),
+                ),
+        ),
+        body: Column(
+          children: [
+            // 검색창 부분은 BlocBuilder 외부에 둡니다.
+            Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isDarkMode
+                      ? Colors.black.withOpacity(0.3)
+                      : Colors.grey.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: TextField(
+                  controller: _searchController, // 컨트롤러 연결
+                  focusNode: _focusNode, // 포커스 노드 추가
+                  onChanged: (value) {
+                    context.read<SearchBloc>().add(
+                      SearchQueryProgramsEvent(query: value),
+                    );
+                  },
+                  style: theme.textTheme.bodyMedium,
+                  decoration: InputDecoration(
+                    hintText: '관심 키워드, 프로그램 명, 카테고리 찾기',
+                    hintStyle: theme.textTheme.bodyMedium,
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: isDarkMode
+                          ? AppColors.darkIcon
+                          : AppColors.lightIcon,
+                    ),
+                    border: InputBorder.none,
+                    contentPadding:
+                    const EdgeInsets.symmetric(vertical: 15),
+                  ),
                 ),
               ),
             ),
-          ),
-          // BlocBuilder 사용하여 하단 리스트만 리빌드
-          BlocBuilder<SearchBloc, SearchState>(
-            builder: (context, state) {
-              if (state is SearchLoadingState) {
-                return Expanded(
-                  child: Center(child: CircularProgressIndicator()),
-                );
-              } else if (state is SearchLoadedState) {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: state.programs.isEmpty
-                        ? Center(child: SearchResultPlaceholder())
-                        : ListView.builder(
-                      itemCount: state.programs.length,
-                      itemBuilder: (context, index) {
-                        final program = state.programs[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 15.0),
-                          child: SearchResultTile(
-                            program: program,
-                            query: _searchController.text, // 검색어 전달
-                            onTap: (program) {
-                              Navigator.pushNamed(
-                                context,
-                                Routes.programDetail,
-                                arguments: program,
-                              );
-                            },
-                          ),
-                        );
-                      },
+            // BlocBuilder 사용하여 하단 리스트만 리빌드
+            BlocBuilder<SearchBloc, SearchState>(
+              builder: (context, state) {
+                if (state is SearchLoadingState) {
+                  return ShimmerSearchResultTile();
+                } else if (state is SearchLoadedState) {
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: state.programs.isEmpty
+                          ? Center(child: SearchResultPlaceholder())
+                          : ListView.builder(
+                        itemCount: state.programs.length,
+                        itemBuilder: (context, index) {
+                          final program = state.programs[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 15.0),
+                            child: SearchResultTile(
+                              program: program,
+                              query: _searchController.text, // 검색어 전달
+                              onTap: (program) {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.programDetail,
+                                  arguments: program,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                );
-              } else if (state is SearchErrorState) {
-                return Expanded(
-                  child: Center(child: Text('Error: ${state.message}')),
-                );
-              } else {
-                return Expanded(
-                  child: Center(child: Text('아무 데이터도 없습니다.')),
-                );
-              }
-            },
-          ),
-        ],
+                  );
+                } else if (state is SearchErrorState) {
+                  return Expanded(
+                    child: Center(child: Text('Error: ${state.message}')),
+                  );
+                } else {
+                  return Expanded(
+                    child: Center(child: Text('아무 데이터도 없습니다.')),
+                  );
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

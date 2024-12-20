@@ -51,7 +51,7 @@ void main() async {
   // Initialize Locale
   await initializeDateFormatting('ko_KR', null);
 
-  // env
+  // env -> API, Secret Key 등을 저장하는 .env 파일 로드
   await dotenv.load();
   runApp(MyApp());
 }
@@ -90,10 +90,6 @@ class MyApp extends StatelessWidget {
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routes.splash:
-        return MaterialPageRoute(
-          builder: (_) => SplashScreen(),
-        );
       case Routes.main:
         return MaterialPageRoute(
           builder: (_) {

@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
+import 'package:shimmer/shimmer.dart';
 
 class Section extends StatelessWidget {
   final String sectionTitle;
@@ -107,11 +109,21 @@ class ProgramSectionListTile extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5),
-                  child: Image.network(
-                    program.thumbnail ?? "",
+                  child: CachedNetworkImage(
+                    imageUrl: program.thumbnail ?? "",
                     width: 120, // 이미지 크기 조정
                     height: 120,
-                    fit: BoxFit.cover, // 이미지 크기에 맞게 자르기
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        color: Colors.grey[300],
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),    // 에러 발생 시 표시
                   ),
                 ),
 

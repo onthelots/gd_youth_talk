@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 import 'package:gd_youth_talk/src/core/constants.dart';
-import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
-import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
 import 'package:gd_youth_talk/src/presentation/home/bloc/ctaProgramBloc/cta_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/home/bloc/ctaProgramBloc/cta_event.dart';
 import 'package:gd_youth_talk/src/presentation/home/bloc/ctaProgramBloc/cta_state.dart';
@@ -17,6 +15,8 @@ import 'package:gd_youth_talk/src/presentation/home/bloc/latestProgramBloc/lates
 import 'package:gd_youth_talk/src/presentation/home/widgets/latest_program_tile.dart';
 import 'package:gd_youth_talk/src/presentation/home/widgets/category_buttons.dart';
 import 'package:gd_youth_talk/src/presentation/home/widgets/pageIndicator.dart';
+import 'package:gd_youth_talk/src/presentation/home/widgets/placeholder/pageview_shimmer.dart';
+import 'package:gd_youth_talk/src/presentation/home/widgets/placeholder/section_shimmer.dart';
 import 'package:gd_youth_talk/src/presentation/home/widgets/program_section.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -115,8 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
               BlocBuilder<LatestProgramBloc, LatestProgramState>(
                 builder: (context, state) {
                   if (state is LatestProgramLoadingState) {
-                    return CircularProgressIndicator();
+                    return ShimmerPageView();
                   } else if (state is LatestProgramLoadedState) {
+                    print('LatestProgramLoadedState');
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -209,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
               BlocBuilder<HitsProgramBloc, HitsProgramState>(
                 builder: (context, state) {
                   if (state is HitsProgramLoadingState) {
-                    return CircularProgressIndicator();
+                    return ShimmerSection();
                   } else if (state is HitsProgramLoadedState) {
                     return Section(
                       programs: state.programs,
@@ -218,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (state is HitsProgramErrorState) {
                     return CircularProgressIndicator();
                   } else {
-                    return CircularProgressIndicator();
+                    return SizedBox.shrink();
                   }
                 },
               ),
@@ -236,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   } else if (state is CTAProgramErrorState) {
                     return CircularProgressIndicator();
                   } else {
-                    return CircularProgressIndicator();
+                    return SizedBox.shrink();
                   }
                 },
               ),

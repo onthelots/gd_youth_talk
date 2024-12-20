@@ -1,5 +1,4 @@
 // screens.dart
-export 'package:gd_youth_talk/src/presentation/splash/splash_screen.dart';
 export 'package:gd_youth_talk/src/presentation/main/main_screen.dart';
 export 'package:gd_youth_talk/src/presentation/home/home_screen.dart';
 export 'package:gd_youth_talk/src/presentation/search/search_screen.dart';

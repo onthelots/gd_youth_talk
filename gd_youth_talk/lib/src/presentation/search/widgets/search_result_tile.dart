@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SearchResultTile extends StatelessWidget {
   const SearchResultTile({
@@ -54,11 +56,21 @@ class SearchResultTile extends StatelessWidget {
       subtitle: _buildHighlightedText(program.subtitle, query, Theme.of(context).textTheme.bodySmall),
       trailing: ClipRRect(
         borderRadius: BorderRadius.circular(5),
-        child: Image.network(
-          program.thumbnail ?? "",
+        child: CachedNetworkImage(
+          imageUrl: program.thumbnail ?? "",
           width: 65,
           height: 65,
           fit: BoxFit.cover,
+          placeholder: (context, url) => Shimmer.fromColors(
+            baseColor: Colors.grey[300]!,
+            highlightColor: Colors.grey[100]!,
+            child: Container(
+              width: 120,
+              height: 120,
+              color: Colors.grey[300],
+            ),
+          ),
+          errorWidget: (context, url, error) => Icon(Icons.error),    // 에러 발생 시 표시
         ),
       ),
       onTap: () {

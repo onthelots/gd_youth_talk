@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/core/utils.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CategoryTile extends StatelessWidget {
   final Function(ProgramModel)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
@@ -34,11 +36,21 @@ class CategoryTile extends StatelessWidget {
                 child: Center(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image.network(
-                      program.thumbnail ?? "",
-                      width: 150, // 이미지 크기 조정
+                    child: CachedNetworkImage(
+                      imageUrl: program.thumbnail ?? "",
+                      width: 150,
                       height: 150,
-                      fit: BoxFit.cover, // 이미지 크기에 맞게 자르기
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey[300]!,
+                        highlightColor: Colors.grey[100]!,
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          color: Colors.grey[300],
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),    // 에러 발생 시 표시
                     ),
                   ),
                 ),
