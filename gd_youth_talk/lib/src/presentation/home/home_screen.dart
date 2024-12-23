@@ -3,20 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/ctaProgramBloc/cta_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/ctaProgramBloc/cta_event.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/ctaProgramBloc/cta_state.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/hitsProgramBloc/hits_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/hitsProgramBloc/hits_event.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/hitsProgramBloc/hits_state.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/latestProgramBloc/latest_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/latestProgramBloc/latest_event.dart';
-import 'package:gd_youth_talk/src/presentation/home/bloc/latestProgramBloc/latest_state.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/home_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/home_event.dart';
+import 'package:gd_youth_talk/src/presentation/home/bloc/home_state.dart';
 import 'package:gd_youth_talk/src/presentation/home/widgets/latest_program_tile.dart';
 import 'package:gd_youth_talk/src/presentation/home/widgets/category_buttons.dart';
 import 'package:gd_youth_talk/src/presentation/home/widgets/pageIndicator.dart';
-import 'package:gd_youth_talk/src/presentation/home/widgets/placeholder/pageview_shimmer.dart';
-import 'package:gd_youth_talk/src/presentation/home/widgets/placeholder/section_shimmer.dart';
 import 'package:gd_youth_talk/src/presentation/home/widgets/program_section.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,10 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    //TODO: - timer를 활용한 로직을 수행하기 위한 고민 필요
-    // _setupBlocListener();
+    context.read<HomeBloc>().add(LoadPrograms()); // 프로그램 로딩 실시
   }
-
 
   @override
   void dispose() {
@@ -42,17 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _timer?.cancel(); // 타이머 해제
     _pageController.dispose(); // 페이지 컨트롤러 해제
     super.dispose();
-  }
-
-  // HomeLoadedState 일 경우, state 값을 활용 -> Timer initalize 실시
-  void _setupBlocListener() {
-    context.read<LatestProgramBloc>().stream.listen((state) {
-      if (state is LatestProgramLoadedState) {
-        _initializeTimer(state.programs.length);
-      } else {
-        _timer?.cancel();
-      }
-    });
   }
 
   // Timer initalizer
@@ -77,12 +56,6 @@ class _HomeScreenState extends State<HomeScreen> {
   // pageControl 설정
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<LatestProgramBloc>().add(GetLatestProgramEvent());
-      context.read<CTAProgramBloc>().add(GetCallToActionProgramEvent());
-      context.read<HitsProgramBloc>().add(GetProgramsSortedByHitsEvent());
-    });
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -108,17 +81,26 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BlocBuilder<LatestProgramBloc, LatestProgramState>(
-                builder: (context, state) {
-                  if (state is LatestProgramLoadingState) {
-                    return ShimmerPageView();
-                  } else if (state is LatestProgramLoadedState) {
-                    print('LatestProgramLoadedState');
-                    return Column(
+        child: BlocConsumer<HomeBloc, HomeState>(
+          listener: (context, state) {
+            if (state is HomeLoaded) {
+              // _initializeTimer(state.latestPrograms.length);
+            } else if (state is HomeError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is HomeLoading) {
+              print('데이터 로딩중... shimmer 나타내기');
+            } else if (state is HomeError) {
+              print('Home Error -> 다시 재 로드 버튼 할당하기');
+            } else if (state is HomeLoaded) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // (상단)페이지 Sized Box
@@ -128,13 +110,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               scrollDirection: Axis.horizontal,
                               controller: _pageController,
                               physics: const BouncingScrollPhysics(),
-                              itemCount: state.programs.length,
+                              itemCount: state.latestPrograms.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 13.0),
                                   child: LatestProgramTile(
-                                    program: state.programs[index],
+                                    program: state.latestPrograms[index],
                                     onTap: (program) async {
                                       Navigator.pushNamed(
                                           context, Routes.programDetail,
@@ -150,99 +132,68 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
                           // custom PageIndicator
                           child: PageIndicator(
-                            pageCount: state.programs.length,
+                            pageCount: state.latestPrograms.length,
                             // 실제 프로그램 count 할당할 것
                             pageController: _pageController,
                           ),
                         ),
                       ],
-                    );
-                  } else if (state is LatestProgramErrorState) {
-                    return CircularProgressIndicator();
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
+                    ),
 
-              const SizedBox(
-                height: 20,
-              ),
+                    SizedBox(
+                      height: 10,
+                    ),
 
-              /// 2. (중앙) 카테고리 버튼
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 13.0),
-                child: Container(
-                  height: 100.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    /// 카테고리 버튼
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 13.0),
+                      child: Container(
+                        height: 100.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
 
-                    // List.generate를 통한 루프 실시
-                    // Category(enum)에 따른 length 처리
-                    children:
-                        List.generate(CategoryType.values.length, (index) {
-                      final categoryType = CategoryType.values[index];
-                      // label, icon 설정
-                      final label = categoryType.displayName; // 카테고리의 이름
-                      final color = categoryType.color; // 카테고리의 이름
-                      final icon = categoryType.icon; // 카테고리의 아이콘
-                      return CategoryButtons(
-                        icon: icon,
-                        label: label,
-                        index: index,
-                        color: color,
-                        onTap: () {
-                          Navigator.of(context)
-                              .pushNamed(Routes.category, arguments: index);
-                        },
-                      );
-                    }),
-                  ),
-                ),
-              ),
-              // Section별 리스트
+                          // List.generate를 통한 루프 실시
+                          // Category(enum)에 따른 length 처리
+                          children:
+                          List.generate(CategoryType.values.length, (index) {
+                            final categoryType = CategoryType.values[index];
+                            // label, icon 설정
+                            final label = categoryType.displayName; // 카테고리의 이름
+                            final color = categoryType.color; // 카테고리의 이름
+                            final icon = categoryType.icon; // 카테고리의 아이콘
+                            return CategoryButtons(
+                              icon: icon,
+                              label: label,
+                              index: index,
+                              color: color,
+                              onTap: () {
+                                Navigator.of(context)
+                                    .pushNamed(Routes.category, arguments: index);
+                              },
+                            );
+                          }),
+                        ),
+                      ),
+                    ),
 
-              const SizedBox(
-                height: 30,
-              ),
-
-              /// 3. 좋아요 순 (Favorite)
-              BlocBuilder<HitsProgramBloc, HitsProgramState>(
-                builder: (context, state) {
-                  if (state is HitsProgramLoadingState) {
-                    return ShimmerSection();
-                  } else if (state is HitsProgramLoadedState) {
-                    return Section(
-                      programs: state.programs,
+                    /// Section 1. 마감 임박순
+                    Section(
+                      programs: state.popularPrograms,
                       sectionTitle: sectionTitle1,
-                    );
-                  } else if (state is HitsProgramErrorState) {
-                    return CircularProgressIndicator();
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-              //
-              /// 4. 마감 임박순 (신청날짜가 있는 프로그램 필터링 후 -> 가장 빠른 순으로)
-              BlocBuilder<CTAProgramBloc, CTAProgramState>(
-                builder: (context, state) {
-                  if (state is CTAProgramLoadingState) {
-                    return CircularProgressIndicator();
-                  } else if (state is CTAProgramLoadedState) {
-                    return Section(
-                      programs: state.programs,
+                    ),
+
+                    /// Section 2.
+                    Section(
+                      programs: state.upcomingPrograms,
                       sectionTitle: sectionTitle2,
-                    );
-                  } else if (state is CTAProgramErrorState) {
-                    return CircularProgressIndicator();
-                  } else {
-                    return SizedBox.shrink();
-                  }
-                },
-              ),
-            ],
-          ),
+                    ),
+
+                  ],
+                ),
+              );
+            }
+            return Container();
+          },
         ),
       ),
     );

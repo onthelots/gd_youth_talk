@@ -5,7 +5,6 @@ import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/presentation/search/bloc/search_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/search/bloc/search_event.dart';
 import 'package:gd_youth_talk/src/presentation/search/bloc/search_state.dart';
-import 'package:gd_youth_talk/src/presentation/search/widgets/placeholder/result_shimmer.dart';
 import 'package:gd_youth_talk/src/presentation/search/widgets/search_result_placeholder.dart';
 import 'package:gd_youth_talk/src/presentation/search/widgets/search_result_tile.dart';
 
@@ -43,7 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () {
-        // 화면을 터치하면 키보드를 숨깁니다.
+        // 키보드 숨기기
         FocusScope.of(context).unfocus();
       },
       child: Scaffold(
@@ -66,7 +65,6 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         body: Column(
           children: [
-            // 검색창 부분은 BlocBuilder 외부에 둡니다.
             Padding(
               padding: const EdgeInsets.all(13.0),
               child: Container(
@@ -105,17 +103,19 @@ class _SearchScreenState extends State<SearchScreen> {
             BlocBuilder<SearchBloc, SearchState>(
               builder: (context, state) {
                 if (state is SearchLoadingState) {
-                  return ShimmerSearchResultTile();
+                  //
+                } else if (state is SearchErrorState) {
+                  //
                 } else if (state is SearchLoadedState) {
                   return Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: state.programs.isEmpty
+                      child: state.searchPrograms.isEmpty
                           ? Center(child: SearchResultPlaceholder())
                           : ListView.builder(
-                        itemCount: state.programs.length,
+                        itemCount: state.searchPrograms.length,
                         itemBuilder: (context, index) {
-                          final program = state.programs[index];
+                          final program = state.searchPrograms[index];
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 15.0),
                             child: SearchResultTile(
@@ -134,15 +134,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                   );
-                } else if (state is SearchErrorState) {
-                  return Expanded(
-                    child: Center(child: Text('Error: ${state.message}')),
-                  );
-                } else {
-                  return Expanded(
-                    child: Center(child: Text('아무 데이터도 없습니다.')),
-                  );
                 }
+                return Container();
               },
             ),
           ],

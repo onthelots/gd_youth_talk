@@ -35,10 +35,10 @@ class ProgramModel {
     this.hits = 0,
   });
 
-  // Firebase의 json 형식을 Model 객체로 변환
-  factory ProgramModel.fromFirebase(String id, Map<String, dynamic> data) {
+  factory ProgramModel.fromFirebase(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
     return ProgramModel(
-      documentId: id,
+      documentId: doc.id,
       category: data['category'] as String?,
       title: data['title'] as String?,
       subtitle: data['subtitle'] as String?,

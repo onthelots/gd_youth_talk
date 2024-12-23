@@ -7,8 +7,15 @@ class ProgramRepository {
 
   ProgramRepository(this._dataSource);
 
+  /// future
+  // Future<List<ProgramModel>> getPrograms() async {
+  //   return await _dataSource.fetchPrograms();
+  // }
+
+  /// stream
+
   Stream<List<ProgramModel>> getPrograms() {
-    return _dataSource.getProgramsStream();
+    return _dataSource.fetchPrograms();
   }
 
   Future<void> updateHits(String documentId, int currentHits) {

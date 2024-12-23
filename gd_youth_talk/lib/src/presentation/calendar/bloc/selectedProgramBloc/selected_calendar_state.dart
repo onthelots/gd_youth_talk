@@ -1,7 +1,7 @@
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 
 abstract class SelectedProgramState {}
-
+class SelectedProgramInitial extends SelectedProgramState {}
 class SelectedProgramLoadingState extends SelectedProgramState {}
 
 class SelectedProgramLoadedState extends SelectedProgramState {

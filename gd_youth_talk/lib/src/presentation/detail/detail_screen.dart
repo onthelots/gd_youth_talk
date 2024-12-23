@@ -10,18 +10,33 @@ import 'package:gd_youth_talk/src/presentation/detail/widgets/program_location.d
 import 'package:share_plus/share_plus.dart';
 import 'package:shimmer/shimmer.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final ProgramModel program;
 
   DetailScreen({super.key, required this.program});
 
   @override
-  Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      locator<ProgramUseCase>()
-          .incrementProgramHits(program); // 조회수 증가 (count + 1)
-    });
+  State<DetailScreen> createState() => _DetailScreenState();
+}
 
+class _DetailScreenState extends State<DetailScreen> {
+
+  @override
+  void initState() {
+    locator<ProgramUseCase>()
+        .incrementProgramHits(widget.program); // 조회수 증가 (count + 1)
+    print("${widget.program.title} hits + 1");
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    print("상세화면 dispose");
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -37,7 +52,7 @@ class DetailScreen extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.share),
               onPressed: () {
-                Share.share(program.blogUrl ?? "", subject: program.title);
+                Share.share(widget.program.blogUrl ?? "", subject: widget.program.title);
               },
             ),
           ),
@@ -54,10 +69,10 @@ class DetailScreen extends StatelessWidget {
               /// thumbnail
               Container(
                 height: 300,
-                color: getColorFromHex(program.primaryColor ?? '#FFFFFF'),
+                color: getColorFromHex(widget.program.primaryColor ?? '#FFFFFF'),
                 child: Center(
                     child: CachedNetworkImage(
-                  imageUrl: program.thumbnail ?? "",
+                  imageUrl: widget.program.thumbnail ?? "",
                   width: 250,
                   height: 250,
                   fit: BoxFit.cover,
@@ -95,7 +110,7 @@ class DetailScreen extends StatelessWidget {
                   children: [
                     // subtitle
                     Text(
-                      program.subtitle ?? "",
+                      widget.program.subtitle ?? "",
                       style: Theme.of(context).textTheme.bodyMedium,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1, // max line
@@ -107,7 +122,7 @@ class DetailScreen extends StatelessWidget {
 
                     // title
                     Text(
-                      program.title ?? "",
+                      widget.program.title ?? "",
                       style: Theme.of(context).textTheme.displayMedium,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2, // max
@@ -119,7 +134,7 @@ class DetailScreen extends StatelessWidget {
 
                     /// 신청 기간
                     ProgramLocationRow(
-                      program: program,
+                      program: widget.program,
                       icon: Icon(
                         Icons.location_on,
                         size: 20,
@@ -133,7 +148,7 @@ class DetailScreen extends StatelessWidget {
 
                     /// 프로그램 기간
                     ProgramDateRow(
-                      program: program,
+                      program: widget.program,
                       icon: Icon(
                         Icons.access_time_filled,
                         size: 20,
@@ -150,7 +165,7 @@ class DetailScreen extends StatelessWidget {
                     ),
 
                     Text(
-                      program.detail ?? '',
+                      widget.program.detail ?? '',
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -168,7 +183,7 @@ class DetailScreen extends StatelessWidget {
           width: double.infinity,
           child: ElevatedButton.icon(
             onPressed: () {
-              final blogUrl = program.blogUrl ?? '';
+              final blogUrl = widget.program.blogUrl ?? '';
               if (blogUrl.isNotEmpty) {
                 Navigator.pushNamed(context, Routes.webView,
                     arguments: blogUrl);
