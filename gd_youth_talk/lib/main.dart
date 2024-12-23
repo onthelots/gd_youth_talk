@@ -53,7 +53,10 @@ void main() async {
 
   // env -> API, Secret Key 등을 저장하는 .env 파일 로드
   await dotenv.load();
-  runApp(MyApp());
+
+  Future.delayed(Duration(seconds: 2), () {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
