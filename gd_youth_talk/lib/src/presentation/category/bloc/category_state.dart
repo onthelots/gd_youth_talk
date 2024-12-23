@@ -2,14 +2,17 @@ import 'package:gd_youth_talk/src/data/models/program_model.dart';
 
 abstract class CategoryState {}
 
-class CategoryLoadingState extends CategoryState {}
+class CategoryInitial extends CategoryState {}
 
-class CategoryLoadedState extends CategoryState {
-  final List<ProgramModel> programs;
-  CategoryLoadedState(this.programs);
+class CategoryLoading extends CategoryState {}
+
+class CategoryLoaded extends CategoryState {
+  final List<ProgramModel> categoryPrograms;
+  final String category;
+  CategoryLoaded({required this.category, required this.categoryPrograms});
 }
 
-class CategoryErrorState extends CategoryState {
+class CategoryError extends CategoryState {
   final String message;
-  CategoryErrorState(this.message);
+  CategoryError(this.message);
 }

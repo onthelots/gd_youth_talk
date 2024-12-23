@@ -4,9 +4,11 @@ abstract class CalendarState {}
 
 class CalendarLoadingState extends CalendarState {}
 
+class CalendarInitial extends CalendarState {}
+
 class CalendarLoadedState extends CalendarState {
   final Map<DateTime, List<ProgramModel>> programs;
-  CalendarLoadedState(this.programs);
+  CalendarLoadedState({required this.programs});
 }
 
 class CalendarErrorState extends CalendarState {

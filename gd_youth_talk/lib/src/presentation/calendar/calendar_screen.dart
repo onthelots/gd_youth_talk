@@ -33,19 +33,16 @@ class _CalendarScreenState extends State<CalendarScreen> {
   void initState() {
     super.initState();
     _focusedDay = DateTime.now();
+
+    context.read<CalendarBloc>().add(
+        GetProgramsGroupedByDate()); // 전체 프로그램 (날짜 : 프로그램 매핑)
+    context.read<SelectedCalendarBloc>().add(
+        GetProgramsByDate(_focusedDay)); // 특정 날짜 선택에 따른 프로그램
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<CalendarBloc>().add(
-          GetProgramsGroupedByDate()); // 전체 프로그램 (날짜 : 프로그램 매핑)
-      context.read<SelectedCalendarBloc>().add(
-          GetProgramsByDate(_focusedDay)); // 특정 날짜 선택에 따른 프로그램
-    });
-
     final theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: theme.scaffoldBackgroundColor,
@@ -212,64 +209,59 @@ class _CalendarScreenState extends State<CalendarScreen> {
             height: 30.0,
             thickness: 10.0,
           ),
-
           Expanded(
             child: BlocBuilder<SelectedCalendarBloc, SelectedProgramState>(
                 builder: (context, state) {
-              if (state is SelectedProgramLoadingState) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state is SelectedProgramLoadedState) {
-                final programs = state.selectedPrograms;
-                if (programs.isEmpty) {
-                  return Center(
-                    child: Text(
-                      '선택한 날짜에 진행되는 프로그램이 없습니다.',
-                      style: Theme.of(context).textTheme.labelMedium,
-                    ),
-                  );
-                } else {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FocusDateAvatar(focusedDay: _focusedDay),
-                        const SizedBox(
-                          width: 30,
+                  if (state is SelectedProgramLoadingState) {
+                    print('카테고리 로딩중... shimmer 나타내기');
+                  } else if (state is SelectedProgramErrorState) {
+                    print('카테고리 Error -> 다시 재 로드 버튼 할당하기');
+                  } else if (state is SelectedProgramLoadedState) {
+                    final programs = state.selectedPrograms;
+                    if (programs.isEmpty) {
+                      return Center(
+                        child: Text(
+                          '선택한 날짜에 진행되는 프로그램이 없습니다.',
+                          style: Theme.of(context).textTheme.labelMedium,
                         ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: programs.length,
-                            itemBuilder: (context, index) {
-                              // 프로그램 만료여부 확인
-                              final bool isExpired = programs[index].programEndDate?.isBefore(DateTime.now()) ?? false;
-                              return Container(
-                                height: 80,
-                                child: CalendarTile(
-                                  program: programs[index],
-                                  isExpired: isExpired,
-                                  onTap: (program) {
-                                    Navigator.pushNamed(
-                                      context,
-                                      Routes.programDetail,
-                                      arguments: program,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          ),
+                      );
+                    } else {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FocusDateAvatar(focusedDay: _focusedDay),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: programs.length,
+                                itemBuilder: (context, index) {
+                                  // 프로그램 만료여부 확인
+                                  final bool isExpired = programs[index].programEndDate?.isBefore(DateTime.now()) ?? false;
+                                  return Container(
+                                    height: 80,
+                                    child: CalendarTile(
+                                      program: programs[index],
+                                      isExpired: isExpired,
+                                      onTap: (program) {
+                                        Navigator.pushNamed(context, Routes.programDetail,
+                                            arguments: program.documentId);
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                }
-              } else if (state is SelectedProgramErrorState) {
-                return Center();
-              } else {
-                return SizedBox.shrink();
-              }
-            }),
+                      );
+                    }
+                  }
+                  return Container();
+                }),
           ),
         ],
       ),

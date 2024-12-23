@@ -24,36 +24,10 @@ class Section extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section text
-          Row(
-            children: [
-              Text(
-                sectionTitle,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              Spacer(), // 버튼을 오른쪽 끝으로 밀어줍니다
-              TextButton(
-                onPressed: onMorePressed, // 버튼 클릭 시 콜백 호출
-                child: Row(
-                  mainAxisSize: MainAxisSize.min, // Row의 크기를 최소화하여 텍스트와 아이콘만 포함되도록 설정
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      '더보기',
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: Theme.of(context).disabledColor,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Icon(
-                      Icons.chevron_right, // 오른쪽 화살표 아이콘
-                      color: Theme.of(context).disabledColor,
-                      size: 16, // 아이콘 크기
-                    ),
-                  ],
-                ),
-              )
-            ],
+          // section title
+          Text(
+            sectionTitle,
+            style: Theme.of(context).textTheme.labelLarge,
           ),
 
           // ListView
@@ -71,7 +45,7 @@ class Section extends StatelessWidget {
                     index: index,
                     onTap: (program) async {
                       Navigator.pushNamed(context, Routes.programDetail,
-                          arguments: program);
+                          arguments: program.documentId);
                     },
                   ),
                 );
@@ -106,6 +80,7 @@ class ProgramSectionListTile extends StatelessWidget {
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(5),

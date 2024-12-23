@@ -1,6 +1,6 @@
 abstract class CategoryEvent {}
 
-class GetProgramsByCategoryEvent extends CategoryEvent {
+class LoadCategoryEvent extends CategoryEvent {
   final String category;
-  GetProgramsByCategoryEvent(this.category);
+  LoadCategoryEvent(this.category);
 }

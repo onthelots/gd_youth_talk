@@ -33,11 +33,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
   void dispose() {
     print('자원해제 진행');
     InAppWebViewController.clearAllCache();
-    // Check if clearHistory is supported on the current platform
-    if (Platform.isAndroid || Platform.isIOS) {
-      webViewController?.clearHistory();
-    }
-
     webViewController?.dispose();
     super.dispose();
   }
