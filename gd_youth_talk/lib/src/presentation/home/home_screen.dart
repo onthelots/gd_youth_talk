@@ -16,33 +16,48 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
   final PageController _pageController = PageController();
   Timer? _timer; // Timer 변수 추가
 
   @override
   void initState() {
     super.initState();
-    context.read<HomeBloc>().add(LoadPrograms()); // 프로그램 로딩 실시
+    context.read<HomeBloc>().add(LoadPrograms());
+    WidgetsBinding.instance.addObserver(this); // 화면 상태 변화 감지
+  }
+
+  // 앱 상태가 변경될 때 타이머 해제
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // 현재 HomeBloc 상태 가져오기
+    final homeState = context.read<HomeBloc>().state;
+
+    if (ModalRoute.of(context)?.isCurrent ?? false) {
+      if (homeState is HomeLoaded) {
+        _initializeTimer(homeState.latestPrograms.length);
+      }
+    } else {
+      _timer?.cancel();
+    }
   }
 
   @override
   void dispose() {
-    print('HomeScreen Dispose');
-    _timer?.cancel(); // 타이머 해제
-    _pageController.dispose(); // 페이지 컨트롤러 해제
     super.dispose();
   }
 
   // Timer initalizer
   void _initializeTimer(int itemCount) {
     _timer?.cancel();
-    if (itemCount > 0) {
+    int limitedItemCount = itemCount > 4 ? 4 : itemCount; // itemCount가 4를 초과하면 4로 제한
+
+    if (limitedItemCount > 0) {
       _timer = Timer.periodic(Duration(seconds: 4), (timer) {
-        print("타이머 실행 중... (${timer.tick}초)");
         if (_pageController.hasClients) {
           int currentPage = _pageController.page?.toInt() ?? 0;
-          int nextPage = (currentPage + 1) % itemCount; // currentPage가 마지막이고, itemCount와 동일할 때 0으로 초기화(처음으로)
+          int nextPage = (currentPage + 1) % limitedItemCount; // 4개 항목을 기준으로 순차적으로 페이지 이동
           _pageController.animateToPage(
             nextPage,
             duration: Duration(seconds: 1),
@@ -84,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BlocConsumer<HomeBloc, HomeState>(
           listener: (context, state) {
             if (state is HomeLoaded) {
-              // _initializeTimer(state.latestPrograms.length);
+              _initializeTimer(state.latestPrograms.length);
             } else if (state is HomeError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
@@ -110,17 +125,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               scrollDirection: Axis.horizontal,
                               controller: _pageController,
                               physics: const BouncingScrollPhysics(),
-                              itemCount: state.latestPrograms.length,
+                              itemCount: state.latestPrograms.length > 4 ? 4 : state.latestPrograms.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 13.0),
                                   child: LatestProgramTile(
                                     program: state.latestPrograms[index],
-                                    onTap: (program) async {
+                                    onTap: (program) {
                                       Navigator.pushNamed(
                                           context, Routes.programDetail,
-                                          arguments: program);
+                                          arguments: program.documentId);
                                     },
                                   ),
                                 );
@@ -132,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
                           // custom PageIndicator
                           child: PageIndicator(
-                            pageCount: state.latestPrograms.length,
+                            pageCount: state.latestPrograms.length > 4 ? 4 : state.latestPrograms.length,
                             // 실제 프로그램 count 할당할 것
                             pageController: _pageController,
                           ),

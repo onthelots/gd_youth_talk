@@ -6,16 +6,18 @@ class ProgramUseCase {
 
   ProgramUseCase(this.repository);
 
-  // 필터링 및 정렬 메서드들은 동일하게 사용할 수 있습니다.
+  // usecase1. 카테고리 필터링
   List<ProgramModel> filterByCategory(List<ProgramModel> programs, String category) {
     return programs.where((program) => program.category == category).toList();
   }
 
+  // usecase2. 최근 수정(등록)된 프로그램
   List<ProgramModel> getLatestPrograms(List<ProgramModel> programs) {
     programs.sort((a, b) => (b.lastModified ?? DateTime(0)).compareTo(a.lastModified ?? DateTime(0)));
     return programs;
   }
 
+  // usecase3. 프로그램 검색쿼리
   List<ProgramModel> searchPrograms(List<ProgramModel> programs, String query) {
     if (query.isEmpty) return [];
     final lowerQuery = query.toLowerCase();
@@ -25,6 +27,7 @@ class ProgramUseCase {
     }).toList();
   }
 
+  // usecase4. 날짜에 따른 프로그램 필터링
   List<ProgramModel> filterByDate(List<ProgramModel> programs, DateTime date) {
     DateTime onlyDate(DateTime date) => DateTime(date.year, date.month, date.day);
     final selectedDate = onlyDate(date);
@@ -46,6 +49,7 @@ class ProgramUseCase {
       });
   }
 
+  // usecase5. 특정 날짜에 따른 프로그램 리스트 Mapping
   Map<DateTime, List<ProgramModel>> groupByDate(List<ProgramModel> programs) {
     final groupedPrograms = <DateTime, List<ProgramModel>>{};
     for (var program in programs) {
@@ -62,6 +66,7 @@ class ProgramUseCase {
     return groupedPrograms;
   }
 
+  // usecase6. 등록 마감순 정렬
   List<ProgramModel> getUpcomingPrograms(List<ProgramModel> programs) {
     final today = DateTime.now();
     final oneWeekLater = today.add(const Duration(days: 7));
@@ -74,11 +79,18 @@ class ProgramUseCase {
       ..sort((a, b) => a.registrationEndDate!.compareTo(b.registrationEndDate!));
   }
 
+  // usecase7. Hits 순 정렬
   List<ProgramModel> sortByHits(List<ProgramModel> programs) {
     programs.sort((a, b) => b.hits.compareTo(a.hits));
     return programs;
   }
 
+  // usecase8. program 상세내용 불러오기
+  ProgramModel getProgramDetail(List<ProgramModel> programs, String docId) {
+    return programs.firstWhere((program) => program.documentId == docId);
+  }
+
+  // usecase9. Hits + 1
   Future<void> incrementProgramHits(ProgramModel program) {
     return repository.updateHits(program.documentId!, program.hits);
   }

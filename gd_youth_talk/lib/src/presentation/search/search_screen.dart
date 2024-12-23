@@ -122,11 +122,8 @@ class _SearchScreenState extends State<SearchScreen> {
                               program: program,
                               query: _searchController.text, // 검색어 전달
                               onTap: (program) {
-                                Navigator.pushNamed(
-                                  context,
-                                  Routes.programDetail,
-                                  arguments: program,
-                                );
+                                Navigator.pushNamed(context, Routes.programDetail,
+                                    arguments: program.documentId);
                               },
                             ),
                           );

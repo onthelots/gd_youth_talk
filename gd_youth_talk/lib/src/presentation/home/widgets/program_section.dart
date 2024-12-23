@@ -71,7 +71,7 @@ class Section extends StatelessWidget {
                     index: index,
                     onTap: (program) async {
                       Navigator.pushNamed(context, Routes.programDetail,
-                          arguments: program);
+                          arguments: program.documentId);
                     },
                   ),
                 );

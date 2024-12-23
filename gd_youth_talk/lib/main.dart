@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // firebase
@@ -115,6 +116,14 @@ class MyApp extends StatelessWidget {
             usecase: locator<ProgramUseCase>(),
           ),
         ),
+
+        // ProgramDetail Bloc
+        BlocProvider(
+          create: (context) => ProgramDetailBloc(
+            repository: locator<ProgramRepository>(),
+            usecase: locator<ProgramUseCase>(),
+          ),
+        ),
       ],
       child: Builder(
         builder: (context) {
@@ -166,9 +175,9 @@ class AppRouter {
           builder: (_) => ThemeSettingsScreen(),
         );
       case Routes.programDetail:
-        final program = settings.arguments as ProgramModel;
+        final docId = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => DetailScreen(program: program),
+          builder: (_) => DetailScreen(docId: docId),
         );
       case Routes.category:
         final selectedIndex = settings.arguments as int;

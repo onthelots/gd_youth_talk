@@ -5,7 +5,6 @@ import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/core/theme.dart';
 import 'package:gd_youth_talk/src/presentation/category/bloc/category_event.dart';
 import 'package:gd_youth_talk/src/presentation/category/widgets/category_tile.dart';
-import 'package:gd_youth_talk/src/presentation/category/widgets/placeholder/category_shimmer.dart';
 import 'bloc/category_bloc.dart';
 import 'bloc/category_state.dart';
 
@@ -104,8 +103,8 @@ class _CategoryScreenState extends State<CategoryScreen>
                       child: CategoryTile(
                         program: program,
                         onTap: (program) {
-                          Navigator.of(context).pushNamed(Routes.programDetail,
-                              arguments: program);
+                          Navigator.pushNamed(context, Routes.programDetail,
+                              arguments: program.documentId);
                         },
                       ),
                     ),

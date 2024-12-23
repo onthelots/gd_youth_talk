@@ -247,11 +247,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                       program: programs[index],
                                       isExpired: isExpired,
                                       onTap: (program) {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.programDetail,
-                                          arguments: program,
-                                        );
+                                        Navigator.pushNamed(context, Routes.programDetail,
+                                            arguments: program.documentId);
                                       },
                                     ),
                                   );
