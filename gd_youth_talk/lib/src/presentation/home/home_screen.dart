@@ -114,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
             } else if (state is HomeLoaded) {
               return SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,8 +156,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
                       ],
                     ),
 
-                    SizedBox(
-                      height: 10,
+                    const SizedBox(
+                      height: 20,
                     ),
 
                     /// 카테고리 버튼
@@ -191,6 +192,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
                       ),
                     ),
 
+                    const SizedBox(
+                      height: 30,
+                    ),
+
                     /// Section 1. 마감 임박순
                     Section(
                       programs: state.popularPrograms,
@@ -202,7 +207,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
                       programs: state.upcomingPrograms,
                       sectionTitle: sectionTitle2,
                     ),
-
                   ],
                 ),
               );
