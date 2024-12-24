@@ -199,4 +199,6 @@ fastlane/test_output
 
 iOSInjectionProject/
 
+firebase_options.dart
+
 # End of https://www.toptal.com/developers/gitignore/api/firebase,swift,flutter,android
