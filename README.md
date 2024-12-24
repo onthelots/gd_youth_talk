@@ -37,20 +37,31 @@
 ## 2-앱 디자인
 
 ### 2-1 Screen Flow
-`Main - Search - Setting(더보기) 주요 Tab 구성`
-- Main 페이지 내, 주요 프로그램 및 카테고리 별 상세보기를 통해 빠르게 정보를 인지할 수 있도록 함
-- 다수의 프로그램이 진행되므로, 검색 탭을 별도로 구성하여 사용자의 편의성을 고려함
-- '찜' 기능과 센터에서 제공하는 기타 정보(대관, 위치 등)를 마지막 더보기 탭 내 구성
+`메인(홈), 검색, 캘린더, 더보기 Tab 구성`
+- 주요 프로그램 및 키워드 리스트를 통해 빠르게 정보를 전달
+- 카테고리 분류를 통해 사용자들이 희망하는 프로그램을 분류하여 제공
+- 타이틀, 서브타이틀을 기반으로 쿼리, 검색기능을 도입
+- 월/일별 프로그램 현황을 한눈에 살펴볼 수 있도록 Table Calender를 제공
+- 더보기 메뉴를 통해 관련 링크(InWeb) 및 테마설정 기능을 활용
 
-<img width="4166" alt="screen_flow" src="https://github.com/user-attachments/assets/4b7ef9cb-7e2a-492c-a877-7314d2488716">
+<img width="4102" alt="app_flow" src="https://github.com/user-attachments/assets/b59cb130-1bfb-4e83-b74a-85961ff25b23" />
+
 
 ### 2-2 Architecture
-`장기적인 업데이트 및 유지보수를 위한 Clean Architecture 적용`
+`지속 가능한 유지보수와 기능 추가를 위한 Clean Architecture 적용`
 - Application Layout, Domain Layout, Data Layout 분리
 - 프로그램 데이터 파싱 이외, 추후 계정관리 기능 도입에 앞서 유지보수가 용이한 Clean Architecture 설계
-- Bloc 상태관리 설정
 
-<img width="4203" alt="app_architecture" src="https://github.com/user-attachments/assets/5248ff40-7f01-45fc-8cfb-3d4b94d89890">
+`상태관리를 위한 Bloc 활용`
+- Firebase Stream을 통해 할당되는 'Program' 리스트 데이터를 기반으로, UseCase 내 화면별 로직 구성
+- 앱 전역에서 데이터를 공유하도록 중앙 집중화를 위해 GetIt Pakcage DI를 Main.dart 내 적용 (MultiProvider)
+- 각각의 Screen, UI에 따라 Bloc을 Listen, Builder 함으로서 실시간 업데이트 사항을 즉각 반영
+
+<img width="4183" alt="app_architecture" src="https://github.com/user-attachments/assets/064022b8-e97b-4df5-9034-7d179b0f5605" />
+
+
+
+<br>
 
 
 <br>
