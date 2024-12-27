@@ -10,4 +10,5 @@ class Routes {
   static const String category = '/category';
   static const String programDetail = '/detail';
   static const String webView = '/webView';
+  static const String openSource = '/opensource';
 }

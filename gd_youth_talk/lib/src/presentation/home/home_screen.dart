@@ -216,10 +216,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
                     ),
 
                     /// Section 2.
-                    Section(
-                      programs: state.upcomingPrograms,
-                      sectionTitle: sectionTitle2,
-                    ),
+                    state.upcomingPrograms.isEmpty
+                        ? SizedBox.shrink()
+                        : Section(
+                            programs: state.upcomingPrograms,
+                            sectionTitle: sectionTitle2,
+                          ),
                   ],
                 ),
               );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
+import 'package:gd_youth_talk/src/presentation/more/oss_license_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/theme_screen.dart';
 import 'widgets/menu_tile.dart';
 import 'widgets/banner_container.dart';
@@ -13,12 +14,11 @@ final menuItems = [
   MenuItem(menuTitle: '오시는 길', route: WebRoutes.location),
   MenuItem(menuTitle: '기본 테마 설정', route: Routes.setting, trailing: null),
   MenuItem(menuTitle: '이용 약관', route: WebRoutes.termsOfUse),
-  MenuItem(menuTitle: '오픈소스 라이센스', route: WebRoutes.openSource),
+  MenuItem(menuTitle: '오픈소스 라이센스', route: Routes.openSource),
   MenuItem(menuTitle: '앱 버전', route: '', trailing: null),
 ];
 
 class MoreScreen extends StatelessWidget {
-  bool _isDarkTheme = false; // 테마 상태를 나타낼 변수
   String _appVersion = 'v1.0'; // 앱 버전 상태
 
   @override
@@ -71,6 +71,16 @@ class MoreScreen extends StatelessWidget {
                   );
                 },
               );
+            } else if (menuItems[index - 1].menuTitle == '오픈소스 라이센스') {
+              return MenuTile(
+                menuTitle: menuItems[index - 1].menuTitle,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OssLicensesPage()), // OssLicensesPage로 이동
+                  );
+                },
+              );
             } else {
               final menuItem = menuItems[index - 1];
               return MenuTile(
@@ -104,3 +114,4 @@ class MoreScreen extends StatelessWidget {
     );
   }
 }
+
