@@ -80,7 +80,20 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
           alignment: Alignment.centerLeft, // 세로축 중앙, 가로축 왼쪽 정렬
           child: Padding(
               padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
-              child: Image.asset('assets/logo.png')),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: Image.asset('assets/logo.png'),
+                  ),
+                  const SizedBox(
+                    width: 2,
+                  ),
+                  Text('강동청년톡톡',
+                  style: Theme.of(context).textTheme.labelLarge)
+                ],
+              )),
         ),
         actions: [
           Padding(

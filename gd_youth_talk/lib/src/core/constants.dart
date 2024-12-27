@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 /// App Colors
 class AppColors {
   // Light Mode Colors
-  static const Color lightPrimary = Color(0xff009B80);
+  static const Color lightPrimary = Color(0xff2B9A87);
   static const Color lightAccent = Color(0xffF4C542);
-  static const Color lightBackground = Color(0xffF7F7F7);
+  static const Color lightBackground = Color(0xffF5F5F5);
   static const Color lightText = Color(0xff333333);
   static const Color lightIcon = Color(0xff606060);
   static const Color lightActiveButton = Color(0xff009B80);
@@ -15,7 +15,7 @@ class AppColors {
   static const Color lightCategoryButton = Color(0xffefefef);
 
   // Dark Mode Colors
-  static const Color darkPrimary = Color(0xff007B63);
+  static const Color darkPrimary = Color(0xff1F716A);
   static const Color darkAccent = Color(0xffD9A62A);
   static const Color darkBackground = Color(0xff1A1A1A);
   static const Color darkText = Color(0xffe0e0e0);
