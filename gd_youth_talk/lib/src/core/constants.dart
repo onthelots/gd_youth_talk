@@ -50,7 +50,6 @@ class WebRoutes {
   static const String customerService  = 'https://pf.kakao.com/_GQxjUxb';
   static const String blog  = 'https://blog.naver.com/syc_gangdong';
   static const String coronation = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S231102155211165423';
-  static const String location = 'https://map.naver.com/p/entry/place/1133065835?placePath=%2Fhome&c=15.00,0,0,0,dh';
   static const String termsOfUse = 'https://momentous-wallet-0f7.notion.site/1681c3f0e00380389faef7a3d636ce76?pvs=4';
 }
 

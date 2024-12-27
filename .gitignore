@@ -75,6 +75,7 @@ lib/generated_plugin_registrant.dart
 **/android/gradlew
 **/android/gradlew.bat
 **/android/key.properties
+**/android/app/key.jks
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 

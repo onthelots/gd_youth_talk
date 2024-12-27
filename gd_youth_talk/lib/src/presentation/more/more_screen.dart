@@ -11,7 +11,6 @@ final menuItems = [
   MenuItem(menuTitle: '공식 블로그', route: WebRoutes.blog),
   MenuItem(menuTitle: '카카오톡 문의하기', route: WebRoutes.customerService),
   MenuItem(menuTitle: '대관 신청', route: WebRoutes.coronation),
-  MenuItem(menuTitle: '오시는 길', route: WebRoutes.location),
   MenuItem(menuTitle: '기본 테마 설정', route: Routes.setting, trailing: null),
   MenuItem(menuTitle: '이용 약관', route: WebRoutes.termsOfUse),
   MenuItem(menuTitle: '오픈소스 라이센스', route: Routes.openSource),
@@ -42,7 +41,7 @@ class MoreScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.only(top: 5),
         child: ListView.separated(
-          itemCount: menuItems.length + 1, // 구분선은 2개 추가
+          itemCount: menuItems.length + 1, // 상단 배너 +1
           itemBuilder: (context, index) {
 
             /// 1. 배너 항목
@@ -94,13 +93,7 @@ class MoreScreen extends StatelessWidget {
           separatorBuilder: (context, index) {
             if (index == 0) {
               return const Divider(
-                height: 10,
-                thickness: 10,
-              ); // 굵은 구분선
-            }
-            if (index == 3 || index == 6) {
-              return const Divider(
-                thickness: 10,
+                thickness: 0,
                 height: 10,
               ); // 굵은 구분선
             }
