@@ -3,6 +3,10 @@
 
 - iOS, Android 출시 예정입니다.
 
+<br>
+
+![Group 10](https://github.com/user-attachments/assets/e59a0700-3cc5-411b-acb3-5c52ff23cde6)
+
 <br> 
 
 # 목차
