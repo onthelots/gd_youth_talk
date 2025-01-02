@@ -41,7 +41,7 @@ class MoreScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.only(top: 5),
         child: ListView.separated(
-          itemCount: menuItems.length + 1, // 상단 배너 +1
+          itemCount: menuItems.length, // 상단 배너 +1
           itemBuilder: (context, index) {
 
             /// 1. 배너 항목
@@ -92,10 +92,9 @@ class MoreScreen extends StatelessWidget {
           },
           separatorBuilder: (context, index) {
             if (index == 0) {
-              return const Divider(
-                thickness: 0,
+              return const SizedBox(
                 height: 10,
-              ); // 굵은 구분선
+              );
             }
             return const Divider(thickness: 0.5,
               indent: 13,

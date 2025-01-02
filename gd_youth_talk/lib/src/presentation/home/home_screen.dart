@@ -113,8 +113,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
           listener: (context, state) {
             if (state is HomeLoaded) {
               _initializeTimer(state.latestPrograms.length);
-              print('HomeBloc 상태 변경');
-              print('가장 첫번째 프로그램 ${state.latestPrograms.first.title}');
             } else if (state is HomeError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
@@ -127,6 +125,16 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
             } else if (state is HomeError) {
               print('Home Error -> 다시 재 로드 버튼 할당하기');
             } else if (state is HomeLoaded) {
+              // 데이터가 없을 경우
+              if (state.latestPrograms.isEmpty) {
+                return Center(
+                  child: Text(
+                    '프로그램 데이터가 존재하지 않습니다.',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                );
+              }
+
               return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,10 +220,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
                     ),
 
                     /// Section 1. 마감 임박순
-                    Section(
-                      programs: state.popularPrograms,
-                      sectionTitle: sectionTitle1,
-                    ),
+                    state.popularPrograms.isEmpty
+                        ? SizedBox.shrink()
+                        : Section(
+                            programs: state.popularPrograms,
+                            sectionTitle: sectionTitle1,
+                          ),
 
                     /// Section 2.
                     state.upcomingPrograms.isEmpty

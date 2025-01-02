@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// From Hex
 Color getColorFromHex(String hexColor) {
   hexColor = hexColor.replaceAll('#', ''); // #을 제거
   if (hexColor.length == 6) {
@@ -9,6 +10,7 @@ Color getColorFromHex(String hexColor) {
   return Color(int.parse('0x$hexColor')); // 16진수로 변환하여 Color로 리턴
 }
 
+/// 배경색 기반 텍스트 색상
 Color getTextColorBasedOnBackground(String hexColor) {
   Color backgroundColor = getColorFromHex(hexColor);  // String 형식의 hex 색상 값을 Color로 변환
   // 배경 색상의 명도를 계산합니다.

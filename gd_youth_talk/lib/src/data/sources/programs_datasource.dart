@@ -14,10 +14,15 @@ class ProgramDataSource {
 
   /// firebase data read - Stream!
   Stream<List<ProgramModel>> fetchPrograms() {
-      return _firestore.collection('programs').snapshots().map((snapshot) {
-        return snapshot.docs.map((doc) => ProgramModel.fromFirebase(doc)).toList();
-      });
-    }
+    final today = DateTime.now();
+    return _firestore.collection('programs').snapshots().map((snapshot) {
+      // 필터링: programEndDate가 오늘보다 이전인 프로그램을 제외
+      return snapshot.docs
+          .map((doc) => ProgramModel.fromFirebase(doc))
+          .where((program) => program.programEndDate == null || program.programEndDate!.isAfter(today))
+          .toList();
+    });
+  }
 
   /// hits update
   Future<void> updateHits(String documentId, int currentHits) async {
