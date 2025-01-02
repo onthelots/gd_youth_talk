@@ -113,6 +113,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
           listener: (context, state) {
             if (state is HomeLoaded) {
               _initializeTimer(state.latestPrograms.length);
+              print('HomeBloc 상태 변경');
+              print('가장 첫번째 프로그램 ${state.latestPrograms.first.title}');
             } else if (state is HomeError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),

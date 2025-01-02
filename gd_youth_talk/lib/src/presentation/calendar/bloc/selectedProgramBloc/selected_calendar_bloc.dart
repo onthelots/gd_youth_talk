@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gd_youth_talk/src/data/models/program_model.dart';
 import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
 import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
 import 'selected_calendar_event.dart';
@@ -17,8 +18,9 @@ class SelectedCalendarBloc
       emit(SelectedProgramLoadingState());
       try {
         await for (var programs in repository.getPrograms()) {
+          final programCopy = List<ProgramModel>.from(programs); // 복제하여 데이터 보호
           emit(SelectedProgramLoadedState(
-              usecase.filterByDate(programs, event.date)));
+              usecase.filterByDate(programCopy, event.date)));
         }
       } catch (e) {
         emit(SelectedProgramErrorState("Failed to load programs"));
