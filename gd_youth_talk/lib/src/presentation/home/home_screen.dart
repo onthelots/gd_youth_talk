@@ -125,12 +125,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
             } else if (state is HomeError) {
               print('Home Error -> 다시 재 로드 버튼 할당하기');
             } else if (state is HomeLoaded) {
-              // 데이터가 없을 경우
               if (state.latestPrograms.isEmpty) {
                 return Center(
-                  child: Text(
-                    '프로그램 데이터가 존재하지 않습니다.',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  child: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Text('데이터를 불러오는 중입니다'),
+                    ],
                   ),
                 );
               }
