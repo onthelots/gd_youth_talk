@@ -26,7 +26,7 @@ class LatestProgramTile extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            color: getColorFromHex(program.primaryColor ?? '#FFFFFF').withOpacity(0.6), // opacity 적용
+            color: getColorFromHex(program.primaryColor ?? '#FFFFFF'),
           ),
           width: double.infinity, // 페이지 뷰 너비
           height: double.infinity, // 페이지 뷰 높이
