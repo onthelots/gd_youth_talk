@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
+import 'package:gd_youth_talk/src/data/models/program_model.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/widgets/focusDate_avatar.dart';
 import 'package:intl/intl.dart';
 
@@ -12,7 +13,6 @@ import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/calendarBloc/calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/calendarBloc/calendar_event.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/calendarBloc/calendar_state.dart';
-
 import 'package:table_calendar/table_calendar.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'widgets/calendar_tile.dart';
@@ -72,6 +72,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   calendarFormat: CalendarFormat.month,
                   startingDayOfWeek: StartingDayOfWeek.sunday,
                   selectedDayPredicate: (day) => isSameDay(_focusedDay, day),
+                  rowHeight: 60.0,
 
                   daysOfWeekStyle: const DaysOfWeekStyle(
                     weekdayStyle: TextStyle(
@@ -84,7 +85,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                     ),
                   ),
 
-                  // eventLoader : 날짜 하단 이벤트 나타내는 작은 버튼 (day 파라미터를 기반으로 할당)
+                  // eventLoader : 날짜 하단 Marker Loader
                   eventLoader: (day) {
                     if (state is CalendarLoadedState) {
                       // 인자인 'day'의 시간 정보를 00:00:00으로 설정하여 비교
@@ -127,52 +128,61 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       );
                     },
 
-                    selectedBuilder: (context, day, focusedDay) {
+                    selectedBuilder: (context, day, focusDay) {
                       return Container(
                         alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          color: Colors.blueAccent, // 원하는 색상으로 변경
-                          shape: BoxShape.circle, // 원형으로 설정
-                        ),
-                        child: Text(
-                          '${day.day}',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                        child: Container(
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.blueAccent
+                          ),
+                          child: Center(
+                            child: Text(
+                              '${day.day}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       );
                     },
                     markerBuilder: (context, day, events) {
-                      bool isSelectedDay = day == _focusedDay;
-
-                      return events.isNotEmpty
-                          ? Container(
-                        width: 18,
-                        height: 18,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: isSelectedDay ? Colors.black87 : Colors
-                              .black12,
-                        ),
-                        child: Text(
-                          '${events.length}',
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 12),
-                        ),
-                      )
-                          : null;
+                      if (events.isNotEmpty && state is CalendarLoadedState) {
+                        final programsForDay = events as List<ProgramModel>;
+                        return Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: List.generate(
+                              programsForDay.length > 5 ? 5 : programsForDay.length, // 최대 5개로 제한
+                                  (index) {
+                                final programCategory = programsForDay[index].category != null
+                                    ? CategoryTypeExtension.fromName(programsForDay[index].category!)
+                                    : null;
+                                return Container(
+                                  width: 7,
+                                  height: 7,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: programCategory?.color ?? Colors.blueAccent,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      } else {
+                        return null;
+                      }
                     },
                   ),
 
                   calendarStyle: CalendarStyle(
-                    markerSize: 10.0,
-                    markersAlignment: Alignment.bottomRight,
-
-                    markerDecoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
 
                     // 오늘 날짜 (Text)
                     todayTextStyle: TextStyle(
@@ -206,7 +216,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           ),
 
           const Divider(
-            height: 30.0,
+            height: 50.0,
             thickness: 10.0,
           ),
           Expanded(
