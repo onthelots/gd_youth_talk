@@ -1,7 +1,9 @@
 # 강동청년톡톡
 > 청년의 가능성을 [잇다]
 - 서울청년센터 강동에서 진행하는 다양한 프로그램과 행사를 한눈에 확인하고 쉽게 참여할 수 있도록 돕는 플랫폼입니다.
-- iOS, Android 출시 예정 입니다 (2024년 12월 중)
+
+#### <a href="https://momentous-wallet-0f7.notion.site/1681c3f0e003806c9b50dde42728413a"><img src="https://img.shields.io/badge/Notion-000000?style=flat&logo=Notion&logoColor=white"/></a> <a href="https://apps.apple.com/kr/app/%EA%B0%95%EB%8F%99%EC%B2%AD%EB%85%84%ED%86%A1%ED%86%A1/id6739631810"><img src="https://img.shields.io/badge/AppStore-000000?style=flat&logo=AppStore&logoColor=white"/></a>
+
 
 <br>
 
