@@ -38,7 +38,11 @@ class OssLicensesPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           scrolledUnderElevation: 0,
-          title: const Text('오픈소스 라이센스'),
+          centerTitle: true,
+          title: Text(
+            '오픈소스 라이센스',
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
         ),
         body: FutureBuilder<List<Package>>(
             future: _licenses,
@@ -87,7 +91,7 @@ class MiscOssLicenseSingle extends StatelessWidget {
         scrolledUnderElevation: 0,
       ),
       body: Container(
-          color: Theme.of(context).canvasColor,
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: ListView(children: <Widget>[
             if (package.description.isNotEmpty)
               Padding(
