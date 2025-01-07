@@ -42,7 +42,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         /// leading : pop Button
         leading: IconButton(
           icon: const Icon(Icons.close),

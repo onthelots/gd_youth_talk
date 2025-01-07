@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/presentation/more/oss_license_screen.dart';
@@ -18,7 +20,6 @@ final menuItems = [
 ];
 
 class MoreScreen extends StatelessWidget {
-  String _appVersion = 'v1.0'; // 앱 버전 상태
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class MoreScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.only(top: 5),
         child: ListView.separated(
-          itemCount: menuItems.length, // 상단 배너 +1
+          itemCount: menuItems.length + 1, // 상단 배너 +1
           itemBuilder: (context, index) {
 
             /// 1. 배너 항목
@@ -53,10 +54,18 @@ class MoreScreen extends StatelessWidget {
               /// 2. 앱 버전
             } else if (index == menuItems.length) {
               final menuItem = menuItems.last;
-              return MenuTile(
-                menuTitle: menuItem.menuTitle,
-                onTap: null, // onTap 없음
-                trailing: Text(_appVersion), // 앱 버전 표시
+
+              // App Version (cubit)
+              return BlocBuilder<AppInfoCubit, String>(
+                builder: (context, version) {
+                  return MenuTile(
+                    menuTitle: menuItem.menuTitle,
+                    onTap: null, // onTap 없음
+                    trailing: Text(
+                      'v${version}',
+                    ),
+                  );
+                },
               );
 
               /// 3. '기본 테마 설정' 메뉴 항목

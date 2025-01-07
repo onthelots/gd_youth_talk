@@ -134,14 +134,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
                         child: Container(
                           height: 35,
                           width: 35,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.blueAccent
                           ),
                           child: Center(
                             child: Text(
                               '${day.day}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),

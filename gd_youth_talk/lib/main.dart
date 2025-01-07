@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
 import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
@@ -54,6 +55,10 @@ void main() async {
   // env -> API, Secret Key 등을 저장하는 .env 파일 로드
   await dotenv.load();
 
+  // TODO:- App version check
+  // 현재 디바이스의 버전 vs Remote config
+
+
   Future.delayed(Duration(seconds: 2), () {
     runApp(MyApp());
   });
@@ -73,6 +78,10 @@ class MyApp extends StatelessWidget {
             ..add(
               ThemeChanged(themeMode: ThemeMode.system), // 기본값으로 시스템 테마 설정
             ),
+        ),
+
+        BlocProvider(
+          create: (context) => AppInfoCubit()..fetchAppVersion(),
         ),
 
         // Bottom Navigation
