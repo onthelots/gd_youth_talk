@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// From Hex
 Color getColorFromHex(String hexColor) {
@@ -41,3 +42,4 @@ String formatTimeRange(DateTime? start, DateTime? end) {
   final String endFormatted = formatter.format(end).replaceFirst('AM', '오전').replaceFirst('PM', '오후');
   return "$startFormatted - $endFormatted";
 }
+
