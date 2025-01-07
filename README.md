@@ -7,7 +7,7 @@
 
 <br>
 
-![Group 10](https://github.com/user-attachments/assets/e59a0700-3cc5-411b-acb3-5c52ff23cde6)
+![screenshot_all](https://github.com/user-attachments/assets/b380881c-617a-4d6f-a856-fa011ddf10da)
 
 <br> 
 
