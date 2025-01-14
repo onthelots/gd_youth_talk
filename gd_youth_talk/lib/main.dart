@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
 import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
+import 'package:gd_youth_talk/src/presentation/auth/terms/reg_terms_screen.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -200,6 +201,10 @@ class AppRouter {
         final url = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => WebViewScreen(url: url),
+        );
+      case Routes.regTerms:
+        return MaterialPageRoute(
+          builder: (_) => TermsAgreementPage(),
         );
       default:
         return null;

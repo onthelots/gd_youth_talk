@@ -11,4 +11,5 @@ class Routes {
   static const String programDetail = '/detail';
   static const String webView = '/webView';
   static const String openSource = '/opensource';
+  static const String regTerms = '/terms';
 }
