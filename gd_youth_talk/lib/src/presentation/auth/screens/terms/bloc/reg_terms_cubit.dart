@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/auth/terms/bloc/reg_terms_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/terms/bloc/reg_terms_state.dart';
 
 class TermsCubit extends Cubit<TermsState> {
   TermsCubit() : super(const TermsState());

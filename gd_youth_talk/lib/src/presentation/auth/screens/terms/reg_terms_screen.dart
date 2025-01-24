@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/auth/terms/bloc/reg_terms_cubit.dart';
-import 'package:gd_youth_talk/src/presentation/auth/terms/bloc/reg_terms_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/terms/bloc/reg_terms_cubit.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/terms/bloc/reg_terms_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/widgets/auth_title_column.dart';
+import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_buttom_navbar.dart';
 
 class TermsAgreementPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -28,27 +29,24 @@ class TermsAgreementPage extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   // 0. 타이틀
-                  Text(
-                    "멤버십 이용을 위해 \n아래 필수 약관에 동의해주세요.",
-                    style: Theme.of(context).textTheme.displayMedium,
-                  ),
-
-                  SizedBox(
-                    height: 30,
+                  const AuthTitleColumn(
+                    title: '필수 약관에 동의해주세요',
+                    subtitle: '모든 약관에 동의해야 멤버십 자격을 얻을 수 있어요',
                   ),
 
                   // 1. 모든 약관 동의
                   CheckboxListTile(
                     title: Text(
                       "모든 약관에 동의합니다",
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context).textTheme.labelMedium,
                     ),
                     checkColor: Theme.of(context).scaffoldBackgroundColor,
                     activeColor: Theme.of(context).primaryColor,
                     contentPadding: EdgeInsets.zero,
                     value: state.agreeAll,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // 체크박스 왼쪽 배치
                     onChanged: (value) => cubit.toggleAgreeAll(value ?? false),
                   ),
 
@@ -64,7 +62,10 @@ class TermsAgreementPage extends StatelessWidget {
                     activeColor: Theme.of(context).primaryColor,
                     contentPadding: EdgeInsets.zero,
                     value: state.ageConfirmed,
-                    onChanged: (value) => cubit.updateIndividual('age', value ?? false),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // 체크박스 왼쪽 배치
+                    onChanged: (value) =>
+                        cubit.updateIndividual('age', value ?? false),
                   ),
 
                   // 3. 서비스 이용약관 동의
@@ -75,11 +76,17 @@ class TermsAgreementPage extends StatelessWidget {
                           "서비스 이용약관에 동의합니다",
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
+                        Spacer(),
                         TextButton(
-                          onPressed: () => Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.termsOfUse),
+                          onPressed: () => Navigator.pushNamed(
+                              context, Routes.webView,
+                              arguments: WebRoutes.termsOfUse),
                           child: Text(
                             "보기",
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.grey),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(color: Colors.grey),
                           ),
                         ),
                       ],
@@ -88,7 +95,10 @@ class TermsAgreementPage extends StatelessWidget {
                     activeColor: Theme.of(context).primaryColor,
                     contentPadding: EdgeInsets.zero,
                     value: state.termsOfService,
-                    onChanged: (value) => cubit.updateIndividual('terms', value ?? false),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // 체크박스 왼쪽 배치
+                    onChanged: (value) =>
+                        cubit.updateIndividual('terms', value ?? false),
                   ),
 
                   // 4. 개인정보 처리방침 동의
@@ -99,11 +109,17 @@ class TermsAgreementPage extends StatelessWidget {
                           "개인정보 처리방침에 동의합니다",
                           style: Theme.of(context).textTheme.labelMedium,
                         ),
+                        Spacer(),
                         TextButton(
-                          onPressed: () => Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.privacyPolicy),
+                          onPressed: () => Navigator.pushNamed(
+                              context, Routes.webView,
+                              arguments: WebRoutes.privacyPolicy),
                           child: Text(
                             "보기",
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(color: Colors.grey),
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall
+                                ?.copyWith(color: Colors.grey),
                           ),
                         ),
                       ],
@@ -112,25 +128,27 @@ class TermsAgreementPage extends StatelessWidget {
                     activeColor: Theme.of(context).primaryColor,
                     contentPadding: EdgeInsets.zero,
                     value: state.privacyPolicy,
-                    onChanged: (value) => cubit.updateIndividual('privacy', value ?? false),
-                  ),
-                  Spacer(),
-
-                  //TODO: - 계속 버튼 수정
-                  ElevatedButton(
-                    onPressed: (state.ageConfirmed && state.termsOfService && state.privacyPolicy)
-                        ? () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("회원가입이 완료되었습니다.")),
-                      );
-                    }
-                        : null, // 모든 체크박스가 체크되지 않았을 경우 비활성화
-                    child: Text("회원가입 완료"),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    // 체크박스 왼쪽 배치
+                    onChanged: (value) =>
+                        cubit.updateIndividual('privacy', value ?? false),
                   ),
                 ],
               );
             },
           ),
+        ),
+        bottomNavigationBar: BlocBuilder<TermsCubit, TermsState>(
+          builder: (context, state) {
+            return CustomButtomNavBar(
+              title: '계속하기',
+              onPressed: state.agreeAll // 모든 약관 동의 시에만 활성화
+                  ? () {
+                Navigator.pushNamed(context, Routes.regEmail);
+              }
+                  : null, // 비활성화
+            );
+          },
         ),
       ),
     );

@@ -5,7 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
 import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
-import 'package:gd_youth_talk/src/presentation/auth/terms/reg_terms_screen.dart';
+import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/email/bloc/reg_email_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/email/reg_email_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/terms/reg_terms_screen.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -137,6 +140,11 @@ class MyApp extends StatelessWidget {
             usecase: locator<ProgramUseCase>(),
           ),
         ),
+        BlocProvider(
+          create: (_) => EmailVerificationBloc(
+            usecase: locator<UserUsecase>(),
+          ),
+        )
       ],
       child: Builder(
         builder: (context) {
@@ -205,6 +213,10 @@ class AppRouter {
       case Routes.regTerms:
         return MaterialPageRoute(
           builder: (_) => TermsAgreementPage(),
+        );
+      case Routes.regEmail:
+        return MaterialPageRoute(
+          builder: (_) => EmailAuthenticationPage(),
         );
       default:
         return null;
