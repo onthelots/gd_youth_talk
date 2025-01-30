@@ -20,6 +20,11 @@ class UserRepository {
     return await _userDatasource.verifyEmail(user);
   }
 
+  // 4. 비밀번호 변경
+  Future<bool> updatePasswordAfterSignUp(String newPassword) async {
+    return await _userDatasource.updatePasswordAfterSignUp(newPassword);
+  }
+
   Future<UserModel> signInWithEmailPassword(String email, String password) async {
     return await _userDatasource.signInWithEmailPassword(email, password);
   }

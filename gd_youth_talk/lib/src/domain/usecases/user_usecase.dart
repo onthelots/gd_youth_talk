@@ -39,7 +39,12 @@ class UserUsecase {
     }
   }
 
-  // 4. 로그인
+  // 4. 비밀번호 변경
+  Future<bool> updatePasswordAfterSignUp(String newPassword) async {
+    return await _userRepository.updatePasswordAfterSignUp(newPassword);
+  }
+
+  // 5. 로그인
   Future<UserModel> signIn({
     required String email,
     required String password,
@@ -52,7 +57,7 @@ class UserUsecase {
     }
   }
 
-  // 5. 로그아웃
+  // 6. 로그아웃
   Future<void> signOut() async {
     try {
       await _userRepository.signOut();
@@ -61,7 +66,7 @@ class UserUsecase {
     }
   }
 
-  // 6. 유저정보(나) 조회
+  // 7. 유저정보(나) 조회
   Future<UserModel> getUserInfo() async {
     try {
       return await _userRepository.getUserInfo();
@@ -70,7 +75,7 @@ class UserUsecase {
     }
   }
 
-  // 7. 닉네임 변경하기
+  // 8. 닉네임 변경하기
   Future<void> updateNickname(String newNickname) async {
     try {
       await _userRepository.updateNickname(newNickname);
@@ -79,7 +84,7 @@ class UserUsecase {
     }
   }
 
-  // 8. 탈퇴 (계정 삭제)
+  // 9. 탈퇴 (계정 삭제)
   Future<void> deleteUser() async {
     try {
       await _userRepository.deleteUser();

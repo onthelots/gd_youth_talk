@@ -1,13 +1,13 @@
 // Bloc 상태 정의
 abstract class EmailVerificationState {}
 
-class EmailVerificationInitial extends EmailVerificationState {}
+class EmailValidationState extends EmailVerificationState {
+  final bool isEmailValid;
 
-class EmailVerificationInProgress extends EmailVerificationState {}
+  EmailValidationState({required this.isEmailValid});
+}
 
 class EmailVerificationSent extends EmailVerificationState {}
-
-class EmailVerificationChecking extends EmailVerificationState {}
 
 class EmailVerificationSuccess extends EmailVerificationState {}
 

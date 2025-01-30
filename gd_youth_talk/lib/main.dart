@@ -8,6 +8,8 @@ import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
 import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/email/bloc/reg_email_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/email/reg_email_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/password/bloc/reg_password_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/password/reg_password_screen.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/terms/reg_terms_screen.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
@@ -140,8 +142,15 @@ class MyApp extends StatelessWidget {
             usecase: locator<ProgramUseCase>(),
           ),
         ),
+
         BlocProvider(
           create: (_) => EmailVerificationBloc(
+            usecase: locator<UserUsecase>(),
+          ),
+        ),
+
+        BlocProvider(
+          create: (_) => RegPasswordBloc(
             usecase: locator<UserUsecase>(),
           ),
         )
@@ -217,6 +226,10 @@ class AppRouter {
       case Routes.regEmail:
         return MaterialPageRoute(
           builder: (_) => EmailAuthenticationPage(),
+        );
+      case Routes.regPassword:
+        return MaterialPageRoute(
+          builder: (_) => PasswordAuthenticationPage(),
         );
       default:
         return null;

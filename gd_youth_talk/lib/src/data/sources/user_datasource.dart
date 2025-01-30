@@ -28,7 +28,8 @@ class UsersDataSource {
           'visitCount': 0,
           'lastVisitDate': null,
           'registrationDate': DateTime.now(),
-          'isEmailVerified': false,
+          'isPasswordVerified': false, // 비밀번호 기입 여부 파악 (초기값 false)
+          'isEmailVerified': false, // 이메일 인증여부 파악 (초기값 false)
         });
 
       } else {
@@ -72,6 +73,24 @@ class UsersDataSource {
     }
   }
 
+  /// 비밀번호 변경
+  Future<bool> updatePasswordAfterSignUp(String newPassword) async {
+    try {
+      final user = _auth.currentUser;
+
+      if (user != null) {
+        await user.updatePassword(newPassword);
+        return true;
+      } else {
+        throw Exception('No user logged in');
+      }
+    } catch (e) {
+      throw Exception('Failed to update password: $e');
+    }
+  }
+
+
+
   /// 로그인
   Future<UserModel> signInWithEmailPassword(String email, String password) async {
     try {
@@ -101,8 +120,8 @@ class UsersDataSource {
     try {
       final user = _auth.currentUser;
       if (user != null) {
-        await _firestore.collection('users').doc(user.uid).delete();
-        await user.delete();
+        await _firestore.collection('users').doc(user.uid).delete(); // firestore 내 삭제
+        await user.delete(); // auth 내 삭제
       } else {
         throw Exception('No user logged in');
       }

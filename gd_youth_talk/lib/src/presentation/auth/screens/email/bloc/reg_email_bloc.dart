@@ -1,6 +1,5 @@
 // Bloc 구현
 import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/email/bloc/reg_email_event.dart';
@@ -11,16 +10,37 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
   final UserUsecase usecase;
   User? _tempUser;
 
-  EmailVerificationBloc({required this.usecase}) : super(EmailVerificationInitial()) {
+  EmailVerificationBloc({required this.usecase}) : super(EmailValidationState(isEmailValid: false)) {
+
+    // 이메일 기입 및 적합성 여부에 따른 상태값
+    on<EmailChanged>((event, emit) {
+      final isValid = _isValidEmail(event.email);
+
+      // ⭐️ State 초기화 (해당 화면이 초기화 되었을 때)
+      emit(EmailValidationState(
+        isEmailValid: isValid,
+      ));
+    });
+
+    // 인증 시작
     on<StartEmailVerification>(_onStartEmailVerification);
+
+    // 인증 여부 확인
     on<CheckEmailVerificationStatus>(_onCheckEmailVerificationStatus);
+
+    // 인증 취소
     on<CancelEmailVerification>(_onCancelEmailVerification);
+  }
+
+  // 이메일 유효성 검사 함수
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(email);
   }
 
   // 임시 회원가입 및 이메일 인증 보내기
   Future<void> _onStartEmailVerification(StartEmailVerification event,
       Emitter<EmailVerificationState> emit) async {
-    emit(EmailVerificationInProgress());
     try {
       // 1. 임시 회원가입
       final randomPassword = _generateRandomPassword();
@@ -52,8 +72,9 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
       CheckEmailVerificationStatus event,
       Emitter<EmailVerificationState> emit,
       ) async {
+
     if (_tempUser == null) return;
-    emit(EmailVerificationChecking());
+
     try {
       final isVerified = await usecase.verifyEmail(_tempUser!);
       if (isVerified) {
@@ -75,7 +96,9 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
       if (_tempUser != null) {
         await usecase.deleteUser(); // 삭제
       }
+      emit(EmailValidationState(isEmailValid: false)); // 유효성 초기화
       emit(EmailVerificationCancelled());
+
     } catch (e) {
       emit(EmailVerificationFailed("Failed to cancel verification: $e"));
     }
