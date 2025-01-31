@@ -1,4 +1,4 @@
-# 강동청년톡톡
+# 강동청년톡톡 & 관리자용
 > 청년의 가능성을 [잇다]
 - 서울청년센터 강동에서 진행하는 다양한 프로그램과 행사를 한눈에 확인하고 쉽게 참여할 수 있도록 돕는 플랫폼입니다.
 
@@ -175,7 +175,11 @@
 - 담당자와의 연계를 통해 테스트 실시 + 프로그램 데이터 할당
 - Hosting을 통해 Web 배포 완료
 
-![Group 7](https://github.com/user-attachments/assets/2043c563-f092-4b78-ac08-6db2ce976e3f)
+> 공지사항, 프로그램, 유저관리 + QR 출석기능 구현
+- 센터 내 주요 소식을 빠르게 전달하기 위한 [공지사항] 생성기능 추가
+- 현장 내 방문하는 가입 유저 관리를 위하여 [QR Scanner] 기능 도입
+
+![Frame 5052](https://github.com/user-attachments/assets/0085d567-deb7-4746-b266-40569ff16a1a)
 
 <br>
 
@@ -185,6 +189,8 @@
 - Domain Layer : 각각의 UI 화면에서 활용할 수 있는 로직을 Usecase 내 구현 (일괄된 프로그램에 대한 정보이므로, Entities는 생략)
 - Presentation Layer : Locator(DI) 생성 및 Bloc 주입을 위한 각각의 Screen 파일 생성
 - Core : 앱 테마 외 Constants, Routes 작업 실시
+
+<br>
 
 > Bloc를 통한 상태관리 구축
 - '프로그램'이라는 하나의 DataSource를 다루는 동시에 앱 전역에서 사용하기 때문에 Main.dart 내 Bloc 주입을 설정
