@@ -21,8 +21,8 @@ class UserRepository {
   }
 
   // 4. 비밀번호 변경
-  Future<bool> updatePasswordAfterSignUp(String newPassword) async {
-    return await _userDatasource.updatePasswordAfterSignUp(newPassword);
+  Future<void> updatePasswordAfterSignUp(String newPassword) async {
+    await _userDatasource.updatePasswordAfterSignUp(newPassword);
   }
 
   Future<UserModel> signInWithEmailPassword(String email, String password) async {

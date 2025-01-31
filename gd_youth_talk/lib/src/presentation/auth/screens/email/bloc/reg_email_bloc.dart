@@ -9,12 +9,13 @@ import '../../../../../domain/usecases/user_usecase.dart';
 class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificationState> {
   final UserUsecase usecase;
   User? _tempUser;
+  bool isTextFieldEnabled = true;
 
   EmailVerificationBloc({required this.usecase}) : super(EmailValidationState(isEmailValid: false)) {
 
     // 이메일 기입 및 적합성 여부에 따른 상태값
     on<EmailChanged>((event, emit) {
-      final isValid = _isValidEmail(event.email);
+      final isValid = _isValidEmail(event.email); // 유효성 검사
 
       // ⭐️ State 초기화 (해당 화면이 초기화 되었을 때)
       emit(EmailValidationState(
@@ -39,17 +40,22 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
   }
 
   // 임시 회원가입 및 이메일 인증 보내기
-  Future<void> _onStartEmailVerification(StartEmailVerification event,
+  Future<void> _onStartEmailVerification(
+      StartEmailVerification event,
       Emitter<EmailVerificationState> emit) async {
+
+    emit(EmailVerificationRequest()); // sent 상태변환
+    isTextFieldEnabled = false; // 버튼 비 활성화
     try {
       // 1. 임시 회원가입
       final randomPassword = _generateRandomPassword();
+      final randomNickname = _generateRandomNickname();  // 랜덤 닉네임 생성
 
       // 회원가입 실시
       await usecase.signUp(
         email: event.email,
         password: randomPassword,
-        nickname: "TempUser",
+        nickname: randomNickname,
       );
 
       // 유저 정보 가져오기
@@ -58,7 +64,7 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
       // 2. 인증 이메일 발송
       if (_tempUser != null) {
         await usecase.sendEmailVerification(_tempUser!);
-        emit(EmailVerificationSent());
+        emit(EmailVerificationSent()); // sent 상태변환
       } else {
         throw Exception("Temporary user creation failed.");
       }
@@ -96,9 +102,7 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
       if (_tempUser != null) {
         await usecase.deleteUser(); // 삭제
       }
-      emit(EmailValidationState(isEmailValid: false)); // 유효성 초기화
       emit(EmailVerificationCancelled());
-
     } catch (e) {
       emit(EmailVerificationFailed("Failed to cancel verification: $e"));
     }
@@ -108,5 +112,11 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
   String _generateRandomPassword() {
     const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
     return List.generate(8, (index) => chars[Random().nextInt(chars.length)]).join();
+  }
+
+  String _generateRandomNickname() {
+    final random = Random();
+    final randomNumber = random.nextInt(90000) + 10000; // 5자리 랜덤 숫자 생성 (10000 ~ 99999)
+    return '#$randomNumber님';
   }
 }

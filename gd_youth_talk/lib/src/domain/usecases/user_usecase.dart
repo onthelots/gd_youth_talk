@@ -40,8 +40,8 @@ class UserUsecase {
   }
 
   // 4. 비밀번호 변경
-  Future<bool> updatePasswordAfterSignUp(String newPassword) async {
-    return await _userRepository.updatePasswordAfterSignUp(newPassword);
+  Future<void> updatePasswordAfterSignUp(String newPassword) async {
+    await _userRepository.updatePasswordAfterSignUp(newPassword);
   }
 
   // 5. 로그인

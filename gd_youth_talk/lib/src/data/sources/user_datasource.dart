@@ -74,13 +74,17 @@ class UsersDataSource {
   }
 
   /// 비밀번호 변경
-  Future<bool> updatePasswordAfterSignUp(String newPassword) async {
+  Future<void> updatePasswordAfterSignUp(String newPassword) async {
     try {
       final user = _auth.currentUser;
 
       if (user != null) {
         await user.updatePassword(newPassword);
-        return true;
+
+        // 비밀번호 변경 완료 후, firstore 내 isPasswordVerified 값을 true로 변경
+        await _firestore.collection('users').doc(user.uid).update({
+          'isPasswordVerified': true,
+        });
       } else {
         throw Exception('No user logged in');
       }
@@ -88,8 +92,6 @@ class UsersDataSource {
       throw Exception('Failed to update password: $e');
     }
   }
-
-
 
   /// 로그인
   Future<UserModel> signInWithEmailPassword(String email, String password) async {

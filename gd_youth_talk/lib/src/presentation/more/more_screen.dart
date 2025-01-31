@@ -41,10 +41,11 @@ class MoreScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TermsAgreementPage()), // ThemeSettingsScreen으로 이동
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => TermsAgreementPage()), // ThemeSettingsScreen으로 이동
+            // );
+            Navigator.pushNamed(context, Routes.regTerms);
           }, icon: Icon(Icons.add_circle))
         ],
       ),

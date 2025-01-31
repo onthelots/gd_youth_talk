@@ -23,6 +23,7 @@ class RegPasswordBloc extends Bloc<RegPasswordEvent, RegPasswordState> {
       Emitter<RegPasswordState> emit) {
     _password = event.password;
     final isValid = _validatePassword(event.password);
+    print('isValid : ${isValid}');
     emit(PasswordValidationState(isPasswordValid: isValid));
     _emitPasswordReadyState(emit); // 변경준비 확인
   }
@@ -63,9 +64,8 @@ class RegPasswordBloc extends Bloc<RegPasswordEvent, RegPasswordState> {
     }
 
     try {
-      final isUpdatePassword = await usecase.updatePasswordAfterSignUp(
-          _password!);
-      emit(RegPasswordSuccess(isPasswordUpdated: isUpdatePassword));
+      await usecase.updatePasswordAfterSignUp(_password!);
+      emit(RegPasswordSuccess());
     } catch (e) {
       emit(RegPasswordFailed("비밀번호 설정 실패: $e"));
     }

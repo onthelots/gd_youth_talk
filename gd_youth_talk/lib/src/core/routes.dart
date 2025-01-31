@@ -14,4 +14,5 @@ class Routes {
   static const String regTerms = '/terms';
   static const String regEmail = '/emailreg';
   static const String regPassword = '/passwordreg';
+  static const String regWelcome = '/welcomereg';
 }

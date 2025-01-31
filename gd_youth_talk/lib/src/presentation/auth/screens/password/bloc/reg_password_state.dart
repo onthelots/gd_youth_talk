@@ -22,10 +22,7 @@ class PasswordReadyState extends RegPasswordState {
 }
 
 // 패스워드 업데이트 성공
-class RegPasswordSuccess extends RegPasswordState {
-  final bool isPasswordUpdated;
-  RegPasswordSuccess({required this.isPasswordUpdated});
-}
+class RegPasswordSuccess extends RegPasswordState {}
 
 // 패스워드 변경 오류
 class RegPasswordFailed extends RegPasswordState {
