@@ -51,6 +51,7 @@ class WebRoutes {
   static const String blog  = 'https://blog.naver.com/syc_gangdong';
   static const String coronation = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S231102155211165423';
   static const String termsOfUse = 'https://momentous-wallet-0f7.notion.site/1681c3f0e00380389faef7a3d636ce76?pvs=4';
+  static const String privacyPolicy = 'https://momentous-wallet-0f7.notion.site/17b1c3f0e00380b5ae92ec994b5ccca8?pvs=4';
 }
 
 class MenuItem {

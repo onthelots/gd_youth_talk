@@ -5,6 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
 import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/email/reg_email_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/password/reg_password_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/terms/reg_terms_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/welcome/reg_welcome_screen.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -30,8 +34,7 @@ import 'package:gd_youth_talk/src/core/screens.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/core/theme.dart';
 
-// model, usecase
-import 'package:gd_youth_talk/src/data/models/program_model.dart';
+// usecase
 import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
 
 void main() async {
@@ -200,6 +203,22 @@ class AppRouter {
         final url = settings.arguments as String;
         return MaterialPageRoute(
           builder: (_) => WebViewScreen(url: url),
+        );
+      case Routes.regTerms:
+        return MaterialPageRoute(
+          builder: (_) => TermsAgreementPage(),
+        );
+      case Routes.regEmail:
+        return MaterialPageRoute(
+          builder: (_) => EmailAuthenticationPage(),
+        );
+      case Routes.regPassword:
+        return MaterialPageRoute(
+          builder: (_) => PasswordAuthenticationPage(),
+        );
+      case Routes.regWelcome:
+        return MaterialPageRoute(
+          builder: (_) => WelcomeAuthenticationPage(),
         );
       default:
         return null;

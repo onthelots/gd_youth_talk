@@ -17,10 +17,10 @@ class AppTheme {
       displayMedium: TextStyle(color: AppColors.lightText, fontSize: 25, fontWeight: FontWeight.bold),
       bodyLarge: TextStyle(color: AppColors.lightText, fontSize: 20, fontWeight: FontWeight.bold),
       bodyMedium: TextStyle(color: AppColors.lightText, fontSize: 16),
-      bodySmall: TextStyle(color: AppColors.lightText, fontSize: 12),
+      bodySmall: TextStyle(color: AppColors.lightText, fontSize: 13),
       labelLarge: TextStyle(color: AppColors.lightText, fontSize: 20, fontWeight: FontWeight.bold), // 버튼 라벨 텍스트 크기 (카테고리)
       labelMedium: TextStyle(color: AppColors.lightText, fontSize: 16, fontWeight: FontWeight.w800), // Section 타이틀
-      labelSmall: TextStyle(color: AppColors.lightText, fontSize: 12, fontWeight: FontWeight.w600), // 위치, 장소
+      labelSmall: TextStyle(color: AppColors.lightText, fontSize: 13, fontWeight: FontWeight.w600), // 위치, 장소
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(

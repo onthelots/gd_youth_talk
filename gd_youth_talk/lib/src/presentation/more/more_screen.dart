@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/terms/reg_terms_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/oss_license_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/theme_screen.dart';
 import 'widgets/menu_tile.dart';
@@ -38,6 +39,15 @@ class MoreScreen extends StatelessWidget {
             ),
           ),
         ),
+        actions: [
+          IconButton(onPressed: () {
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => TermsAgreementPage()), // ThemeSettingsScreen으로 이동
+            // );
+            Navigator.pushNamed(context, Routes.regTerms);
+          }, icon: Icon(Icons.add_circle))
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 5),
