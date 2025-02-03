@@ -96,14 +96,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
               )),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 13.0), // 우측 여백 조정
-            child: IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.search, arguments: true);
-              },
-            ),
+          IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.scatch);
+            },
+          ),
+
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.search, arguments: true);
+            },
           ),
         ],
       ),

@@ -1,51 +1,70 @@
 import 'package:flutter/material.dart';
 
 class BannerContainer extends StatelessWidget {
-  final VoidCallback onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
 
   const BannerContainer({
-    super.key, required this.onTap,
+    super.key,
+    required this.onTap,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(5),
+      onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16.0),
-        color: Colors.teal,
-        child: const Row(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Theme.of(context).primaryColor,
+        ),
+        padding: EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-              child: Column(
+            // icon
+            Icon(
+              this.icon,
+              size: 30,
+            ),
+
+            // title
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
-                    '더 자세한 정보를 알고싶다면?',
-                    style: TextStyle(
+                    title,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 5),
+
                   Text(
-                    '서울청년센터 강동 홈페이지 둘러보기',
-                    style: TextStyle(color: Colors.white),
+                    subtitle,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Colors.white.withOpacity(0.8), fontSize: 13,
+                    ),
                   ),
                 ],
               ),
-            ),
-            const Icon(
-              Icons.engineering,
-              color: Colors.white,
-              size: 40,
+
+            // icon
+            Icon(
+              Icons.chevron_right_rounded,
+              color: Theme.of(context).disabledColor,
+              size: 30,
             ),
           ],
         ),
       ),
-      onTap: () {
-        onTap();
-      },
     );
   }
 }

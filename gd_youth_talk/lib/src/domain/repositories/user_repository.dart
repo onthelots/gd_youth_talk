@@ -25,27 +25,27 @@ class UserRepository {
     await _userDatasource.updatePasswordAfterSignUp(newPassword);
   }
 
-  Future<UserModel> signInWithEmailPassword(String email, String password) async {
+  // 5. 로그인
+  Future<UserModel?> signInWithEmailPassword(String email, String password) async {
     return await _userDatasource.signInWithEmailPassword(email, password);
   }
 
+  // 6. 로그아웃
   Future<void> signOut() async {
     return await _userDatasource.signOut();
   }
 
+  // 7. 회원탈퇴
   Future<void> deleteUser() async {
     return await _userDatasource.deleteUser();
   }
 
-  Future<UserModel> getUserInfo() async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      return await _userDatasource.getUserInfo(user.uid);
-    } else {
-      throw Exception('User is not authenticated');
-    }
+   //8. 유저 정보 불러오기
+  Future<UserModel> getUserInfo({required User currentUser}) async {
+    return await _userDatasource.getCurrentUserInfo(currentUser: currentUser);
   }
 
+  // 9. 닉네임 수정
   Future<void> updateNickname(String newNickname) async {
     final user = _auth.currentUser;
     if (user != null) {

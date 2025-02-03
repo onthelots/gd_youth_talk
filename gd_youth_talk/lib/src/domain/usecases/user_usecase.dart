@@ -45,13 +45,12 @@ class UserUsecase {
   }
 
   // 5. 로그인
-  Future<UserModel> signIn({
+  Future<UserModel?> signIn({
     required String email,
     required String password,
   }) async {
     try {
-      await _userRepository.signInWithEmailPassword(email, password);
-      return await _userRepository.getUserInfo();
+      await _userRepository.signInWithEmailPassword(email, password); // 로그인 + 회원정보 불러오기
     } catch (e) {
       throw Exception('Failed to sign in: $e');
     }
@@ -67,9 +66,9 @@ class UserUsecase {
   }
 
   // 7. 유저정보(나) 조회
-  Future<UserModel> getUserInfo() async {
+  Future<UserModel> getUserInfo({required User currentUser}) async {
     try {
-      return await _userRepository.getUserInfo();
+      return await _userRepository.getUserInfo(currentUser: currentUser);
     } catch (e) {
       throw Exception('Failed to get user info: $e');
     }

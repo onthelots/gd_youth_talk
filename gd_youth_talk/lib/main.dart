@@ -5,12 +5,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
 import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
+import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/email/reg_email_screen.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/password/reg_password_screen.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/terms/reg_terms_screen.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/welcome/reg_welcome_screen.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/home/scatch_auth_screen.dart';
+import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_event.dart';
+import 'package:gd_youth_talk/src/presentation/more/mypage_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // firebase
@@ -22,7 +27,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gd_youth_talk/src/presentation/category/bloc/category_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/calendarBloc/calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/search/bloc/search_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/main/bloc/bottom_nav_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/main/bloc/bottom_nav_bloc/bottom_nav_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/home/bloc/home_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/more/bloc/theme_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/more/bloc/theme_event.dart';
@@ -60,7 +65,6 @@ void main() async {
 
   // TODO:- App version check
   // 현재 디바이스의 버전 vs Remote config
-
 
   Future.delayed(Duration(seconds: 2), () {
     runApp(MyApp());
@@ -139,12 +143,20 @@ class MyApp extends StatelessWidget {
             usecase: locator<ProgramUseCase>(),
           ),
         ),
+
+        // User Bloc
+        BlocProvider(
+          create: (context) => UserBloc(
+            usecase: locator<UserUsecase>(),
+          )..add(AppStarted()),
+        ),
       ],
       child: Builder(
         builder: (context) {
           return BlocBuilder<ThemeBloc, ThemeState>(
             builder: (context, state) {
-              final themeMode = (state is ThemeInitial) ? state.themeMode : ThemeMode.system;
+              final themeMode =
+                  (state is ThemeInitial) ? state.themeMode : ThemeMode.system;
               return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 theme: AppTheme.lightTheme,
@@ -157,7 +169,7 @@ class MyApp extends StatelessWidget {
           );
         },
       ),
-);
+    );
   }
 }
 
@@ -180,6 +192,10 @@ class AppRouter {
       case Routes.calendar:
         return MaterialPageRoute(
           builder: (_) => CalendarScreen(),
+        );
+      case Routes.myPage:
+        return MaterialPageRoute(
+          builder: (_) => MyPageScreen(),
         );
       case Routes.more:
         return MaterialPageRoute(
@@ -219,6 +235,10 @@ class AppRouter {
       case Routes.regWelcome:
         return MaterialPageRoute(
           builder: (_) => WelcomeAuthenticationPage(),
+        );
+      case Routes.scatch:
+        return MaterialPageRoute(
+          builder: (_) => ScatchAuthScreen(),
         );
       default:
         return null;

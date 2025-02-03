@@ -12,12 +12,12 @@ import 'widgets/banner_container.dart';
 final menuItems = [
   MenuItem(menuTitle: '인스타그램', route: WebRoutes.instagram),
   MenuItem(menuTitle: '공식 블로그', route: WebRoutes.blog),
-  MenuItem(menuTitle: '카카오톡 문의하기', route: WebRoutes.customerService),
-  MenuItem(menuTitle: '대관 신청', route: WebRoutes.coronation),
-  MenuItem(menuTitle: '기본 테마 설정', route: Routes.setting, trailing: null),
-  MenuItem(menuTitle: '이용 약관', route: WebRoutes.termsOfUse),
-  MenuItem(menuTitle: '오픈소스 라이센스', route: Routes.openSource),
-  MenuItem(menuTitle: '앱 버전', route: '', trailing: null),
+  MenuItem(menuTitle: '인스타그램', route: WebRoutes.customerService),
+  MenuItem(menuTitle: '출석체크', route: WebRoutes.coronation),
+  MenuItem(menuTitle: '공지사항', route: Routes.setting),
+  MenuItem(menuTitle: '대관신청', route: WebRoutes.termsOfUse),
+  MenuItem(menuTitle: '스크랩', route: Routes.openSource),
+  MenuItem(menuTitle: '홈페이지', route: WebRoutes.introduce),
 ];
 
 class MoreScreen extends StatelessWidget {
@@ -40,13 +40,12 @@ class MoreScreen extends StatelessWidget {
           ),
         ),
         actions: [
-          IconButton(onPressed: () {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => TermsAgreementPage()), // ThemeSettingsScreen으로 이동
-            // );
-            Navigator.pushNamed(context, Routes.regTerms);
-          }, icon: Icon(Icons.add_circle))
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.regTerms);
+            },
+            icon: Icon(Icons.add_circle),
+          ),
         ],
       ),
       body: Padding(
@@ -57,9 +56,10 @@ class MoreScreen extends StatelessWidget {
 
             /// 1. 배너 항목
             if (index == 0) {
-              return BannerContainer(onTap: () {
-                Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.introduce);
-              });
+              return SizedBox.shrink();
+              // return BannerContainer(onTap: () {
+              //   Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.introduce);
+              // });
 
               /// 2. 앱 버전
             } else if (index == menuItems.length) {

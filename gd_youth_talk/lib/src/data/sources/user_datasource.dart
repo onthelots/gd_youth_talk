@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gd_youth_talk/src/core/secure_storage_helper.dart';
 import 'package:gd_youth_talk/src/data/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -94,12 +95,13 @@ class UsersDataSource {
   }
 
   /// 로그인
-  Future<UserModel> signInWithEmailPassword(String email, String password) async {
+  Future<UserModel?> signInWithEmailPassword(String email, String password) async {
     try {
       final authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
       final user = authResult.user;
       if (user != null) {
-        return await getUserInfo(user.uid);
+        await SecureStorageHelper.saveUserCredentials(email, password); // secure_storage 저장
+        return await getCurrentUserInfo(currentUser: user); // 내 정보 불러오기
       } else {
         throw Exception('Authentication failed');
       }
@@ -111,6 +113,7 @@ class UsersDataSource {
   /// 로그아웃
   Future<void> signOut() async {
     try {
+      await SecureStorageHelper.clearUserCredentials(); // secure_storage 삭제
       await _auth.signOut();
     } catch (e) {
       throw Exception('Failed to log out: $e');
@@ -122,6 +125,7 @@ class UsersDataSource {
     try {
       final user = _auth.currentUser;
       if (user != null) {
+        await SecureStorageHelper.clearUserCredentials(); // secure_storage 삭제
         await _firestore.collection('users').doc(user.uid).delete(); // firestore 내 삭제
         await user.delete(); // auth 내 삭제
       } else {
@@ -133,16 +137,17 @@ class UsersDataSource {
   }
 
   /// 내 정보 받아오기
-  Future<UserModel> getUserInfo(String userId) async {
+  Future<UserModel> getCurrentUserInfo({required User currentUser}) async {
     try {
-      final userDoc = await _firestore.collection('users').doc(userId).get();
+      final userDoc = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+
       if (userDoc.exists) {
         return UserModel.fromFirebase(userDoc);
       } else {
-        throw Exception('User not found');
+        throw Exception('User not found in Firestore');
       }
     } catch (e) {
-      throw Exception('Failed to load user: $e');
+      throw Exception('Failed to load user info: $e');
     }
   }
 
