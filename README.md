@@ -52,10 +52,11 @@
     - 사용자 (iOS, Android)
     - 관리자 (Web)
    
-  - State Management : Bloc (Provider, Consumer, builder)
-  - DI : get_it package 활용
+  - 상태관리 : BloC, Provider
+  - DI : get_it 
   - Server : Firebase (Storage, FireStore, Authentication, Hosting)
-  - DB : Shared Preferences
+  - Network : dio
+  - DB : Shared Preferences, flutter_secure_storage
 
 - **주요 라이브러리**
    - flutter_bloc
@@ -205,7 +206,8 @@
 - [ ] empty
 
 2) Develop
-- [ ] Table_calender UI 개선
+- [x] Table_calender UI 개선
+- [ ] 로그인, 회원가입 등 유저관리 로직, UI 추가 (진행중)
 - [ ] Bottom NavigationBar UI 개선
 - [ ] Placeholder package 선택 후 적용 (ex. shimmer)
 
