@@ -16,6 +16,9 @@ import 'package:gd_youth_talk/src/presentation/home/scatch_auth_screen.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_event.dart';
 import 'package:gd_youth_talk/src/presentation/more/mypage_screen.dart';
+import 'package:gd_youth_talk/src/presentation/more/settings/setting/oss_license_screen.dart';
+import 'package:gd_youth_talk/src/presentation/more/settings/setting/setting_menu_screen.dart';
+import 'package:gd_youth_talk/src/presentation/more/settings/setting/theme_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // firebase
@@ -193,18 +196,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => CalendarScreen(),
         );
-      case Routes.myPage:
-        return MaterialPageRoute(
-          builder: (_) => MyPageScreen(),
-        );
-      case Routes.more:
-        return MaterialPageRoute(
-          builder: (_) => MoreScreen(),
-        );
-      case Routes.setting:
-        return MaterialPageRoute(
-          builder: (_) => ThemeSettingsScreen(),
-        );
       case Routes.programDetail:
         final docId = settings.arguments as String;
         return MaterialPageRoute(
@@ -235,6 +226,22 @@ class AppRouter {
       case Routes.regWelcome:
         return MaterialPageRoute(
           builder: (_) => WelcomeAuthenticationPage(),
+        );
+      case Routes.myPage:
+        return MaterialPageRoute(
+          builder: (_) => MyPageScreen(),
+        );
+      case Routes.setting:
+        return MaterialPageRoute(
+          builder: (_) => SettingMenuScreen(),
+        );
+      case Routes.themeSetting:
+        return MaterialPageRoute(
+          builder: (_) => ThemeSettingsScreen(),
+        );
+      case Routes.openSource:
+        return MaterialPageRoute(
+          builder: (_) => OssLicensesPage(),
         );
       case Routes.scatch:
         return MaterialPageRoute(

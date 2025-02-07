@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gd_youth_talk/src/core/constants.dart';
 
 class IconTitleGrid extends StatelessWidget {
   final List<IconTitleItem> items;
@@ -32,7 +33,7 @@ class IconTitleGrid extends StatelessWidget {
         itemBuilder: (context, index) {
           final item = items[index];
           return InkWell(
-            onTap: item.onTap,
+            onTap: () => item.onTap(context), // 변경된 부분
             borderRadius: BorderRadius.circular(5),
             child: Container(
               child: Column(
@@ -60,16 +61,4 @@ class IconTitleGrid extends StatelessWidget {
       ),
     );
   }
-}
-
-class IconTitleItem {
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-
-  IconTitleItem({
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
 }

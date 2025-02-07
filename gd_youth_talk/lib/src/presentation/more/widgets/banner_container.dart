@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class BannerContainer extends StatelessWidget {
+class UserBanner extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
   final VoidCallback onTap;
 
-  const BannerContainer({
+  const UserBanner({
     super.key,
     required this.onTap,
     required this.title,
@@ -29,11 +29,6 @@ class BannerContainer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // icon
-            Icon(
-              this.icon,
-              size: 30,
-            ),
 
             // title
               Column(

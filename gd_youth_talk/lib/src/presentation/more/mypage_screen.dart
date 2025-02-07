@@ -1,22 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
+import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
+import 'package:gd_youth_talk/src/presentation/home/widgets/program_section.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_state.dart';
 import 'package:gd_youth_talk/src/presentation/more/widgets/banner_container.dart';
 import 'package:gd_youth_talk/src/presentation/more/widgets/icon_title_grid.dart';
-
-final List<IconTitleItem> items = [
-  IconTitleItem(icon: FeatherIcons.messageCircle, title: "1:1 문의하기", onTap: () {}),
-  IconTitleItem(icon: Icons.open_in_browser_rounded, title: "공식 블로그", onTap: () {}),
-  IconTitleItem(icon: FeatherIcons.instagram, title: "인스타그램", onTap: () {}),
-  IconTitleItem(icon: FeatherIcons.checkSquare, title: "출석체크", onTap: () {}),
-  IconTitleItem(icon: FeatherIcons.bell, title: "공지사항", onTap: () {}),
-  IconTitleItem(icon: FeatherIcons.calendar, title: "대관신청", onTap: () {}),
-  IconTitleItem(icon: FeatherIcons.star, title: "스크랩", onTap: () {}),
-  IconTitleItem(icon: FeatherIcons.globe, title: "홈페이지", onTap: () {}),
-];
 
 class MyPageScreen extends StatelessWidget {
   const MyPageScreen({super.key});
@@ -65,7 +56,7 @@ class MyPageScreen extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
-                  Navigator.pushNamed(context, Routes.setting, arguments: true);
+                  Navigator.pushNamed(context, Routes.setting);
                 },
               ),
             ],
@@ -75,7 +66,7 @@ class MyPageScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  BannerContainer(
+                  UserBanner(
                       onTap: () {
                         isUserLoggedIn
                             ? print('유저 정보 관리 창으로 이동')
@@ -83,12 +74,19 @@ class MyPageScreen extends StatelessWidget {
                       },
                       title: title,
                       subtitle: subtitle,
-                      icon: Icons.login
-                  ),
-                  SizedBox(
+                      icon: Icons.login),
+
+
+                  const SizedBox(
                     height: 20,
                   ),
+
                   IconTitleGrid(items: items),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Section(sectionTitle: '최근 본 프로그램', programs: []),
                 ],
               ),
             ),
@@ -98,3 +96,31 @@ class MyPageScreen extends StatelessWidget {
     );
   }
 }
+
+// icon navigator
+final List<IconTitleItem> items = [
+  IconTitleItem(icon: FeatherIcons.messageCircle, title: "1:1 문의하기", onTap: (context) {
+    Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.customerService);
+  }),
+  IconTitleItem(icon: FeatherIcons.globe, title: "공식 블로그", onTap: (context) {
+    Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.blog);
+  }),
+  IconTitleItem(icon: FeatherIcons.instagram, title: "인스타그램", onTap: (context) {
+    Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.instagram);
+  }),
+  IconTitleItem(icon: FeatherIcons.checkSquare, title: "출석체크", onTap: (context) {
+    print("출석 체크 QR 보러가기");
+  }),
+  IconTitleItem(icon: FeatherIcons.bell, title: "공지사항", onTap: (context) {
+    print("공지사항 리스트 보러가기");
+  }),
+  IconTitleItem(icon: FeatherIcons.calendar, title: "대관신청", onTap: (context) {
+    Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.coronation);
+  }),
+  IconTitleItem(icon: FeatherIcons.star, title: "스크랩", onTap: (context) {
+    print("내가 좋아요를 누른 스크랩 리스트 보러가기");
+  }),
+  IconTitleItem(icon: FeatherIcons.info, title: "홈페이지", onTap: (context) {
+    Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.homepage);
+  }),
+];
