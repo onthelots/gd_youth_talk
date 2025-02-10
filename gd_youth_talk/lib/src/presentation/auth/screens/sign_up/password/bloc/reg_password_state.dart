@@ -1,4 +1,6 @@
 // Bloc 상태 정의
+import 'package:gd_youth_talk/src/data/models/user_model.dart';
+
 abstract class RegPasswordState {}
 
 class RegPasswordInitial extends RegPasswordState {}

@@ -1,51 +1,65 @@
 import 'package:flutter/material.dart';
 
-class BannerContainer extends StatelessWidget {
-  final VoidCallback onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
+class UserBanner extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final Color containerColor;
+  final VoidCallback onTap;
 
-  const BannerContainer({
-    super.key, required this.onTap,
+  const UserBanner({
+    super.key,
+    required this.onTap,
+    required this.title,
+    required this.subtitle,
+    required this.containerColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(5),
+      onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16.0),
-        color: Colors.teal,
-        child: const Row(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: containerColor,
+        ),
+        padding: EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Expanded(
-              child: Column(
+
+            // title
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
-                    '더 자세한 정보를 알고싶다면?',
-                    style: TextStyle(
+                    title,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 5),
+
                   Text(
-                    '서울청년센터 강동 홈페이지 둘러보기',
-                    style: TextStyle(color: Colors.white),
+                    subtitle,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      color: Colors.white.withOpacity(0.8), fontSize: 13,
+                    ),
                   ),
                 ],
               ),
-            ),
+
+            // icon
             const Icon(
-              Icons.engineering,
+              Icons.chevron_right_rounded,
               color: Colors.white,
-              size: 40,
+              size: 30,
             ),
           ],
         ),
       ),
-      onTap: () {
-        onTap();
-      },
     );
   }
 }

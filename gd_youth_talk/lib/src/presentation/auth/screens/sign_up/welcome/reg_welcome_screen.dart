@@ -20,7 +20,7 @@ class WelcomeAuthenticationPage extends StatelessWidget {
             // 0. 타이틀
             AuthTitleColumn(
               title: '가입을 환영합니다!',
-              subtitle: '멤버십을 통한 다양한 혜택과 각종 소식을 즐겨보세요',
+              subtitle: '로그인 후 다양한 혜택과 각종 소식을 즐겨보세요',
             ),
 
             SizedBox(
@@ -40,7 +40,7 @@ class WelcomeAuthenticationPage extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: MediaQuery.of(context).viewInsets,
         child: CustomButtomNavBar(
-          title: '가입 완료 및 로그인',
+          title: '가입 완료',
           isLoading: false,
           onPressed: ()  {
             Navigator.popUntil(context, (route) => route.isFirst);

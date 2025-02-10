@@ -38,15 +38,15 @@ class CategoryTile extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                     child: CachedNetworkImage(
                       imageUrl: program.thumbnail ?? "",
-                      width: 150,
-                      height: 150,
+                      width: 100,
+                      height: 100,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Shimmer.fromColors(
                         baseColor: Colors.grey[300]!,
                         highlightColor: Colors.grey[100]!,
                         child: Container(
-                          width: 120,
-                          height: 120,
+                          width: 100,
+                          height: 100,
                           color: Colors.grey[300],
                         ),
                       ),
@@ -73,7 +73,7 @@ class CategoryTile extends StatelessWidget {
                         program.title ?? "",
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2, // max line
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16),
                       ),
                     ),
 

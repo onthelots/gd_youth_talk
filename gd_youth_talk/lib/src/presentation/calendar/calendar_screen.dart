@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/widgets/focusDate_avatar.dart';
-import 'package:intl/intl.dart';
 
 // bloc
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
@@ -54,7 +53,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             padding: const EdgeInsets.only(left: 13.0), // 좌측 여백 조정
             child: Text(
                 '프로그램 일정',
-                style: theme.textTheme.displayMedium
+                style: theme.textTheme.labelLarge
             ),
           ),
         ),

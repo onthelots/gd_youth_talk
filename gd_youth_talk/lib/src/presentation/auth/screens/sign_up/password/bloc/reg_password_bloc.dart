@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/password/bloc/reg_password_event.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/password/bloc/reg_password_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/password/bloc/reg_password_event.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/password/bloc/reg_password_state.dart';
 
 class RegPasswordBloc extends Bloc<RegPasswordEvent, RegPasswordState> {
   final UserUsecase usecase;

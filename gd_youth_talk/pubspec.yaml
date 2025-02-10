@@ -39,18 +39,21 @@ dependencies:
   url_launcher: ^6.3.1
   palette_generator: ^0.3.3+5
   shimmer: ^3.0.0
+  lottie: ^3.2.0
 
   # Web
   flutter_inappwebview: ^6.1.5
 
   # Shared
   share_plus: ^10.1.2
+  flutter_secure_storage: ^9.2.4
 
   # env
   flutter_dotenv: ^5.2.1
   xml: ^6.5.0
   package_info_plus: ^8.1.2
-  lottie: ^3.2.0
+  flutter_feather_icons: ^2.0.0+1
+  flutter_spinkit: ^5.2.1
 
 
 dev_dependencies:

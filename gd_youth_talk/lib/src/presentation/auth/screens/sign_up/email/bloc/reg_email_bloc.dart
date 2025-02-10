@@ -2,9 +2,9 @@
 import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/email/bloc/reg_email_event.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/email/bloc/reg_email_state.dart';
-import '../../../../../domain/usecases/user_usecase.dart';
+import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/email/bloc/reg_email_event.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/email/bloc/reg_email_state.dart';
 
 class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificationState> {
   final UserUsecase usecase;
@@ -44,14 +44,11 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
       StartEmailVerification event,
       Emitter<EmailVerificationState> emit) async {
 
-    emit(EmailVerificationRequest()); // sent 상태변환
-    isTextFieldEnabled = false; // 버튼 비 활성화
     try {
-      // 1. 임시 회원가입
       final randomPassword = _generateRandomPassword();
       final randomNickname = _generateRandomNickname();  // 랜덤 닉네임 생성
 
-      // 회원가입 실시
+      // 회원가입 시도
       await usecase.signUp(
         email: event.email,
         password: randomPassword,
@@ -61,6 +58,25 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
       // 유저 정보 가져오기
       _tempUser = FirebaseAuth.instance.currentUser;
 
+      // 상태 변화 (임시 회원가입 완료 + 유저정보 가져오기)
+      emit(EmailVerificationRequest()); // sent 상태변환
+      isTextFieldEnabled = false; // 버튼 비활성화
+
+      // ✅ 이메일 중복 체크 후 에러 처리
+    } on FirebaseAuthException catch (e) {
+      print('회원가입 에러 : $e');
+      if (e.code == 'email-already-in-use') {
+        emit(EmailVerificationFailed("이미 가입된 이메일입니다. 로그인해주세요."));
+      } else {
+        emit(EmailVerificationFailed("회원가입 중 오류가 발생했습니다: ${e.message}"));
+      }
+      return;
+    } catch (e) {
+      emit(EmailVerificationFailed("회원가입 실패: ${e.toString()}"));
+      return;
+    }
+
+    try {
       // 2. 인증 이메일 발송
       if (_tempUser != null) {
         await usecase.sendEmailVerification(_tempUser!);
@@ -69,7 +85,7 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
         throw Exception("Temporary user creation failed.");
       }
     } catch (e) {
-      emit(EmailVerificationFailed(e.toString()));
+      emit(EmailVerificationFailed("이메일 인증 요청 실패: ${e.toString()}"));
     }
   }
 
@@ -117,6 +133,6 @@ class EmailVerificationBloc extends Bloc<EmailVerificationEvent, EmailVerificati
   String _generateRandomNickname() {
     final random = Random();
     final randomNumber = random.nextInt(90000) + 10000; // 5자리 랜덤 숫자 생성 (10000 ~ 99999)
-    return '#$randomNumber님';
+    return '#$randomNumber';
   }
 }

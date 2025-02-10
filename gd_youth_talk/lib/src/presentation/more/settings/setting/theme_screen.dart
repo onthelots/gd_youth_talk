@@ -13,7 +13,7 @@ class ThemeSettingsScreen extends StatelessWidget {
         centerTitle: true,
         scrolledUnderElevation: 0,
         title: Text(
-          '테마설정',
+          '기본 테마 설정',
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),

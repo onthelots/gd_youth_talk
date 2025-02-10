@@ -4,9 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/screens.dart';
-import 'bloc/bottom_nav_state.dart';
-import 'bloc/bottom_nav_bloc.dart';
-import 'bloc/bottom_nav_event.dart';
+import 'package:gd_youth_talk/src/presentation/main/bloc/bottom_nav_bloc/bottom_nav_event.dart';
+import 'package:gd_youth_talk/src/presentation/main/bloc/bottom_nav_bloc/bottom_nav_state.dart';
+import 'package:gd_youth_talk/src/presentation/more/mypage_screen.dart';
+import 'bloc/bottom_nav_bloc/bottom_nav_bloc.dart';
 
 class MainScreen extends StatelessWidget {
 
@@ -14,7 +15,7 @@ class MainScreen extends StatelessWidget {
     HomeScreen(),
     SearchScreen(isHomeScreenPushed: false),
     CalendarScreen(),
-    MoreScreen(),
+    MyPageScreen(),
   ];
 
   @override

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/terms/bloc/reg_terms_cubit.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/terms/bloc/reg_terms_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/terms/bloc/reg_terms_cubit.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/terms/bloc/reg_terms_state.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/auth_title_column.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_buttom_navbar.dart';
 
