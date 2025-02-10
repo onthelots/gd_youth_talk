@@ -26,7 +26,7 @@ class UserRepository {
   }
 
   // 5. 로그인
-  Future<UserModel?> signInWithEmailPassword(String email, String password) async {
+  Future<UserModel> signInWithEmailPassword(String email, String password) async {
     return await _userDatasource.signInWithEmailPassword(email, password);
   }
 
@@ -52,6 +52,15 @@ class UserRepository {
       await _userDatasource.updateNickname(user.uid, newNickname);
     } else {
       throw Exception('User is not authenticated');
+    }
+  }
+
+  // 10. 비밀번호 재 설정
+  Future<void> resetPassword(String email) async {
+    try {
+      await _userDatasource.resetPassword(email);
+    } catch (e) {
+      throw Exception('Failed to reset password email send: $e');
     }
   }
 }

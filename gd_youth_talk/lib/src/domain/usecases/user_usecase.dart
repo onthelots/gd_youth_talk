@@ -45,12 +45,13 @@ class UserUsecase {
   }
 
   // 5. 로그인
-  Future<UserModel?> signIn({
-    required String email,
+  Future<UserModel> signIn({
     required String password,
+    required String email,
   }) async {
     try {
-      await _userRepository.signInWithEmailPassword(email, password); // 로그인 + 회원정보 불러오기
+      return await _userRepository.signInWithEmailPassword(
+          email, password); // 로그인 + 회원정보 불러오기
     } catch (e) {
       throw Exception('Failed to sign in: $e');
     }
@@ -89,6 +90,15 @@ class UserUsecase {
       await _userRepository.deleteUser();
     } catch (e) {
       throw Exception('Failed to delete user: $e');
+    }
+  }
+
+  // 10. 비밀번호 재 설정
+  Future<void> resetPassword(String email) async {
+    try {
+      await _userRepository.resetPassword(email);
+    } catch (e) {
+      throw Exception('Failed to reset password email send: $e');
     }
   }
 }

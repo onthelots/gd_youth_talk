@@ -95,12 +95,29 @@ class UsersDataSource {
   }
 
   /// 로그인
-  Future<UserModel?> signInWithEmailPassword(String email, String password) async {
+  Future<UserModel> signInWithEmailPassword(String email, String password) async {
     try {
       final authResult = await _auth.signInWithEmailAndPassword(email: email, password: password);
       final user = authResult.user;
+
       if (user != null) {
         await SecureStorageHelper.saveUserCredentials(email, password); // secure_storage 저장
+        final userDocRef = _firestore.collection('users').doc(user.uid);
+        final userDoc = await userDocRef.get();
+
+        if (userDoc.exists) {
+          Map<String, dynamic> userData = userDoc.data()!;
+          bool isPasswordVerified = userData['isPasswordVerified'] ?? false;
+          bool isEmailVerified = userData['isEmailVerified'] ?? false;
+
+          // 이메일 인증 및 비밀번호 설정 여부 확인 후 업데이트
+          if (!isPasswordVerified || !isEmailVerified) {
+            await userDocRef.update({
+              'isPasswordVerified': true,
+              'isEmailVerified': true,
+            });
+          }
+        }
         return await getCurrentUserInfo(currentUser: user); // 내 정보 불러오기
       } else {
         throw Exception('Authentication failed');
@@ -159,6 +176,15 @@ class UsersDataSource {
       });
     } catch (e) {
       throw Exception('Failed to update nickname: $e');
+    }
+  }
+
+  // 비밀번호 찾기
+  Future<void> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw Exception('Failed to reset pw: $e');
     }
   }
 }

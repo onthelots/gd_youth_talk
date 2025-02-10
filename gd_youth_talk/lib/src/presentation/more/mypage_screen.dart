@@ -17,19 +17,25 @@ class MyPageScreen extends StatelessWidget {
     return BlocConsumer<UserBloc, UserState>(
       listener: (context, state) {
         if (state is UserLoggedIn) {
-        } else if (state is UserNotLoggedIn) {}
+          print("로그인이 완료되었습니다.");
+        } else if (state is UserNotLoggedIn) {
+          print("로그인이 필요합니다.");
+        }
       },
       builder: (context, state) {
         bool isUserLoggedIn = state is UserLoggedIn;
         String title = '';
         String subtitle = '';
+        Color containerColor = Theme.of(context).primaryColor;
 
         if (state is UserLoggedIn) {
           title = "${state.user.nickname}님";
           subtitle = "오늘까지 총 ${state.user.visitCount}번 프로그램에 참여하셨어요";
+          containerColor = Theme.of(context).primaryColor;
         } else if (state is UserNotLoggedIn) {
           title = "멤버십 로그인이 필요합니다";
-          subtitle = "강동센터의 다양한 장보, 혜택을 누려보세요";
+          subtitle = "서울청년센터 강동의 다양한 정보와 혜택을 누려보세요";
+          containerColor = Theme.of(context).disabledColor;
         }
 
         return Scaffold(
@@ -67,15 +73,15 @@ class MyPageScreen extends StatelessWidget {
               child: Column(
                 children: [
                   UserBanner(
-                      onTap: () {
-                        isUserLoggedIn
-                            ? print('유저 정보 관리 창으로 이동')
-                            : print('회원가입&로그인 창으로 이동');
-                      },
-                      title: title,
-                      subtitle: subtitle,
-                      icon: Icons.login),
-
+                    onTap: () {
+                      isUserLoggedIn
+                          ? Navigator.pushNamed(context, Routes.user)
+                          : _showLoginModal(context);
+                    },
+                    title: title,
+                    subtitle: subtitle,
+                    containerColor: containerColor,
+                  ),
 
                   const SizedBox(
                     height: 20,
@@ -90,6 +96,87 @@ class MyPageScreen extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Modal Show Login
+  void _showLoginModal(BuildContext context) {
+    showModalBottomSheet(
+      showDragHandle: true,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      context: context,
+      isDismissible: true,
+      // 모달 외부 터치 시 닫힘
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.3, // 화면 높이의 40% 차지
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center, // 버튼 중앙 정렬
+            children: [
+              Text(
+                "멤버십 회원으로 계속하기",
+                style: Theme.of(context).textTheme.labelLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 5),
+
+              Text(
+                "서울청년센터 강동 멤버십에 가입하고\n다양한 혜택을 누려보세요!",
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+
+              const SizedBox(height: 15),
+
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.85,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5), // 캡슐 모양
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24), // 버튼 크기 조정
+
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context); // 모달 닫기
+                    Navigator.pushNamed(context, Routes.regTerms); // 회원가입 뷰 이동
+                  },
+                  child: Text(
+                    "회원가입",
+                    style: Theme.of(context)
+                        .textTheme
+                        .labelMedium
+                        ?.copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 5),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('이미 가입하셨나요?', style: Theme.of(context).textTheme.bodyMedium),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // 모달 닫기
+                      Navigator.pushNamed(context, Routes.signIn); // 회원가입 뷰 이동
+                    },
+                    child: Text('로그인', style: Theme.of(context).textTheme.bodyMedium),
+                  ),
+                ],
+              ),
+            ],
           ),
         );
       },

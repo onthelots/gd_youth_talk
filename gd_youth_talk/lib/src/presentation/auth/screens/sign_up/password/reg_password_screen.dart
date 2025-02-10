@@ -3,19 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/password/bloc/reg_password_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/password/bloc/reg_password_event.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/password/bloc/reg_password_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/password/bloc/reg_password_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/password/bloc/reg_password_event.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/password/bloc/reg_password_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/widgets/auth_title_column.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_buttom_navbar.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_exit_dialog.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_textField.dart';
-
-import '../../widgets/auth_title_column.dart';
+import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_event.dart';
 
 class PasswordAuthenticationPage extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordConfirmController =
-      TextEditingController();
+  final TextEditingController passwordConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

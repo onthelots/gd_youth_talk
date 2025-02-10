@@ -6,19 +6,21 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
 import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
 import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/email/reg_email_screen.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/password/reg_password_screen.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/terms/reg_terms_screen.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/welcome/reg_welcome_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/reset_password_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/sign_in_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/email/reg_email_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/password/reg_password_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/terms/reg_terms_screen.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/welcome/reg_welcome_screen.dart';
 import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc/selected_calendar_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/home/scatch_auth_screen.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_event.dart';
 import 'package:gd_youth_talk/src/presentation/more/mypage_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/settings/setting/oss_license_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/settings/setting/setting_menu_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/settings/setting/theme_screen.dart';
+import 'package:gd_youth_talk/src/presentation/more/settings/user/user_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // firebase
@@ -211,6 +213,14 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => WebViewScreen(url: url),
         );
+      case Routes.signIn:
+        return MaterialPageRoute(
+          builder: (_) => SignInScreen(),
+        );
+      case Routes.resetPw:
+        return MaterialPageRoute(
+          builder: (_) => ResetPasswordScreen(),
+        );
       case Routes.regTerms:
         return MaterialPageRoute(
           builder: (_) => TermsAgreementPage(),
@@ -231,6 +241,10 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => MyPageScreen(),
         );
+      case Routes.user:
+        return MaterialPageRoute(
+          builder: (_) => UserScreen(),
+        );
       case Routes.setting:
         return MaterialPageRoute(
           builder: (_) => SettingMenuScreen(),
@@ -242,10 +256,6 @@ class AppRouter {
       case Routes.openSource:
         return MaterialPageRoute(
           builder: (_) => OssLicensesPage(),
-        );
-      case Routes.scatch:
-        return MaterialPageRoute(
-          builder: (_) => ScatchAuthScreen(),
         );
       default:
         return null;

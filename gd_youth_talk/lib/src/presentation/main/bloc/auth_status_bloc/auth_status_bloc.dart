@@ -11,6 +11,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<AppStarted>(_onAppStarted);
     on<LoginRequested>(_onLoginRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    on<DeleteUserRequested>(_onDeleteUserRequest);
+
+    on<UserLoggedInEvent>((event, emit) {
+      emit(UserLoggedIn(user: event.user));
+    });
   }
 
   // 1. 앱 실행 시 자동 로그인 시도
@@ -18,7 +23,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     emit(UserLoading());
 
     final credentials =
-        await SecureStorageHelper.getUserCredentials(); // 이메일, 비밀번호 가져오기 시도
+        await SecureStorageHelper.getUserCredentials(); // 이메일, 비밀번호 가져오기 시작
     final email = credentials['email']; // 존재할 경우 이메일
     final password = credentials['password']; // 존재할 경우 비밀번호
 
@@ -27,12 +32,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       try {
         final user = await usecase.signIn(email: email, password: password);
         if (user != null) {
+          print("불러온 유저의 정보에요 : ${user.email}");
           emit(UserLoggedIn(user: user));
         }
-      } catch (_) {
+      } catch (e) {
+        print("앱 시작 시 자동로그인 실패 $e");
         emit(UserNotLoggedIn());
       }
     } else {
+      print("---- 왜 로딩에서 멈춤..?");
       emit(UserNotLoggedIn());
     }
   }
@@ -57,6 +65,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Future<void> _onLogoutRequested(
       LogoutRequested event, Emitter<UserState> emit) async {
     await usecase.signOut();
+    emit(UserNotLoggedIn());
+  }
+
+  // 4. 회원 탈퇴 시
+  Future<void> _onDeleteUserRequest(
+      DeleteUserRequested event, Emitter<UserState> emit) async {
+    await usecase.deleteUser();
     emit(UserNotLoggedIn());
   }
 }

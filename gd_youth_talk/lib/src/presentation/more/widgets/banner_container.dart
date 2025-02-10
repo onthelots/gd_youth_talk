@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class UserBanner extends StatelessWidget {
-  final IconData icon;
   final String title;
   final String subtitle;
+  final Color containerColor;
   final VoidCallback onTap;
 
   const UserBanner({
@@ -11,7 +11,7 @@ class UserBanner extends StatelessWidget {
     required this.onTap,
     required this.title,
     required this.subtitle,
-    required this.icon,
+    required this.containerColor,
   });
 
   @override
@@ -22,7 +22,7 @@ class UserBanner extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Theme.of(context).primaryColor,
+          color: containerColor,
         ),
         padding: EdgeInsets.all(16.0),
         child: Row(
@@ -52,9 +52,9 @@ class UserBanner extends StatelessWidget {
               ),
 
             // icon
-            Icon(
+            const Icon(
               Icons.chevron_right_rounded,
-              color: Theme.of(context).disabledColor,
+              color: Colors.white,
               size: 30,
             ),
           ],

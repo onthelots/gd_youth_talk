@@ -99,7 +99,8 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              Navigator.pushNamed(context, Routes.scatch);
+              //TODO: - 공지사항 리스트 만들기
+              print("공지사항");
             },
           ),
 

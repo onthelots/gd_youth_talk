@@ -4,9 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/email/bloc/reg_email_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/email/bloc/reg_email_event.dart';
-import 'package:gd_youth_talk/src/presentation/auth/screens/email/bloc/reg_email_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/email/bloc/reg_email_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/email/bloc/reg_email_event.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_up/email/bloc/reg_email_state.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/auth_title_column.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_buttom_navbar.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_exit_dialog.dart';
@@ -26,14 +26,28 @@ class EmailAuthenticationPage extends StatelessWidget {
       child: BlocConsumer<EmailVerificationBloc, EmailVerificationState>(
         /// Listener
         listener: (context, state) {
+
+          // 인증 메일 발송 요청 (상태 변화)
           if (state is EmailVerificationRequest) {
             showCustomRequestDialog(context);
+
+            // 인증 메일 발송 성공
           } else if (state is EmailVerificationSent) {
             context
                 .read<EmailVerificationBloc>()
                 .add(CheckEmailVerificationStatus());
+
+            // 회원가입 취소
           } else if (state is EmailVerificationCancelled) {
             Navigator.popUntil(context, (route) => route.isFirst);
+
+            // 메일 인증 실패 (중복 등)
+          } else if (state is EmailVerificationFailed) {
+            if (state.error.contains("already in use")) {
+              showDuplicateEmailDialog(context);
+            } else {
+              showErrorDialog(context);
+            }
           }
         },
 
@@ -42,11 +56,16 @@ class EmailAuthenticationPage extends StatelessWidget {
           String buttonText = '이메일 인증하기';
           bool isButtonEnabled = false;
 
+          // 유효한 이메일 형식 기입 여부
           if (state is EmailValidationState) {
             isButtonEnabled = state.isEmailValid;
+
+            // 인증 이메일 발송 완료
           } else if (state is EmailVerificationSent) {
             buttonText = '인증 대기중';
             isLoading = true;
+
+            // 이메일 인증 완료
           } else if (state is EmailVerificationSuccess) {
             buttonText = '다음';
             isLoading = false;
@@ -107,8 +126,9 @@ class EmailAuthenticationPage extends StatelessWidget {
                     ? () {
                         if (state is EmailVerificationSuccess) {
                           Navigator.pushNamed(context, Routes.regPassword);
+                        } else if (state is EmailVerificationFailed) {
+                          null;
                         } else {
-                          // 이메일 인증 시작
                           context.read<EmailVerificationBloc>().add(
                               StartEmailVerification(emailController.text));
                         }
@@ -122,6 +142,7 @@ class EmailAuthenticationPage extends StatelessWidget {
     );
   }
 
+  // 인증 메일 발송 완료
   void showCustomRequestDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -136,6 +157,7 @@ class EmailAuthenticationPage extends StatelessWidget {
     );
   }
 
+  // 기 가입된 이메일
   void showCustomExitDialog(BuildContext context) {
     final bloc = context.read<EmailVerificationBloc>(); // Bloc을 먼저 읽음
     showDialog(
@@ -151,6 +173,35 @@ class EmailAuthenticationPage extends StatelessWidget {
         },
         onContinue: () {
           // 계속하기 버튼 동작
+          Navigator.pop(dialogContext);
+        },
+      ),
+    );
+  }
+
+  // 이메일 인증 실패
+  void showDuplicateEmailDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => CustomRequestDialog(
+        title: "이메일 인증 실패",
+        content: "이미 가입되어 있는 이메일입니다. 확인 후 다시 시도해주세요",
+        continueButtonText: "확인",
+        onContinue: () {
+          Navigator.pop(dialogContext);
+        },
+      ),
+    );
+  }
+
+  void showErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => CustomRequestDialog(
+        title: "이메일 인증 실패",
+        content: "올바른 요청이 아닙니다. 잠시 후 다시 시도해주세요",
+        continueButtonText: "확인",
+        onContinue: () {
           Navigator.pop(dialogContext);
         },
       ),
