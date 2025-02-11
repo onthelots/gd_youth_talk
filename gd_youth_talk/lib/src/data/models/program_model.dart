@@ -42,7 +42,7 @@ class ProgramModel {
       blogUrl: data['blogUrl'] as String?,
       detail: data['detail'] as String?,
       programDates: (data['programDates'] as List<dynamic>?)?.map((timestamp) => (timestamp as Timestamp).toDate()).toList(), // 변경된 부분
-      registrationEndDate: (data['RegistrationEndDate'] as Timestamp?)?.toDate(),
+      registrationEndDate: (data['registrationEndDate'] as Timestamp?)?.toDate(),
       lastModified: (data['lastModified'] as Timestamp?)?.toDate(),
       thumbnail: data['thumbnail'] as String?,
       primaryColor: data['primaryColor'] as String?,
