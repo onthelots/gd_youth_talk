@@ -19,6 +19,12 @@ class UserLoggedInEvent extends UserEvent {
   UserLoggedInEvent({required this.user});
 }
 
+// 닉네임 변경
+class UpdateNicknameRequested extends UserEvent {
+  final String newNickname;
+  UpdateNicknameRequested({required this.newNickname});
+}
+
 // 로그아웃 시도
 class LogoutRequested extends UserEvent {}
 

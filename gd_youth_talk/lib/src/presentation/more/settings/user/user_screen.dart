@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_exit_dialog.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_bloc.dart';
@@ -48,7 +52,7 @@ class UserScreen extends StatelessWidget {
                       MenuTile(
                         menuTitle: '이름(닉네임)',
                         onTap: (context) {
-                          // 닉네임 수정
+                          _showEditNicknameDialog(context, state.user.nickname);
                         },
                         trailing: Text('${state.user.nickname}'),
                       ),
@@ -80,6 +84,93 @@ class UserScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+// 닉네임 수정 다이얼로그
+  void _showEditNicknameDialog(BuildContext context, String? currentNickname) {
+    final TextEditingController nicknameController = TextEditingController(text: currentNickname);
+    final bloc = context.read<UserBloc>(); // Bloc을 읽어옴
+
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        // iOS와 Android에 맞는 다이얼로그 스타일을 구분
+        if (Platform.isIOS) {
+          return CupertinoAlertDialog(
+            title: Padding(
+              padding: EdgeInsets.only(bottom: 15.0), // title과 content 사이 간격
+              child: Text(
+                "이름(닉네임) 수정",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+            content: Padding(
+              padding: EdgeInsets.only(bottom: 12.0), // content와 actions 사이 간격
+              child: CupertinoTextField(
+                controller: nicknameController,
+                placeholder: '최대 한글 6자, 영문 12자 입력',
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(12), // 최대 12자 제한
+                  _NicknameInputFormatter(), // 한글 6자 제한
+                ],
+              ),
+            ),
+            actions: [
+              CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(dialogContext); // 닫기
+                },
+                child: Text("취소", style: Theme.of(context).textTheme.labelMedium,),
+              ),
+
+              CupertinoDialogAction(
+                onPressed: () {
+                  final newNickname = nicknameController.text.trim();
+                  if (newNickname.isNotEmpty) {
+                    bloc.add(UpdateNicknameRequested(newNickname: newNickname));
+                    Navigator.pop(dialogContext); // 닫기
+                  }
+                },
+                child: Text("확인", style: Theme.of(context).textTheme.labelMedium,),
+              ),
+            ],
+          );
+        } else {
+          return AlertDialog(
+            title: Text(
+              "이름(닉네임) 수정",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            content: TextField(
+              controller: nicknameController,
+              decoration: InputDecoration(hintText: '최대 한글 6자, 영문 12자 입력'),
+              inputFormatters: [
+                LengthLimitingTextInputFormatter(12), // 최대 12자 제한
+                _NicknameInputFormatter(), // 한글 6자 제한
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(dialogContext); // 닫기
+                },
+                child: Text("취소", style: Theme.of(context).textTheme.labelMedium,),
+              ),
+              TextButton(
+                onPressed: () {
+                  final newNickname = nicknameController.text.trim();
+                  if (newNickname.isNotEmpty) {
+                    bloc.add(UpdateNicknameRequested(newNickname: newNickname));
+                    Navigator.pop(dialogContext); // 닫기
+                  }
+                },
+                child: Text("확인", style: Theme.of(context).textTheme.labelMedium,),
+              ),
+            ],
+          );
+        }
+      },
     );
   }
 
@@ -121,21 +212,21 @@ class UserScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(15.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // 버튼 중앙 정렬
+            mainAxisAlignment: MainAxisAlignment.start, // 버튼 중앙 정렬
             children: [
               Icon(
                 Icons.warning,
                 size: 50,
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
 
               Text(
-                "멤버십 및 회원탈퇴를 진행하시겠습니까?",
+                "회원탈퇴를 진행하시겠습니까?",
                 style: Theme.of(context).textTheme.labelLarge,
                 textAlign: TextAlign.center,
               ),
 
-              const SizedBox(height: 5),
+              const SizedBox(height: 10),
 
               Text(
                 "멤버십 혜택을 비롯한\n방문횟수 등의 정보는 모두 삭제됩니다",
@@ -174,6 +265,29 @@ class UserScreen extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+// 한글 6자, 영문 12자 제한을 위한 TextInputFormatter
+class _NicknameInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    String newText = newValue.text;
+
+    // 한글 문자 수 계산
+    int koreanCount = newText.runes.where((rune) => rune > 128).length;
+
+    // 한글은 6자, 영문은 12자 제한
+    if (koreanCount > 6) {
+      newText = newText.substring(0, 6);
+    } else if (newText.length > 12) {
+      newText = newText.substring(0, 12);
+    }
+
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
     );
   }
 }

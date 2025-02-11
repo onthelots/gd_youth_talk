@@ -68,7 +68,7 @@ class PasswordAuthenticationPage extends StatelessWidget {
                   // 0. 타이틀
                   const AuthTitleColumn(
                     title: '비밀번호를 입력해주세요',
-                    subtitle: '특수문자, 숫자, 영문 포함 8자 이상 16자 이하입니다',
+                    subtitle: '숫자, 영문 포함 8자 이상 16자 이하입니다',
                   ),
 
                   // 1. 비밀번호

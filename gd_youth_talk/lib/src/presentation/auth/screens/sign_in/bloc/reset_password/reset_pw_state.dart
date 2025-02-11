@@ -7,6 +7,9 @@ class ResetEmailValidationState extends ResetPwState {
   ResetEmailValidationState({required this.isEmailValid});
 }
 
+// 이메일 발송 중
+class EmailSendLoading extends ResetPwState {}
+
 // 이메일 발송 완료
 class EmailSendSuccess extends ResetPwState {}
 

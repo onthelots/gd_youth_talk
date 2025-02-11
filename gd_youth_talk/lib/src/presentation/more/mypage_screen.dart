@@ -8,6 +8,7 @@ import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_s
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_state.dart';
 import 'package:gd_youth_talk/src/presentation/more/widgets/banner_container.dart';
 import 'package:gd_youth_talk/src/presentation/more/widgets/icon_title_grid.dart';
+import 'package:gd_youth_talk/src/presentation/qr_code/qr_screen.dart';
 
 class MyPageScreen extends StatelessWidget {
   const MyPageScreen({super.key});
@@ -23,10 +24,10 @@ class MyPageScreen extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        bool isUserLoggedIn = state is UserLoggedIn;
-        String title = '';
-        String subtitle = '';
-        Color containerColor = Theme.of(context).primaryColor;
+        bool isUserLoggedIn = state is UserLoggedIn; // 로그인 여부
+        String title = ''; // 로그인, 비 로그인 상태에서의 title
+        String subtitle = ''; // 로그인, 비 로그인 상태에서의 subtitle
+        Color containerColor = Theme.of(context).primaryColor; // 로그인, 비 로그인 상태의 container 색상
 
         if (state is UserLoggedIn) {
           title = "${state.user.nickname}님";
@@ -52,13 +53,6 @@ class MyPageScreen extends StatelessWidget {
               ),
             ),
             actions: [
-              IconButton(
-                onPressed: () {
-                  //
-                },
-                icon: Icon(Icons.qr_code_outlined),
-              ),
-
               IconButton(
                 icon: Icon(Icons.settings),
                 onPressed: () {
@@ -103,7 +97,7 @@ class MyPageScreen extends StatelessWidget {
   }
 
   // Modal Show Login
-  void _showLoginModal(BuildContext context) {
+  static void _showLoginModal(BuildContext context) {
     showModalBottomSheet(
       showDragHandle: true,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -196,7 +190,14 @@ final List<IconTitleItem> items = [
     Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.instagram);
   }),
   IconTitleItem(icon: FeatherIcons.checkSquare, title: "출석체크", onTap: (context) {
-    print("출석 체크 QR 보러가기");
+    final userState = context.read<UserBloc>().state; // 현재 로그인 상태 가져오기
+    if (userState is UserLoggedIn) {
+      // 로그인 상태 → QR 코드 화면으로 이동
+      QRCodeScreen.showQRCodeModal(context, userState.user.documentId!);
+    } else {
+      // 비로그인 상태 → 로그인 모달 띄우기
+      MyPageScreen._showLoginModal(context);
+    }
   }),
   IconTitleItem(icon: FeatherIcons.bell, title: "공지사항", onTap: (context) {
     print("공지사항 리스트 보러가기");

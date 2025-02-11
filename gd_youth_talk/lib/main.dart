@@ -21,6 +21,7 @@ import 'package:gd_youth_talk/src/presentation/more/settings/setting/oss_license
 import 'package:gd_youth_talk/src/presentation/more/settings/setting/setting_menu_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/settings/setting/theme_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/settings/user/user_screen.dart';
+import 'package:gd_youth_talk/src/presentation/qr_code/qr_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // firebase
@@ -244,6 +245,11 @@ class AppRouter {
       case Routes.user:
         return MaterialPageRoute(
           builder: (_) => UserScreen(),
+        );
+      case Routes.qr:
+        final documentId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (_) => QRCodeScreen(documentId: documentId),
         );
       case Routes.setting:
         return MaterialPageRoute(
