@@ -113,6 +113,7 @@ class UserScreen extends StatelessWidget {
                   LengthLimitingTextInputFormatter(12), // 최대 12자 제한
                   _NicknameInputFormatter(), // 한글 6자 제한
                 ],
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
             actions: [
@@ -143,7 +144,9 @@ class UserScreen extends StatelessWidget {
             ),
             content: TextField(
               controller: nicknameController,
-              decoration: InputDecoration(hintText: '최대 한글 6자, 영문 12자 입력'),
+              decoration: InputDecoration(
+                  hintText: '최대 한글 6자, 영문 12자 입력',
+                  labelStyle: Theme.of(context).textTheme.bodyMedium),
               inputFormatters: [
                 LengthLimitingTextInputFormatter(12), // 최대 12자 제한
                 _NicknameInputFormatter(), // 한글 6자 제한
