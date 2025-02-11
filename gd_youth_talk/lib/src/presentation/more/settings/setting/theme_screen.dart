@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/more/bloc/theme_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/more/bloc/theme_event.dart';
-import 'package:gd_youth_talk/src/presentation/more/bloc/theme_state.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme/theme_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme/theme_event.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme/theme_state.dart';
 
 class ThemeSettingsScreen extends StatelessWidget {
   @override

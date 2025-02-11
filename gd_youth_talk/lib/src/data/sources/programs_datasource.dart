@@ -6,20 +6,23 @@ class ProgramDataSource {
 
   ProgramDataSource(this._firestore);
 
-  /// firebase data read - Future!
-  // Future<List<ProgramModel>> fetchPrograms() async {
-  //   final snapshot = await _firestore.collection('programs').get();
-  //   return snapshot.docs.map((doc) => ProgramModel.fromFirebase(doc)).toList();
-  // }
-
   /// firebase data read - Stream!
   Stream<List<ProgramModel>> fetchPrograms() {
-    final today = DateTime.now();
+    final now = DateTime.now();
+
     return _firestore.collection('programs').snapshots().map((snapshot) {
-      // 필터링: programEndDate가 오늘보다 이전인 프로그램을 제외
       return snapshot.docs
           .map((doc) => ProgramModel.fromFirebase(doc))
-          .where((program) => program.programEndDate == null || program.programEndDate!.isAfter(today))
+          .where((program) {
+        // 프로그램의 마지막 날짜를 찾기 전에 날짜를 정렬
+        final sortedDates = program.programDates?..sort();
+
+        // 정렬된 후 가장 마지막 날짜를 가져오기 (가장 늦은 날짜)
+        final lastProgramDate = sortedDates?.last;
+
+        // 마지막 날짜가 null이 아니고, 현재 날짜와 시간을 기준으로 아직 진행 중인 프로그램만 필터링
+        return lastProgramDate != null && lastProgramDate.isAfter(now);
+      })
           .toList();
     });
   }

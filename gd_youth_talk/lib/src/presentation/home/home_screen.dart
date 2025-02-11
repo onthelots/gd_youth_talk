@@ -99,8 +99,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver{
           IconButton(
             icon: Icon(Icons.notifications),
             onPressed: () {
-              //TODO: - 공지사항 리스트 만들기
-              print("공지사항");
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('준비중입니다'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
             },
           ),
 

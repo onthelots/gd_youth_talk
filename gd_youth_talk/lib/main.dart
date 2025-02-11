@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:gd_youth_talk/src/core/app_info/app_info_cubit.dart';
-import 'package:gd_youth_talk/src/domain/repositories/program_repository.dart';
 import 'package:gd_youth_talk/src/domain/usecases/user_usecase.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/reset_password_screen.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/sign_in_screen.dart';
@@ -16,6 +15,10 @@ import 'package:gd_youth_talk/src/presentation/calendar/bloc/selectedProgramBloc
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_event.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/recent_program/recent_program_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/recent_program/recent_program_event.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme/theme_event.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme/theme_state.dart';
 import 'package:gd_youth_talk/src/presentation/more/mypage_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/settings/setting/oss_license_screen.dart';
 import 'package:gd_youth_talk/src/presentation/more/settings/setting/setting_menu_screen.dart';
@@ -35,9 +38,7 @@ import 'package:gd_youth_talk/src/presentation/calendar/bloc/calendarBloc/calend
 import 'package:gd_youth_talk/src/presentation/search/bloc/search_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/bottom_nav_bloc/bottom_nav_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/home/bloc/home_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/more/bloc/theme_bloc.dart';
-import 'package:gd_youth_talk/src/presentation/more/bloc/theme_event.dart';
-import 'package:gd_youth_talk/src/presentation/more/bloc/theme_state.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/theme/theme_bloc.dart';
 
 // constant
 import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
@@ -93,8 +94,16 @@ class MyApp extends StatelessWidget {
             ),
         ),
 
+        // version
         BlocProvider(
           create: (context) => AppInfoCubit()..fetchAppVersion(),
+        ),
+
+        // Recent See Programs
+        BlocProvider(
+          create: (context) => RecentProgramBloc(
+            usecase: locator<ProgramUseCase>(),
+          )..add(LoadRecentProgramsEvent())
         ),
 
         // Bottom Navigation
@@ -105,7 +114,6 @@ class MyApp extends StatelessWidget {
         // Home Bloc
         BlocProvider(
           create: (context) => HomeBloc(
-            repository: locator<ProgramRepository>(),
             usecase: locator<ProgramUseCase>(),
           ),
         ),
@@ -113,7 +121,6 @@ class MyApp extends StatelessWidget {
         // Search Bloc
         BlocProvider(
           create: (context) => SearchBloc(
-            repository: locator<ProgramRepository>(),
             usecase: locator<ProgramUseCase>(),
           ),
         ),
@@ -121,7 +128,6 @@ class MyApp extends StatelessWidget {
         // Category Bloc
         BlocProvider(
           create: (context) => CategoryBloc(
-            repository: locator<ProgramRepository>(),
             usecase: locator<ProgramUseCase>(),
           ),
         ),
@@ -129,7 +135,6 @@ class MyApp extends StatelessWidget {
         // Calender Bloc
         BlocProvider(
           create: (context) => CalendarBloc(
-            repository: locator<ProgramRepository>(),
             usecase: locator<ProgramUseCase>(),
           ),
         ),
@@ -137,7 +142,6 @@ class MyApp extends StatelessWidget {
         // Calender Bloc
         BlocProvider(
           create: (context) => SelectedCalendarBloc(
-            repository: locator<ProgramRepository>(),
             usecase: locator<ProgramUseCase>(),
           ),
         ),
@@ -145,7 +149,6 @@ class MyApp extends StatelessWidget {
         // ProgramDetail Bloc
         BlocProvider(
           create: (context) => ProgramDetailBloc(
-            repository: locator<ProgramRepository>(),
             usecase: locator<ProgramUseCase>(),
           ),
         ),

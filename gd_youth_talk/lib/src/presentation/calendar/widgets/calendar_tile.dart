@@ -9,12 +9,14 @@ class CalendarTile extends StatelessWidget {
     super.key,
     required this.program,
     required this.onTap,
-    required this.isExpired
+    required this.isExpired,
+    required this.targetDate,
   });
 
   final ProgramModel program;
   final Function(ProgramModel)? onTap; // program을 전달할 수 있는 탭 이벤트 핸들러
   final bool isExpired;
+  final DateTime targetDate; // 📅 선택된 날짜
 
   @override
   Widget build(BuildContext context) {
@@ -44,9 +46,7 @@ class CalendarTile extends StatelessWidget {
           ),
 
           subtitle: Text(
-            program.programStartDate?.day != program.programEndDate?.day
-                ? "종일"
-                : formatTimeRange(program.programStartDate, program.programEndDate),
+            _getFormattedTimeForDate(program.programDates, targetDate),
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w500,
@@ -69,4 +69,21 @@ class CalendarTile extends StatelessWidget {
       ),
     );
   }
+
+  String _getFormattedTimeForDate(List<DateTime>? programDates, DateTime targetDate) {
+    if (programDates == null || programDates.isEmpty) return '';
+
+    // 현재 날짜와 일치하는 programDate 리스트 추출
+    List<DateTime> filteredDates = programDates.where((date) =>
+    date.year == targetDate.year &&
+        date.month == targetDate.month &&
+        date.day == targetDate.day).toList();
+
+    if (filteredDates.isEmpty) return '';
+
+    // 가장 이른 시간 선택 후 HH:mm 형식으로 변환
+    filteredDates.sort((a, b) => a.compareTo(b));
+    return DateFormat('HH:mm').format(filteredDates.first);
+  }
+
 }

@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProgramModel {
-  final String? documentId; // Firestore 문서 ID
+  final String? documentId;
   final String? category;
   final String? title;
   final String? subtitle;
   final String? location;
   final String? blogUrl;
   final String? detail;
-  final DateTime? programStartDate;
-  final DateTime? programEndDate;
-  final DateTime? registrationStartDate;
+  final List<DateTime>? programDates;
   final DateTime? registrationEndDate;
   final DateTime? lastModified;
   final String? thumbnail;
@@ -25,9 +23,7 @@ class ProgramModel {
     this.location,
     this.blogUrl,
     this.detail,
-    this.programStartDate,
-    this.programEndDate,
-    this.registrationStartDate,
+    this.programDates,
     this.registrationEndDate,
     this.lastModified,
     this.thumbnail,
@@ -45,9 +41,7 @@ class ProgramModel {
       location: data['location'] as String?,
       blogUrl: data['blogUrl'] as String?,
       detail: data['detail'] as String?,
-      programStartDate: (data['programStartDate'] as Timestamp?)?.toDate(),
-      programEndDate: (data['programEndDate'] as Timestamp?)?.toDate(),
-      registrationStartDate: (data['RegistrationStartDate'] as Timestamp?)?.toDate(),
+      programDates: (data['programDates'] as List<dynamic>?)?.map((timestamp) => (timestamp as Timestamp).toDate()).toList(), // 변경된 부분
       registrationEndDate: (data['RegistrationEndDate'] as Timestamp?)?.toDate(),
       lastModified: (data['lastModified'] as Timestamp?)?.toDate(),
       thumbnail: data['thumbnail'] as String?,

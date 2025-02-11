@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
+import 'package:gd_youth_talk/src/core/shared_preferences_helper.dart';
 import 'package:gd_youth_talk/src/core/utils.dart';
 import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
 import 'package:gd_youth_talk/src/presentation/detail/bloc/detail_bloc.dart';
@@ -45,6 +46,7 @@ class _DetailScreenState extends State<DetailScreen> {
         } else if (state is ProgramDetailError) {
           print('에러');
         } else if (state is ProgramDetailLoaded) {
+          SharedPreferencesHelper.saveRecentProgram(context, state.program.documentId!);
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Theme
@@ -155,7 +157,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             height: 20,
                           ),
 
-                          /// 신청 기간
+                          /// 장소
                           ProgramLocationRow(
                             program: state.program,
                             icon: Icon(
