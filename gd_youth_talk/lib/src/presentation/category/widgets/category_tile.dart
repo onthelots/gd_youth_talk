@@ -99,12 +99,8 @@ class CategoryTile extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              program.programStartDate?.day !=
-                                  program.programEndDate?.day
-                                  ? '${formatDate(program.programStartDate ?? DateTime.now())} - ${formatDate(program.programEndDate ?? DateTime.now())}'
-                                  : formatDate(program.programStartDate ??
-                                  DateTime.now()),
-                              overflow: TextOverflow.ellipsis,
+                                formatDateRange(program.programDates ?? []),
+                            overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                               style: Theme.of(context).textTheme.labelSmall // max lin// max line
                             ),

@@ -5,17 +5,15 @@ import 'category_event.dart';
 import 'category_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
-  final ProgramRepository repository;
   final ProgramUseCase usecase;
 
   CategoryBloc({
-    required this.repository,
     required this.usecase,
   }) : super(CategoryInitial()) {
     on<LoadCategoryEvent>((event, emit) async {
       emit(CategoryLoading());
       try {
-        await for (var programs in repository.getPrograms()) {
+        await for (var programs in usecase.getAllPrograms()) {
           emit(
             CategoryLoaded(
                 categoryPrograms:

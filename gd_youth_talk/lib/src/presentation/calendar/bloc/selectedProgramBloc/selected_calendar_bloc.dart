@@ -7,20 +7,17 @@ import 'selected_calendar_state.dart';
 
 class SelectedCalendarBloc
     extends Bloc<SelectedProgramEvent, SelectedProgramState> {
-  final ProgramRepository repository;
   final ProgramUseCase usecase;
 
   SelectedCalendarBloc({
-    required this.repository,
     required this.usecase,
   }) : super(SelectedProgramInitial()) {
     on<GetProgramsByDate>((event, emit) async {
       emit(SelectedProgramLoadingState());
       try {
-        await for (var programs in repository.getPrograms()) {
-          final programCopy = List<ProgramModel>.from(programs); // 복제하여 데이터 보호
+        await for (var programs in usecase.getAllPrograms()) {
           emit(SelectedProgramLoadedState(
-              usecase.filterByDate(programCopy, event.date)));
+              usecase.dateFilterPrograms(programs, event.date)));
         }
       } catch (e) {
         emit(SelectedProgramErrorState("Failed to load programs"));

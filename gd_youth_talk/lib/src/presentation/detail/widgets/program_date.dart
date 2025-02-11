@@ -18,17 +18,6 @@ class ProgramDateRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime? startDate = isProgramDate
-        ? program.programStartDate
-        : program.registrationStartDate;
-    final DateTime? endDate = isProgramDate
-        ? program.programEndDate
-        : program.registrationEndDate;
-
-    String dateText = startDate?.day != endDate?.day
-        ? '${formatDate(startDate ?? DateTime.now())} - ${formatDate(endDate ?? DateTime.now())}'
-        : '${formatDate(startDate ?? DateTime.now())}';
-
     return Row(
       children: [
         icon,
@@ -38,7 +27,7 @@ class ProgramDateRow extends StatelessWidget {
 
         // 날짜 텍스트
         Text(
-          '$title : $dateText',
+          '$title : ${formatDateRange(program.programDates ?? [])}',
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
           style: Theme.of(context).textTheme.labelSmall,

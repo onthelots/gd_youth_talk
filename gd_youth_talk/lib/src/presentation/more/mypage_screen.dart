@@ -3,9 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:gd_youth_talk/src/core/constants.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/widgets/loading_indicator.dart';
 import 'package:gd_youth_talk/src/presentation/home/widgets/program_section.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/main/bloc/auth_status_bloc/auth_status_state.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/recent_program/recent_program_bloc.dart';
+import 'package:gd_youth_talk/src/presentation/more/bloc/recent_program/recent_program_state.dart';
 import 'package:gd_youth_talk/src/presentation/more/widgets/banner_container.dart';
 import 'package:gd_youth_talk/src/presentation/more/widgets/icon_title_grid.dart';
 import 'package:gd_youth_talk/src/presentation/qr_code/qr_screen.dart';
@@ -65,6 +68,7 @@ class MyPageScreen extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 13.0),
             child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   UserBanner(
                     onTap: () {
@@ -80,13 +84,21 @@ class MyPageScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-
                   IconTitleGrid(items: items),
-
                   const SizedBox(
                     height: 20,
                   ),
-                  Section(sectionTitle: '최근 본 프로그램', programs: []),
+                  BlocBuilder<RecentProgramBloc, RecentProgramState>(
+                    builder: (context, state) {
+                      if (state is RecentProgramLoaded) {
+                        return Section(
+                            sectionTitle: '최근 본 프로그램',
+                            programs: state.programs);
+                      } else {
+                        return Section(sectionTitle: '최근 본 프로그램', programs: []);
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
@@ -200,13 +212,25 @@ final List<IconTitleItem> items = [
     }
   }),
   IconTitleItem(icon: FeatherIcons.bell, title: "공지사항", onTap: (context) {
-    print("공지사항 리스트 보러가기");
+    // 공지사항 클릭 시 준비중 메시지 표시
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('준비중입니다'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }),
   IconTitleItem(icon: FeatherIcons.calendar, title: "대관신청", onTap: (context) {
     Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.coronation);
   }),
   IconTitleItem(icon: FeatherIcons.star, title: "스크랩", onTap: (context) {
-    print("내가 좋아요를 누른 스크랩 리스트 보러가기");
+    // 공지사항 클릭 시 준비중 메시지 표시
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('준비중입니다'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }),
   IconTitleItem(icon: FeatherIcons.info, title: "홈페이지", onTap: (context) {
     Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.homepage);
