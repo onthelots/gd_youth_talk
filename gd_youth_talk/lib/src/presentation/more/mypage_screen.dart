@@ -192,7 +192,7 @@ class MyPageScreen extends StatelessWidget {
 
 // icon navigator
 final List<IconTitleItem> items = [
-  IconTitleItem(icon: FeatherIcons.messageCircle, title: "1:1 문의하기", onTap: (context) {
+  IconTitleItem(icon: FeatherIcons.messageCircle, title: "문의하기", onTap: (context) {
     Navigator.pushNamed(context, Routes.webView, arguments: WebRoutes.customerService);
   }),
   IconTitleItem(icon: FeatherIcons.globe, title: "공식 블로그", onTap: (context) {
