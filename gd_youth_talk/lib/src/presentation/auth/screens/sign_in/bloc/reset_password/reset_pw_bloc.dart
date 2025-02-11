@@ -16,14 +16,16 @@ class ResetPWBloc extends Bloc<ResetPwEvent, ResetPwState> {
     });
 
     // 비밀번호 재 설정
-    // TODO: - 비밀번호 재 설정 전송 후, 반응이 없음 -> 결과값에 대한 부분을 전달받아야 함 (datasource에서 부터)
     on<ResetButtonPressed>((event, emit) async {
+      print('🔹 ResetButtonPressed 이벤트 발생!');
+      emit(EmailSendLoading()); // 전송 중
       try {
         await usecase.resetPassword(event.email);
-        emit(EmailSendSuccess()); // 로그인 실패
+        print('✅ 이메일 전송 성공');
+        emit(EmailSendSuccess()); // 전송 성공
       } catch (e) {
         print('이메일 재설정 전송 실패 : $e');
-        emit(EmailSendFailed()); // 로그인 실패
+        emit(EmailSendFailed()); // 전송 실패
       }
     });
   }

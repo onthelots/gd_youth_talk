@@ -73,8 +73,7 @@ class RegPasswordBloc extends Bloc<RegPasswordEvent, RegPasswordState> {
 
   /// 비밀번호 형식 검증
   bool _validatePassword(String password) {
-    final regex = RegExp(
-        r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$');
+    final regex = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$');
     return regex.hasMatch(password);
   }
 

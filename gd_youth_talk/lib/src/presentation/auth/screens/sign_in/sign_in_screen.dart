@@ -98,7 +98,7 @@ class SignInScreen extends StatelessWidget {
                         controller: passwordController,
                         hintText: "비밀번호 입력",
                         keyboardType: TextInputType.text,
-                        errorText: isButtonEnabled || passwordController.text.isEmpty ? null : '특수문자, 숫자, 영문 포함 8자 이상 16자 이하로 입력해주세요',
+                        errorText: isButtonEnabled || passwordController.text.isEmpty ? null : '숫자, 영문 포함 8자 이상 16자 이하로 입력해주세요',
                         obscureText: true,
                         isEnabled: isTextFieldEnabled,
                         onChanged: (value) {

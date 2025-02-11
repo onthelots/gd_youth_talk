@@ -10,6 +10,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   UserBloc({required this.usecase}) : super(UserInitial()) {
     on<AppStarted>(_onAppStarted);
     on<LoginRequested>(_onLoginRequested);
+    on<UpdateNicknameRequested>(_onUpdateNicknameRequested);
     on<LogoutRequested>(_onLogoutRequested);
     on<DeleteUserRequested>(_onDeleteUserRequest);
 
@@ -40,7 +41,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         emit(UserNotLoggedIn());
       }
     } else {
-      print("---- 왜 로딩에서 멈춤..?");
       emit(UserNotLoggedIn());
     }
   }
@@ -61,14 +61,28 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
   }
 
-  // 3. 로그아웃 요청 시
+  // 3. 닉네임 수정 처리
+  Future<void> _onUpdateNicknameRequested(
+      UpdateNicknameRequested event, Emitter<UserState> emit) async {
+    try {
+      await usecase.updateNickname(event.newNickname); // 닉네임 업데이트
+      // 닉네임이 업데이트된 후 상태 변경
+      final currentUser = (state as UserLoggedIn).user;
+      emit(UserLoggedIn(user: currentUser.copyWith(nickname: event.newNickname)));
+    } catch (e) {
+      // 오류 처리
+      print('닉네임 수정 실패: $e');
+    }
+  }
+
+  // 4. 로그아웃 요청 시
   Future<void> _onLogoutRequested(
       LogoutRequested event, Emitter<UserState> emit) async {
     await usecase.signOut();
     emit(UserNotLoggedIn());
   }
 
-  // 4. 회원 탈퇴 시
+  // 5. 회원 탈퇴 시
   Future<void> _onDeleteUserRequest(
       DeleteUserRequested event, Emitter<UserState> emit) async {
     await usecase.deleteUser();

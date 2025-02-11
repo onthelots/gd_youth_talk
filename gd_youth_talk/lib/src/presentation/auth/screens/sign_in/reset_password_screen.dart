@@ -4,6 +4,7 @@ import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/bloc/reset_password/reset_pw_bloc.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/bloc/reset_password/reset_pw_event.dart';
 import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/bloc/reset_password/reset_pw_state.dart';
+import 'package:gd_youth_talk/src/presentation/auth/screens/sign_in/widgets/loading_indicator.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/auth_title_column.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_buttom_navbar.dart';
 import 'package:gd_youth_talk/src/presentation/auth/widgets/custom_request_dialog.dart';
@@ -24,24 +25,27 @@ class ResetPasswordScreen extends StatelessWidget {
       child: BlocConsumer<ResetPWBloc, ResetPwState>(
         /// Listener
         listener: (context, state) {
+          print('🎯 BlocConsumer - 현재 상태: $state'); // 상태 감지 로그 추가
           if (state is EmailSendFailed) {
+            print('❌ 이메일 발송 실패 감지됨');
             showCustomPWResetErrorDialog(context);
             emailController.text = "";
             // 이메일 인증 완료
-          } if (state is EmailSendSuccess) {
-            showCustomPWResetErrorDialog(context);
-            Navigator.pop(context);
+          } else if (state is EmailSendSuccess) {
+            print('✅ 이메일 발송 성공 감지됨');
+            showCustomPWResetSuccessDialog(context);
           }
         },
 
         builder: (context, state) {
           bool isButtonEnabled = false;
-          bool isTextFieldEnabled = true;
           bool isLoading = false;
 
           // 유효한 이메일 형식 기입 여부
           if (state is ResetEmailValidationState) {
             isButtonEnabled = state.isEmailValid;
+          } else if (state is EmailSendLoading) {
+            isLoading = true;
           }
 
           return Scaffold(
@@ -73,7 +77,7 @@ class ResetPasswordScreen extends StatelessWidget {
                         hintText: "이메일 입력",
                         keyboardType: TextInputType.emailAddress,
                         errorText: null,
-                        isEnabled: isTextFieldEnabled,
+                        isEnabled: true,
                         onChanged: (value) {
                           context.read<ResetPWBloc>().add(ResetEmailChanged(value));
                         },
@@ -81,6 +85,10 @@ class ResetPasswordScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                // Loading Indicator
+                Container(
+                  child: isLoading ? Loader() : Container(),
+                )
               ],
             ),
             bottomNavigationBar: Padding(
@@ -103,21 +111,6 @@ class ResetPasswordScreen extends StatelessWidget {
     );
   }
 
-  // 인증 메일 발송 실패
-  void showCustomPWResetErrorDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => CustomRequestDialog(
-        title: "발송 실패",
-        content: "존재하지 않거나, 올바른 이메일이 아닙니다. 확인 후 다시 시도해주세요.",
-        continueButtonText: "확인",
-        onContinue: () {
-          Navigator.pop(dialogContext);
-        },
-      ),
-    );
-  }
-
   // 인증 메일 발송 완료
   void showCustomPWResetSuccessDialog(BuildContext context) {
     showDialog(
@@ -128,6 +121,23 @@ class ResetPasswordScreen extends StatelessWidget {
         continueButtonText: "확인",
         onContinue: () {
           Navigator.pop(dialogContext);
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  // 인증 메일 발송 실패
+  void showCustomPWResetErrorDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => CustomRequestDialog(
+        title: "발송 실패",
+        content: "존재하지 않거나, 올바른 이메일이 아닙니다. 확인 후 다시 시도해주세요.",
+        continueButtonText: "확인",
+        onContinue: () {
+          Navigator.pop(dialogContext);
+          Navigator.pop(context);
         },
       ),
     );
