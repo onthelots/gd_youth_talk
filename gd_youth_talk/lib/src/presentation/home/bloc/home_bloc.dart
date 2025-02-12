@@ -6,17 +6,15 @@ import 'package:gd_youth_talk/src/presentation/home/bloc/home_event.dart';
 import 'package:gd_youth_talk/src/presentation/home/bloc/home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final ProgramRepository repository;
   final ProgramUseCase usecase;
 
   HomeBloc({
-    required this.repository,
     required this.usecase,
   }) : super(HomeInitial()) {
     on<LoadPrograms>((event, emit) async {
       emit(HomeLoading());
       try {
-        await for (var programs in repository.getPrograms()) {
+        await for (var programs in usecase.getAllPrograms()) {
           final programCopy = List<ProgramModel>.from(programs); // 복제하여 정렬
           emit(HomeLoaded(
             latestPrograms: usecase.getLatestPrograms(programCopy),

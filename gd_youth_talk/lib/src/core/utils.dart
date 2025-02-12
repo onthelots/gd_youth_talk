@@ -43,3 +43,25 @@ String formatTimeRange(DateTime? start, DateTime? end) {
   return "$startFormatted - $endFormatted";
 }
 
+// (v1.0.2) 프로그램 날짜 변환 (기간)
+String formatDateRange(List<DateTime> programDates) {
+  if (programDates.isEmpty) return '';
+
+  programDates.sort(); // 날짜 오름차순 정렬
+
+  // 만약 날짜가 한 개이면 그 날짜만 반환
+  if (programDates.length == 1) {
+    return DateFormat('yyyy.MM.dd').format(programDates.first);
+  }
+
+  // 날짜가 두 개 이상이면 범위 표시
+  DateTime startDate = programDates.first;
+  DateTime endDate = programDates.last;
+
+  if (startDate.isAtSameMomentAs(endDate)) {
+    return DateFormat('yyyy.MM.dd').format(startDate);
+  }
+
+  return '${DateFormat('yyyy.MM.dd').format(startDate)} ~ ${DateFormat('yyyy.MM.dd').format(endDate)}';
+}
+

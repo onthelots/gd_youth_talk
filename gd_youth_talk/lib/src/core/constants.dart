@@ -46,19 +46,37 @@ class CustomBottomNavigationBar {
 /// WebView Routes
 class WebRoutes {
   static const String introduce = 'https://youth.seoul.go.kr/orang/cntr/intro.do?key=2309210001&cntrId=CT00001';
+  static const String homepage = 'https://momentous-wallet-0f7.notion.site/1681c3f0e003806c9b50dde42728413a?pvs=73';
   static const String instagram = 'https://www.instagram.com/syc_gangdong/#';
   static const String customerService  = 'https://pf.kakao.com/_GQxjUxb';
   static const String blog  = 'https://blog.naver.com/syc_gangdong';
   static const String coronation = 'https://yeyak.seoul.go.kr/web/reservation/selectReservView.do?rsv_svc_id=S231102155211165423';
   static const String termsOfUse = 'https://momentous-wallet-0f7.notion.site/1681c3f0e00380389faef7a3d636ce76?pvs=4';
+  static const String privacyPolicy = 'https://momentous-wallet-0f7.notion.site/17b1c3f0e00380b5ae92ec994b5ccca8?pvs=4';
 }
 
 class MenuItem {
   final String menuTitle;
-  final String route;
   final Widget? trailing;
+  final void Function(BuildContext context) onTap;
 
-  MenuItem({required this.menuTitle, required this.route, this.trailing});
+  MenuItem({
+    required this.menuTitle,
+    required this.onTap,
+    this.trailing,
+  });
+}
+
+class IconTitleItem {
+  final IconData icon;
+  final String title;
+  final void Function(BuildContext context) onTap;
+
+  IconTitleItem({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
 }
 
 enum CategoryType {

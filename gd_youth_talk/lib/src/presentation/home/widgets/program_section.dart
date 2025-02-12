@@ -1,20 +1,20 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:gd_youth_talk/src/core/di/setup_locator.dart';
 import 'package:gd_youth_talk/src/core/routes.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
-import 'package:gd_youth_talk/src/domain/usecases/program_usecase.dart';
 import 'package:shimmer/shimmer.dart';
 
 class Section extends StatelessWidget {
   final String sectionTitle;
   final List<ProgramModel> programs;
   final VoidCallback? onMorePressed; // 더보기 버튼 클릭 시 호출되는 콜백 이벤트
+  final String emptyMessage; // 빈 데이터일 경우, 나타낼 title
 
   Section({
     required this.sectionTitle,
     required this.programs,
     this.onMorePressed, // 콜백 함수 전달
+    this.emptyMessage = '등록된 프로그램이 없습니다.',
   });
 
   @override
@@ -30,7 +30,18 @@ class Section extends StatelessWidget {
             style: Theme.of(context).textTheme.labelLarge,
           ),
 
-          // ListView
+          programs.isEmpty
+              ? SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: Text(
+                      emptyMessage,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
+                )
+              :
+              // ListView
           SizedBox(
             height: 200, // 명확한 높이 지정
             child: ListView.builder(

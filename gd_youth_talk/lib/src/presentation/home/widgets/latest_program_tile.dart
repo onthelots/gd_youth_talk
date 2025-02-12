@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gd_youth_talk/src/data/models/program_model.dart';
 import 'package:gd_youth_talk/src/core/utils.dart';
+import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 class LatestProgramTile extends StatelessWidget {
@@ -86,7 +87,7 @@ class LatestProgramTile extends StatelessWidget {
                           maxLines: 2, // max line
                           style: TextStyle(
                               color: getTextColorBasedOnBackground(program.primaryColor ?? '#FFFFFF'),
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.w700,
                           ),
                         ),
@@ -118,11 +119,7 @@ class LatestProgramTile extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                program.programStartDate?.day !=
-                                        program.programEndDate?.day
-                                    ? '${formatDate(program.programStartDate ?? DateTime.now())} - ${formatDate(program.programEndDate ?? DateTime.now())}'
-                                    : formatDate(program.programStartDate ??
-                                        DateTime.now()),
+                                formatDateRange(program.programDates ?? []),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                                 style: TextStyle(

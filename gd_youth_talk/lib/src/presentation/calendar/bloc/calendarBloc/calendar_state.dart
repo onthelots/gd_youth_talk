@@ -7,7 +7,7 @@ class CalendarLoadingState extends CalendarState {}
 class CalendarInitial extends CalendarState {}
 
 class CalendarLoadedState extends CalendarState {
-  final Map<DateTime, List<ProgramModel>> programs;
+  final List<ProgramModel> programs;
   CalendarLoadedState({required this.programs});
 }
 

@@ -6,6 +6,11 @@ class ProgramUseCase {
 
   ProgramUseCase(this.repository);
 
+  // usecase0. 전체 프로그램 가져오기
+  Stream<List<ProgramModel>> getAllPrograms() {
+    return repository.getPrograms();
+  }
+
   // usecase1. 카테고리 필터링
   List<ProgramModel> filterByCategory(List<ProgramModel> programs, String category) {
     return programs.where((program) => program.category == category).toList();
@@ -29,37 +34,35 @@ class ProgramUseCase {
     }).toList();
   }
 
-  // usecase4. 날짜에 따른 프로그램 필터링
-  List<ProgramModel> filterByDate(List<ProgramModel> programs, DateTime date) {
-    final filteredPrograms = List<ProgramModel>.from(programs); // 원본 복제
-    filteredPrograms.retainWhere((program) {
-      final startDate = DateTime(program.programStartDate!.year, program.programStartDate!.month, program.programStartDate!.day);
-      final endDate = DateTime(program.programEndDate!.year, program.programEndDate!.month, program.programEndDate!.day);
-      return date.isAfter(startDate) && date.isBefore(endDate.add(const Duration(days: 1)));
-    });
-    filteredPrograms.sort((a, b) {
-      final aStart = a.programStartDate ?? DateTime(9999, 12, 31);
-      final bStart = b.programStartDate ?? DateTime(9999, 12, 31);
-      return aStart.compareTo(bStart);
-    });
-    return filteredPrograms;
-  }
+  // usecase4. 날짜별 프로그램
+  List<ProgramModel> dateFilterPrograms(
+      List<ProgramModel> programs, DateTime targetDate) {
+    return programs
+        .where((program) =>
+            program.programDates?.any((date) =>
+                date.year == targetDate.year &&
+                date.month == targetDate.month &&
+                date.day == targetDate.day) ??
+            false)
+        .toList()
+      ..sort((a, b) {
+        DateTime? earliestA = a.programDates
+            ?.where((date) =>
+                date.year == targetDate.year &&
+                date.month == targetDate.month &&
+                date.day == targetDate.day)
+            .reduce((d1, d2) => d1.isBefore(d2) ? d1 : d2);
+        DateTime? earliestB = b.programDates
+            ?.where((date) =>
+                date.year == targetDate.year &&
+                date.month == targetDate.month &&
+                date.day == targetDate.day)
+            .reduce((d1, d2) => d1.isBefore(d2) ? d1 : d2);
 
-  // usecase5. 특정 날짜에 따른 프로그램 리스트 Mapping
-  Map<DateTime, List<ProgramModel>> groupByDate(List<ProgramModel> programs) {
-    final groupedPrograms = <DateTime, List<ProgramModel>>{};
-    for (var program in programs) {
-      final startDate = DateTime(program.programStartDate!.year, program.programStartDate!.month, program.programStartDate!.day);
-      final endDate = DateTime(program.programEndDate!.year, program.programEndDate!.month, program.programEndDate!.day);
-
-      for (var date = startDate;
-      date.isBefore(endDate.add(const Duration(days: 1)));
-      date = date.add(const Duration(days: 1))) {
-        groupedPrograms.putIfAbsent(date, () => []);
-        groupedPrograms[date]!.add(program);
-      }
-    }
-    return groupedPrograms;
+        if (earliestA == null) return 1;
+        if (earliestB == null) return -1;
+        return earliestA.compareTo(earliestB);
+      });
   }
 
   // usecase6. 등록 마감순 정렬
@@ -90,4 +93,14 @@ class ProgramUseCase {
   Future<void> incrementProgramHits(ProgramModel program) {
     return repository.updateHits(program.documentId!, program.hits);
   }
+
+  // usecase10. 최근 본 프로그램 가져오기
+  List<ProgramModel> getRecentPrograms(List<ProgramModel> programs, List<String> programIds) {
+    if (programIds.isNotEmpty) {
+      return programs.where((program) => programIds.contains(program.documentId)).toList();
+    } else {
+      return [];
+    }
+  }
 }
+
