@@ -10,12 +10,12 @@ class MenuTile extends StatelessWidget {
 
   final String menuTitle;
   final Widget? trailing;
-  final VoidCallback? onTap; // Nullable onTap
+  final void Function(BuildContext context)? onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: 13.0), // 좌우 여백 조정
+      contentPadding: EdgeInsets.symmetric(horizontal: 5.0), // 좌우 여백 조정
       dense: true, // ListTile의 높이를 낮추는 옵션
       title: Text(
         menuTitle,
@@ -25,11 +25,9 @@ class MenuTile extends StatelessWidget {
           const Icon(
             Icons.chevron_right,
           ),
-      onTap: onTap != null // Null check before calling onTap
-          ? () {
-              onTap!(); // Call onTap safely
-            }
-          : null, // or provide a fallback if onTap is null
+      onTap: onTap != null
+          ? () => onTap!(context) // onTap이 null이 아닐 때만 호출
+          : null, // onTap이 null이면 아무 동작도 하지 않음
     );
   }
 }

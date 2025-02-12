@@ -5,17 +5,15 @@ import 'search_event.dart';
 import 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchProgramEvent, SearchState> {
-  final ProgramRepository repository;
   final ProgramUseCase usecase;
 
   SearchBloc({
-    required this.repository,
     required this.usecase,
   }) : super(SearchLoadingState()) {
     on<SearchQueryProgramsEvent>((event, emit) async {
       emit(SearchLoadingState());
       try {
-        await for (var programs in repository.getPrograms()) {
+        await for (var programs in usecase.getAllPrograms()) {
           emit(SearchLoadedState(
               searchPrograms: usecase.searchPrograms(programs, event.query)));
         }

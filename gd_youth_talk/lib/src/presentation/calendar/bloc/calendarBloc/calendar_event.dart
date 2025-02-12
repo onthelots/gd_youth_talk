@@ -1,3 +1,3 @@
 abstract class CalendarEvent {}
 
-class GetProgramsGroupedByDate extends CalendarEvent {}
+class GetAllPrograms extends CalendarEvent {}

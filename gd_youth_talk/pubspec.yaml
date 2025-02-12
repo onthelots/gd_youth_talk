@@ -1,7 +1,7 @@
 name: gd_youth_talk
 description: "A youth information app providing real-time updates on programs and services from the Gangdong-gu Youth Center"
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 1.0.1+1
+version: 1.0.2+1
 
 environment:
   sdk: ^3.5.4
@@ -20,6 +20,8 @@ dependencies:
   firebase_core: ^3.8.1
   cloud_firestore: ^5.5.1
   firebase_storage: ^12.3.7
+  firebase_remote_config: ^5.2.0
+  firebase_auth: ^5.4.0
 
   # Local Storage
   shared_preferences: ^2.3.3
@@ -27,7 +29,6 @@ dependencies:
   # Networking
   dio: ^5.7.0
   cached_network_image: ^3.4.1
-  http: ^1.2.2
 
 
   # UI
@@ -38,18 +39,22 @@ dependencies:
   url_launcher: ^6.3.1
   palette_generator: ^0.3.3+5
   shimmer: ^3.0.0
+  lottie: ^3.2.0
+  flutter_feather_icons: ^2.0.0+1
+  flutter_spinkit: ^5.2.1
+  qr_flutter: ^4.1.0
 
   # Web
   flutter_inappwebview: ^6.1.5
 
   # Shared
   share_plus: ^10.1.2
+  flutter_secure_storage: ^9.2.4
 
   # env
   flutter_dotenv: ^5.2.1
   xml: ^6.5.0
   package_info_plus: ^8.1.2
-  firebase_remote_config: ^5.2.0
 
 
 dev_dependencies:
@@ -64,4 +69,5 @@ flutter:
 
   assets:
     - assets/
+    - assets/animations/
     - .env
