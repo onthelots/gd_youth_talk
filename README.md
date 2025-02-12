@@ -84,7 +84,7 @@
 ### 2-2 Architecture
 `지속 가능한 유지보수와 기능 추가를 위한 Clean Architecture 적용`
 - Application Layout, Domain Layout, Data Layout 분리
-- 프로그램 데이터 파싱 이외, 추후 계정관리 기능 도입에 앞서 유지보수가 용이한 Clean Architecture 설계
+- 유지보수 및 추가 기능 도입에 용이한 Clean Architecture 설계 실시
 
 `상태관리를 위한 Bloc 활용`
 - Firebase Stream을 통해 할당되는 'Program' 리스트 데이터를 기반으로, UseCase 내 화면별 로직 구성
@@ -204,7 +204,7 @@
 ### 4-3 기 설계한 아키텍쳐를 기반으로 앱 개발 실시
 > 클린 아키텍쳐 구현을 위하여 3가지 Layer Mock-up
 - Data Layer : 관리자 앱에서 저장된 Datasouce를 Stream 형식으로 구독한 후, Model, interface(repository)를 설계
-- Domain Layer : 각각의 UI 화면에서 활용할 수 있는 로직을 Usecase 내 구현 (일괄된 프로그램에 대한 정보이므로, Entities는 생략)
+- Domain Layer : 각각의 UI 화면에서 활용할 수 있는 로직을 Usecase 내 구현
 - Presentation Layer : Locator(DI) 생성 및 Bloc 주입을 위한 각각의 Screen 파일 생성
 - Core : 앱 테마 외 Constants, Routes 작업 실시
 
