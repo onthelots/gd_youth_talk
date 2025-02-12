@@ -135,19 +135,36 @@
 
 ### 3-3 프로그램 별 상세보기 페이지 구성, Web 이동을 통해 더욱 자세한 내용을 파악
 - 프로그램 정보를 기반으로 이미지, 주소, 일시 외 상세 내용을 확인 (+ 공유기능)
-- InWeb Link를 할당함으로서 센터에서 제공하는 Blog 페이지로 이동
-- 더보기 및 옵션 페이지 제공 (대관신청, 문의, 테마설정 외)
+- In Web Link를 할당함으로서 센터에서 제공하는 Blog 페이지로 이동
+- 내 정보관리 및 옵션 페이지 제공 (대관신청, 문의, 테마설정 외)
 
 <table>
   <tr>
     <td align="center"><img src="https://github.com/user-attachments/assets/d19b1746-3e5c-4097-9ea0-63bf9adddf52" width="250" height="541"/></td>
     <td align="center"><img src="https://github.com/user-attachments/assets/ae6a6c79-dbb4-4f83-a3c3-ba1f3600b98a" width="250" height="541"/></td>
-    <td align="center"><img src="https://github.com/user-attachments/assets/8d25db9d-15cc-413f-8b27-fd9fb3f29bab" width="250" height="541"/></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/d6c87392-746d-4ba3-8cf7-f16de4b5bfda" width="250" height="541"/></td>
   </tr>
   <tr>
     <td align="center">Detail</td>
     <td align="center">WebView</td>
     <td align="center">More</td>
+  </tr>
+</table>
+
+<br>
+
+### 3-4 회원 등록 후, 관리자 앱/웹과 연동한 출석시스템 구축
+- 유저 고유 doc.id를 기반으로 한 QR 화면 생성
+- 관리자 앱 내, QR Scanner를 통해 해당 유저의 방문횟수를 증가시킴으로서 출석관리 실시
+
+<table>
+  <tr>
+    <td align="center"><img src="https://github.com/user-attachments/assets/ad924689-77c1-4524-ad73-623c60edadd4" width="250" height="541"/></td>
+    <td align="center"><img src="https://github.com/user-attachments/assets/77aeb7ee-2446-4659-9cc7-656d798f96dd" width="250" height="541"/></td>
+  </tr>
+  <tr>
+    <td align="center">QRCode</td>
+    <td align="center">Count System</td>
   </tr>
 </table>
 
@@ -207,7 +224,7 @@
 
 2) Develop
 - [x] Table_calender UI 개선
-- [ ] 로그인, 회원가입 등 유저관리 로직, UI 추가 (진행중)
+- [x] 로그인, 회원가입 등 유저관리 로직, UI 추가 (진행중)
 - [ ] Bottom NavigationBar UI 개선
 - [ ] Placeholder package 선택 후 적용 (ex. shimmer)
 
