@@ -39,7 +39,7 @@
 - **참여인원** : 1인 (개인 프로젝트)
 - **주요내용**
 
-  - 서울청년센터 강동에서 진행되는프로그램에 대한 자세한 정보를 제공받고, 캘린더를 통해 일정을 확인
+  - 서울청년센터 강동에서 진행되는 프로그램에 대한 자세한 정보를 제공받고, 캘린더를 통해 일정을 확인
   - 블로그, 인스타그램 등 센터에서 운영하는 주요 사이트와 장소대관, Q&A 등을 손쉽게 이용
   - 실제 센터 내 근무하는 관리자의 원활한 프로그램 등록&관리를 위해 별도의 '관리자 앱' 개발
 
@@ -88,8 +88,8 @@
 
 `상태관리를 위한 Bloc 활용`
 - Firebase Stream을 통해 할당되는 'Program' 리스트 데이터를 기반으로, UseCase 내 화면별 로직 구성
-- 앱 전역에서 데이터를 공유하도록 중앙 집중화를 위해 GetIt Pakcage DI를 Main.dart 내 적용 (MultiProvider)
-- 각각의 Screen, UI에 따라 Bloc을 Listen, Builder 함으로서 실시간 업데이트 사항을 즉각 반영
+- 앱 전역으로 활용되는 상태값은 MultiProvider로 DI를 할당
+- 각각의 Screen별로 Consumer 혹은 일반적인 Listener, Builder를 통해 상태 반영
 
 <img width="4183" alt="app_architecture" src="https://github.com/user-attachments/assets/064022b8-e97b-4df5-9034-7d179b0f5605" />
 
