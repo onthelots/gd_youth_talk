@@ -1,3 +1,5 @@
+<img width="80" height="80" alt="icon" src="https://github.com/user-attachments/assets/90ea9ae9-1316-4fb7-9825-99c4bc4ded9c" />
+
 # 강동청년톡톡 & 관리자용
 > 청년의 가능성을 [잇다]
 - 서울청년센터 강동에서 진행하는 다양한 프로그램과 행사를 한눈에 확인하고 쉽게 참여할 수 있도록 돕는 플랫폼입니다.
